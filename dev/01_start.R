@@ -20,13 +20,13 @@
 ##
 golem::fill_desc(
   pkg_name = "purchprod", # The name of the golem package containing the app (typically lowercase, no underscore or periods)
-  pkg_title = "PKG_TITLE", # What the Package Does (One Line, Title Case, No Period)
-  pkg_description = "PKG_DESC.", # What the package does (one paragraph).
+  pkg_title = "Purchase Production App", # What the Package Does (One Line, Title Case, No Period)
+  pkg_description = "Placeholder for package description.", # What the package does (one paragraph).
   authors = person(
-    given = "AUTHOR_FIRST", # Your First Name
-    family = "AUTHOR_LAST", # Your Last Name
-    email = "AUTHOR@MAIL.COM", # Your email
-    role = c("aut", "cre") # Your role (here author/creator)
+    given = "Raymond", # Your First Name
+    family = "Hunter", # Your Last Name
+    email = "raymond.hunter@noaa.gov", # Your email
+    role = "cre" # Your role (here author/creator)
   ),
   repo_url = NULL, # The URL of the GitHub repo (optional),
   pkg_version = "0.0.0.9000", # The version of the package containing the app
@@ -36,7 +36,7 @@ golem::fill_desc(
 ## Install the required dev dependencies ----
 golem::install_dev_deps()
 
-## Create Common Files ----
+Yes ## Create Common Files ----
 ## See ?usethis for more information
 usethis::use_mit_license("Golem User") # You can set another license here
 golem::use_readme_rmd(open = FALSE)
@@ -65,7 +65,7 @@ usethis::use_git()
 ## Sets the remote associated with 'name' to 'url'
 usethis::use_git_remote(
   name = "origin",
-  url = "https://github.com/<OWNER>/<REPO>.git"
+  url = "https://github.com/ramhunte/purchprod.git"
 )
 
 # You're now set! ----
