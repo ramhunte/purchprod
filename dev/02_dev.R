@@ -17,6 +17,18 @@
 ## Amend DESCRIPTION with dependencies read from package code parsing
 ## install.packages('attachment') # if needed.
 attachment::att_amend_desc()
+usethis::use_package("bslib")
+usethis::use_package("shinyjs")
+usethis::use_package("shinyBS")
+usethis::use_package("thematic")
+usethis::use_package("stringr")
+usethis::use_package("ggplot2")
+usethis::use_package("grid")
+usethis::use_package("dplyr")
+usethis::use_package("scales")
+usethis::use_package("DT")
+usethis::use_package("shinyWidgets")
+usethis::use_package("shinycssloaders")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
