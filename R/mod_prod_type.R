@@ -1,4 +1,4 @@
-#' summary UI Function
+#' prod_type UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -7,32 +7,26 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_summary_ui <- function(id) {
+mod_prod_type_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    metric_func1(inputID = ns("metricInput")),
+    metric_func2(inputID = ns("metricInput")),
+    prodtype_func(inputID = ns("protypeInput")),
     stat_func(inputID = ns("statInput"))
   )
 }
 
-#' summary Server Functions
+#' prod_type Server Functions
 #'
 #' @noRd
-mod_summary_server <- function(id) {
+mod_prod_type_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    return(reactive({
-      list(
-        metric = input$metricInput,
-        stat = input$statInput
-      )
-    }))
   })
 }
 
 ## To be copied in the UI
-# mod_summary_ui("summary_1")
+# mod_prod_type_ui("prod_type_1")
 
 ## To be copied in the server
-# mod_summary_server("summary_1")
+# mod_prod_type_server("prod_type_1")

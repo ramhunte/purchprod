@@ -1,0 +1,88 @@
+/* fmt: skip file */
+
+
+.shiny-output-error-validation {
+      color: #2593AF;
+      font-size: 30px;
+      text-align: center;
+    }
+
+#osDropdown, #os2Dropdown {
+  display: block;
+  padding: 4px 10px;
+  max-width: 200px;   /* Controls the max width of the button */
+  width: fit-content; /* Allows the button width to adapt to its content */
+}
+
+#downloadData {
+  display: block;
+  padding: 4px 10px;    /* Less padding */
+  margin: 30px auto 10px auto;  /* top-bottom 20px, auto left-right */
+  max-width: 200px;   /* Controls the max width of the button */
+  width: fit-content; /* Allows the button width to adapt to its content */
+}
+
+/* removing scroll bars from data table */
+.dataTables_scrollBody::-webkit-scrollbar {  /* Chrome, Safari */
+    display: none;
+  }
+  
+  
+div.dataTables_wrapper div.dataTables_length select {
+    width: 100px;
+    display: inline-block;
+}
+
+.nav {
+  --bs-nav-link-padding-x: .8rem;
+}
+
+/*
+.bslib-sidebar-layout>.sidebar {
+  background-color: #001743;
+} */
+
+/* scroll bar */
+
+  .bslib-sidebar-layout > .sidebar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+  
+  .custom-card {
+  background-color: #E9F3F6; /* light blue, change as needed */
+}
+
+/*
+.bslib-card .card-header {
+      background-color: #001743; 
+      color: #001743;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    }
+*/
+
+  .dataTables_wrapper {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  table.dataTable {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  /* Table header */
+  table.dataTable thead {
+    background-color: #f8f9fa !important;
+    color: black !important;
+  }
+
+  /* Table rows */
+  table.dataTable tbody td {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  table.dataTable thead th {
+  background-color: #f8f9fa !important; /* or white */
+  color: black !important;
+}
