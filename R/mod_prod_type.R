@@ -22,6 +22,14 @@ mod_prod_type_ui <- function(id) {
 mod_prod_type_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    return(reactive({
+      list(
+        metric = input$metricInput,
+        prod_type = input$protypeInput,
+        stat = input$statInput
+      )
+    }))
   })
 }
 

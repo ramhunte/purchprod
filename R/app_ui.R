@@ -73,12 +73,12 @@ app_ui <- function(request) {
 
             conditionalPanel(
               condition = "input.tab_top != 'Species'",
-              uiOutput("otherTabs")
+              mod_other_tabs_ui("other_tabs_1")
             ),
 
             conditionalPanel(
               condition = "input.tab_top == 'Species'",
-              uiOutput("speciesTabs")
+              mod_specs_tabs_ui("specs_tabs_1")
             ),
 
             # downloadButton
