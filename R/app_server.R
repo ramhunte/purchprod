@@ -5,15 +5,36 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  observeEvent(input$tab_top, {
-    if (input$tab_top != "Species") {
-      updateTabsetPanel(
-        session,
-        "tab_bottom",
-        selected = "Production Activities"
-      )
-    }
+  # conditional panel render if top nav_panels are "Summary" or "By Product Type"
+  output$otherTabs <- renderUI({
+    mod_other_tabs_ui("other_tabs_1")
   })
+
+  # conditional panel render if top nav_panels is "Species"
+  output$speciesTabs <- renderUI({
+    mod_specs_tabs_ui("specs_tabs_1")
+  })
+
+  # on initial render, input$tab_bottom is NULL b/c hasnt been rendered yet, so asigning it a value
+  # observe({
+  #   if (input$tab_top != "Species" && is.null(input$tab_bottom)) {
+  #     updateTabsetPanel(
+  #       session,
+  #       "tab_bottom",
+  #       selected = "Production Activities"
+  #     )
+  #   }
+  # })
+
+  # observeEvent(input$tab_top, {
+  #   if (input$tab_top != "Species") {
+  #     updateTabsetPanel(
+  #       session,
+  #       "tab_bottom",
+  #       selected = "Production Activities"
+  #     )
+  #   }
+  # })
 
   # loading in module server outputs
   summary_inputs <- mod_summary_server("summary_1")
@@ -25,12 +46,13 @@ app_server <- function(input, output, session) {
   ##################### Reactive Summary DF #########################
 
   sum_plot_df <- reactive({
-    req(input$tab_top == "Summary")
     req(
+      input$tab_top == "Summary",
       input$tab_bottom %in%
-        c("Production Activities", "Region", "Processor Size/Type")
+        c("Production Activities", "Region", "Processor Size/Type"),
+      summary_inputs(),
+      other_tabs_inputs()
     )
-    df <- NULL
 
     if (
       input$tab_top == "Summary" && input$tab_bottom == "Production Activities"
