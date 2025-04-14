@@ -5,71 +5,78 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  # Your application server logic
+  observeEvent(input$tab_top, {
+    if (input$tab_top != "Species") {
+      updateTabsetPanel(
+        session,
+        "tab_bottom",
+        selected = "Production Activities"
+      )
+    }
+  })
 
-  # # on initial render, input$tab_bottom is NULL b/c hasnt been rendered yet, so asigning it a value
-  # observe({
-  #   if (input$tab_top != "Species" && is.null(input$tab_bottom)) {
-  #     updateTabsetPanel(
-  #       session,
-  #       "tab_bottom",
-  #       selected = "Production Activities"
-  #     )
-  #   }
-  # })
-
+  # loading in module server outputs
   summary_inputs <- mod_summary_server("summary_1")
   prod_type_inputs <- mod_prod_type_server("prod_type_1")
   specs_inputs <- mod_specs_server("specs_1")
   other_tabs_inputs <- mod_other_tabs_server("other_tabs_1")
   specs_tabs_inputs <- mod_specs_tabs_server("specs_tabs_1")
 
-  ##################### Reactive Summary DF's #########################
+  ##################### Reactive Summary DF #########################
 
   sum_plot_df <- reactive({
     req(input$tab_top == "Summary")
+    req(
+      input$tab_bottom %in%
+        c("Production Activities", "Region", "Processor Size/Type")
+    )
+    df <- NULL
 
-    if (input$tab_top == "Summary") {
-      if (input$tab_bottom == "Production Activities") {
-        df <- sumdf_prac |>
-          dplyr::filter(
-            # top tab filters
-            metric %in% summary_inputs()$metric,
-            statistic %in% summary_inputs()$stat,
-            # bottom tab filters
-            variable %in%
-              c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
-          )
-      } else if (input$tab_bottom == "Region") {
-        df <- sumdf_reg |>
-          dplyr::filter(
-            # top tab filters
-            metric %in% summary_inputs()$metric,
-            statistic %in% summary_inputs()$stat,
-            # bottom tab filters
-            variable %in% other_tabs_inputs()$reg,
-            cs %in% other_tabs_inputs()$pracs1
-          )
-      } else if (input$tab_bottom == "Processor Size/Type") {
-        df <- sumdf_size |>
-          dplyr::filter(
-            # top tab filters
-            metric %in% summary_inputs()$metric,
-            statistic %in% summary_inputs()$stat,
-            # bottom tab filters
-            variable %in% other_tabs_inputs()$size,
-            cs %in% other_tabs_inputs()$pracs2
-          )
-      }
-
-      return(df)
+    if (
+      input$tab_top == "Summary" && input$tab_bottom == "Production Activities"
+    ) {
+      df <- sumdf_prac |>
+        dplyr::filter(
+          # top tab filters
+          metric %in% summary_inputs()$metric,
+          statistic %in% summary_inputs()$stat,
+          # bottom tab filters
+          variable %in%
+            c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
+        )
+    } else if (input$tab_top == "Summary" && input$tab_bottom == "Region") {
+      df <- sumdf_reg |>
+        dplyr::filter(
+          # top tab filters
+          metric %in% summary_inputs()$metric,
+          statistic %in% summary_inputs()$stat,
+          # bottom tab filters
+          variable %in% other_tabs_inputs()$reg,
+          cs %in% other_tabs_inputs()$pracs1
+        )
+    } else if (
+      input$tab_top == "Summary" && input$tab_bottom == "Processor Size/Type"
+    ) {
+      df <- sumdf_size |>
+        dplyr::filter(
+          # top tab filters
+          metric %in% summary_inputs()$metric,
+          statistic %in% summary_inputs()$stat,
+          # bottom tab filters
+          variable %in% other_tabs_inputs()$size,
+          cs %in% other_tabs_inputs()$pracs2
+        )
     }
+
+    return(df)
   })
 
   ##################### Reactive Summary Plots #########################
 
   output$sumplot <- renderPlot(
     {
+      req(sum_plot_df())
+
       # # creating a validatement statement requiring valid inputs
       validate(
         need(sum_plot_df(), "No data available for these selected inputs"),
