@@ -69,10 +69,6 @@ app_ui <- function(request) {
 
             # START tabsetPanel
 
-            # uiOutput("dynamicTabs"),
-
-            # uiOutput("bottomTabs"),
-
             conditionalPanel(
               condition = "input.tab_top != 'Species'",
               # mod_other_tabs_ui("other_tabs_1")
@@ -140,9 +136,9 @@ app_ui <- function(request) {
         # style = page_height,
         fluidRow(
           # use columns to create white space on sides
-          # column(1),
-          # column(10, includeMarkdown("text/info.md")),
-          # column(1)
+          column(2),
+          column(8, includeMarkdown("inst/app/text/info.md")),
+          column(2)
         ),
       ), # END "Information Page" nav_panel
 
@@ -158,9 +154,9 @@ app_ui <- function(request) {
         # style = page_height,
         fluidRow(
           # use columns to create white space on sides
-          # column(1),
-          # column(10, includeMarkdown("text/contact.md")),
-          # column(1)
+          column(2),
+          column(8, includeMarkdown("inst/app/text/contact.md")),
+          column(2)
         )
       ), # "Contact" Us nav_panel
 
@@ -168,11 +164,8 @@ app_ui <- function(request) {
     ) # END page_navbar
   ) # END tagList
 }
-#
-#
-#
-#
-#
+
+
 #' Add external Resources to the Application
 #'
 #' This function is internally used to add external

@@ -131,7 +131,52 @@ proddf_size <- proddf |>
   )
 
 
-# helper function to process data
+####################### Cleaning "By Product Type" tab data ###########################
+
+specsdf <- raw_purcprod |>
+  dplyr::select(-c(ylab)) |>
+  janitor::clean_names() |>
+  dplyr::filter(
+    tab == 'Product', # production tab data
+    cs == ""
+  ) |>
+
+  # original data filter already classified labels as millions, billions,
+  dplyr::mutate(
+    q25 = q25 / 1e6,
+    q75 = q75 / 1e6,
+    variance = variance / 1e6,
+    value = value / 1e6,
+    unit = "millions",
+    upper = dplyr::case_when(
+      statistic == 'Mean' ~ value + variance,
+      statistic == 'Median' ~ q75,
+      statistic == 'Total' ~ value
+    ),
+    lower = dplyr::case_when(
+      statistic == 'Mean' ~ value - variance,
+      statistic == 'Median' ~ q25,
+      statistic == 'Total' ~ value
+    )
+  ) |>
+  tidyr::separate(
+    metric,
+    into = c("type", "metric"),
+    sep = " ",
+    extra = "merge"
+  ) |>
+  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1))
+
+
+# tidyr::separate(
+#   metric,
+#   into = c("type", "metric"),
+#   sep = " ",
+#   extra = "merge"
+# ) |>
+# dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1))
+
+####################### helper function to process data ############################
 process_df <- function(df) {
   df |>
     dplyr::select(-c(ylab, tab, unit_lab)) |>

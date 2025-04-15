@@ -101,7 +101,7 @@ specs_func <- function(inputID) {
       "Thornyheads",
       "Other groundfish species"
     ),
-    selected = "All production"
+    selected = c("All production", "Rockfish", "Dover sole", "Petrale sole")
   )
 }
 
@@ -135,7 +135,10 @@ reg_func <- function(inputID) {
       'California',
       'Washington and Oregon'
     ),
-    selected = "California"
+    selected = c(
+      'California',
+      'Washington and Oregon'
+    ),
   )
 }
 
@@ -164,7 +167,11 @@ size_func <- function(inputID) {
       'Large',
       'Non-processor'
     ),
-    selected = "Small"
+    selected = c(
+      'Small',
+      'Medium',
+      'Large'
+    )
   )
 }
 

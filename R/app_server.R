@@ -15,27 +15,6 @@ app_server <- function(input, output, session) {
     mod_specs_tabs_ui("specs_tabs_1")
   })
 
-  # on initial render, input$tab_bottom is NULL b/c hasnt been rendered yet, so asigning it a value
-  # observe({
-  #   if (input$tab_top != "Species" && is.null(input$tab_bottom)) {
-  #     updateTabsetPanel(
-  #       session,
-  #       "tab_bottom",
-  #       selected = "Production Activities"
-  #     )
-  #   }
-  # })
-
-  # observeEvent(input$tab_top, {
-  #   if (input$tab_top != "Species") {
-  #     updateTabsetPanel(
-  #       session,
-  #       "tab_bottom",
-  #       selected = "Production Activities"
-  #     )
-  #   }
-  # })
-
   # loading in module server outputs
   summary_inputs <- mod_summary_server("summary_1")
   prod_type_inputs <- mod_prod_type_server("prod_type_1")
@@ -110,7 +89,7 @@ app_server <- function(input, output, session) {
       # run function to create plot with summary tab data
       plot_func(
         data = sum_plot_df(),
-        lab = "test",
+        lab = summary_inputs()$stat,
         group = "variable",
         facet = "unit_lab"
       )
@@ -177,7 +156,7 @@ app_server <- function(input, output, session) {
       # run function to create plot with summary tab data
       plot_func(
         data = prod_plot_df(),
-        lab = input$stat2Input,
+        lab = prod_type_inputs()$stat,
         group = "variable",
         facet = "unit_lab"
       )
@@ -189,7 +168,7 @@ app_server <- function(input, output, session) {
   # reactive data frame for By Product Type tab
   specs_plot_df <- reactive({
     if (input$tab_top == "Species") {
-      df <- proddf_prac |>
+      df <- specsdf |>
         dplyr::filter(
           # top tab filters
           metric %in% specs_inputs()$metric,
@@ -220,7 +199,7 @@ app_server <- function(input, output, session) {
       # run function to create plot with summary tab data
       plot_func(
         data = specs_plot_df(),
-        lab = input$stat3Input,
+        lab = specs_inputs()$stat,
         group = "type",
         facet = "variable"
       )
@@ -247,5 +226,20 @@ app_server <- function(input, output, session) {
       scrollX = TRUE, # Enable horizontal scroll
       scrollY = "680px" # setting vertical scroll height
     )
+  )
+
+  ##################### Data Table Download #########################
+
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("purchprod", input$tab_top, "data.csv", sep = "_")
+    },
+    content = function(file) {
+      if (input$tab_top == "Summary") {
+        write.csv(sum_plot_df(), file)
+      } else if (input$tab_top == "By Product Type") {
+        write.csv(prod_plot_df(), file)
+      }
+    }
   )
 }
