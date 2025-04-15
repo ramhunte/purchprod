@@ -142,30 +142,33 @@ specsdf <- raw_purcprod |>
   ) |>
 
   # original data filter already classified labels as millions, billions,
-  dplyr::mutate(
-    q25 = q25 / 1e6,
-    q75 = q75 / 1e6,
-    variance = variance / 1e6,
-    value = value / 1e6,
-    unit = "millions",
-    upper = dplyr::case_when(
-      statistic == 'Mean' ~ value + variance,
-      statistic == 'Median' ~ q75,
-      statistic == 'Total' ~ value
-    ),
-    lower = dplyr::case_when(
-      statistic == 'Mean' ~ value - variance,
-      statistic == 'Median' ~ q25,
-      statistic == 'Total' ~ value
-    )
-  ) |>
+  # dplyr::mutate(
+  #   q25 = q25 / 1e6,
+  #   q75 = q75 / 1e6,
+  #   variance = variance / 1e6,
+  #   value = value / 1e6,
+  #   # unit = "millions",
+  #   upper = dplyr::case_when(
+  #     statistic == 'Mean' ~ value + variance,
+  #     statistic == 'Median' ~ q75,
+  #     statistic == 'Total' ~ value
+  #   ),
+  #   lower = dplyr::case_when(
+  #     statistic == 'Mean' ~ value - variance,
+  #     statistic == 'Median' ~ q25,
+  #     statistic == 'Total' ~ value
+  #   )
+  # ) |>
   tidyr::separate(
     metric,
     into = c("type", "metric"),
     sep = " ",
     extra = "merge"
   ) |>
-  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1))
+  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1)) |>
+  dplyr::mutate(
+    unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
+  )
 
 
 # tidyr::separate(
