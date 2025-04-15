@@ -76,16 +76,6 @@ app_server <- function(input, output, session) {
 
   output$sumplot <- renderPlot(
     {
-      req(sum_plot_df())
-
-      # # creating a validatement statement requiring valid inputs
-      validate(
-        need(sum_plot_df(), "No data available for these selected inputs"),
-        need(
-          nrow(sum_plot_df()) > 0,
-          "No data available for these selected inputs"
-        )
-      )
       # run function to create plot with summary tab data
       plot_func(
         data = sum_plot_df(),
@@ -145,14 +135,6 @@ app_server <- function(input, output, session) {
   ##Plot for the product tab
   output$productplot <- renderPlot(
     {
-      validate(
-        need(prod_plot_df(), "No data available for these selected inputs"),
-        need(
-          nrow(prod_plot_df()) > 0,
-          "No data available for these selected inputs"
-        )
-      )
-
       # run function to create plot with summary tab data
       plot_func(
         data = prod_plot_df(),
@@ -188,14 +170,6 @@ app_server <- function(input, output, session) {
   ##Plot for the species tab
   output$specsplot <- renderPlot(
     {
-      validate(
-        need(specs_plot_df(), "No data available for these selected inputs"),
-        need(
-          nrow(specs_plot_df()) > 0,
-          "No data available for these selected inputs"
-        )
-      )
-
       # run function to create plot with summary tab data
       plot_func(
         data = specs_plot_df(),

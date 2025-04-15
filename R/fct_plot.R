@@ -100,9 +100,13 @@ line_ty <- c(
 
 plot_func <- function(data, lab, group, facet) {
   # return nothing if plot is Null
-  if (is.null(data)) {
-    return()
-  }
+  validate(
+    need(data, "No data available for these selected inputs"),
+    need(
+      nrow(data) > 0,
+      "No data available for these selected inputs"
+    )
+  )
 
   # ggplot code
   ggplot2::ggplot(
