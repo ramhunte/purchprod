@@ -141,13 +141,44 @@ specsdf <- raw_purcprod |>
     cs == ""
   ) |>
 
+  tidyr::separate(
+    metric,
+    into = c("type", "metric"),
+    sep = " ",
+    extra = "merge"
+  ) |>
+  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1)) |>
+
   # original data filter already classified labels as millions, billions,
   dplyr::mutate(
-    q25 = q25 / 1e6,
-    q75 = q75 / 1e6,
-    variance = variance / 1e6,
-    value = value / 1e6,
-    # unit = "millions",
+    unit = dplyr::case_when(
+      metric == "Production weight" ~ "millions",
+      metric == "Production value" ~ "millions",
+      metric == "Production price (per lb)" ~ ""
+    ),
+
+    q25 = dplyr::case_when(
+      metric == "Production weight" ~ q25 / 1e6,
+      metric == "Production value" ~ q25 / 1e6,
+      metric == "Production price (per lb)" ~ q25
+    ),
+
+    q75 = dplyr::case_when(
+      metric == "Production weight" ~ q75 / 1e6,
+      metric == "Production value" ~ q75 / 1e6,
+      metric == "Production price (per lb)" ~ q75
+    ),
+
+    value = dplyr::case_when(
+      metric == "Production weight" ~ value / 1e6,
+      metric == "Production value" ~ value / 1e6,
+      metric == "Production price (per lb)" ~ value
+    ),
+    variance = dplyr::case_when(
+      metric == "Production weight" ~ variance / 1e6,
+      metric == "Production value" ~ variance / 1e6,
+      metric == "Production price (per lb)" ~ variance
+    ),
     upper = dplyr::case_when(
       statistic == 'Mean' ~ value + variance,
       statistic == 'Median' ~ q75,
@@ -157,27 +188,35 @@ specsdf <- raw_purcprod |>
       statistic == 'Mean' ~ value - variance,
       statistic == 'Median' ~ q25,
       statistic == 'Total' ~ value
-    )
-  ) |>
-  tidyr::separate(
-    metric,
-    into = c("type", "metric"),
-    sep = " ",
-    extra = "merge"
-  ) |>
-  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1)) |>
-  dplyr::mutate(
+    ),
     unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
   )
+# dplyr::mutate(
+#   unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
+# )
 
+thornyheads <- specsdf |>
+  dplyr::filter(
+    variable == "Thornyheads",
+    statistic == "Median",
+    metric == "Production weight"
+  )
 
-# tidyr::separate(
-#   metric,
-#   into = c("type", "metric"),
-#   sep = " ",
-#   extra = "merge"
-# ) |>
-# dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1))
+other_gs <- specsdf |>
+  dplyr::filter(
+    # tab == "Product",
+    variable == "Other groundfish species",
+    statistic == "Mean",
+    metric == "Production weight",
+    type == "Frozen"
+  )
+# metric == "Production weight")
+
+grouped <- specsdf |>
+  dplyr::filter(metric == "Production weight", statistic == "Mean") |>
+  dplyr::group_by(variable, type, year) |>
+  dplyr::summarize(mean_new = mean(value))
+
 
 ####################### helper function to process data ############################
 process_df <- function(df) {

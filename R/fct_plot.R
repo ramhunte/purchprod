@@ -98,7 +98,7 @@ line_ty <- c(
   "Smoked" = "solid"
 )
 
-plot_func <- function(data, lab, group, facet) {
+plot_func <- function(data, lab, group, facet, title = NULL) {
   # return nothing if plot is Null
   validate(
     need(data, "No data available for these selected inputs"),
@@ -119,7 +119,8 @@ plot_func <- function(data, lab, group, facet) {
     theme_minimal() +
     labs(
       y = lab,
-      x = "Year"
+      x = "Year",
+      title = title
     ) +
     scale_x_continuous(breaks = scales::pretty_breaks()) +
     scale_y_continuous(expand = c(0, 0)) +

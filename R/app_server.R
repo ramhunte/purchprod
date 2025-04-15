@@ -175,7 +175,13 @@ app_server <- function(input, output, session) {
         data = specs_plot_df(),
         lab = specs_inputs()$stat,
         group = "type",
-        facet = "variable"
+        facet = "unit_lab",
+        # title = paste0(
+        #   specs_inputs()$metric,
+        #   ": ",
+        #   specs_inputs()$unit,
+        #   " nominal $"
+        # )
       )
     }
   )
