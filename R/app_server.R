@@ -5,6 +5,15 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
+  ##################### Loading Module Server Outputs #########################
+  summary_inputs <- mod_summary_server("summary_1")
+  prod_type_inputs <- mod_prod_type_server("prod_type_1")
+  specs_inputs <- mod_specs_server("specs_1")
+  other_tabs_inputs <- mod_other_tabs_server("other_tabs_1")
+  specs_tabs_inputs <- mod_specs_tabs_server("specs_tabs_1")
+
+  ##################### Conditional Panel Render in UI #########################
+
   # conditional panel render if top nav_panels are "Summary" or "By Product Type"
   output$otherTabs <- renderUI({
     mod_other_tabs_ui("other_tabs_1")
@@ -15,15 +24,9 @@ app_server <- function(input, output, session) {
     mod_specs_tabs_ui("specs_tabs_1")
   })
 
-  # loading in module server outputs
-  summary_inputs <- mod_summary_server("summary_1")
-  prod_type_inputs <- mod_prod_type_server("prod_type_1")
-  specs_inputs <- mod_specs_server("specs_1")
-  other_tabs_inputs <- mod_other_tabs_server("other_tabs_1")
-  specs_tabs_inputs <- mod_specs_tabs_server("specs_tabs_1")
-
   ##################### Reactive Summary DF #########################
 
+  # reactive DF for summary tab plot data frame
   sum_plot_df <- reactive({
     req(
       input$tab_top == "Summary",
@@ -33,7 +36,9 @@ app_server <- function(input, output, session) {
       other_tabs_inputs()
     )
 
+    # Conditional rendering depending on the tab_bottom select
     if (
+      # "Summary" and "Production Acitviites"
       input$tab_top == "Summary" && input$tab_bottom == "Production Activities"
     ) {
       df <- sumdf_prac |>
@@ -45,7 +50,10 @@ app_server <- function(input, output, session) {
           variable %in%
             c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
         )
-    } else if (input$tab_top == "Summary" && input$tab_bottom == "Region") {
+    } else if (
+      # "Summary" and "Region"
+      input$tab_top == "Summary" && input$tab_bottom == "Region"
+    ) {
       df <- sumdf_reg |>
         dplyr::filter(
           # top tab filters
@@ -56,6 +64,7 @@ app_server <- function(input, output, session) {
           cs %in% other_tabs_inputs()$pracs1
         )
     } else if (
+      # "Summary" and "Processor Size/Type"
       input$tab_top == "Summary" && input$tab_bottom == "Processor Size/Type"
     ) {
       df <- sumdf_size |>
@@ -74,6 +83,7 @@ app_server <- function(input, output, session) {
 
   ##################### Reactive Summary Plots #########################
 
+  # plot for summary tab selections
   output$sumplot <- renderPlot(
     {
       # run function to create plot with summary tab data
@@ -90,6 +100,7 @@ app_server <- function(input, output, session) {
 
   # reactive data frame for By Product Type tab
   prod_plot_df <- reactive({
+    # "By Product Type" and "Production Acitivities"
     if (input$tab_top == "By Product Type") {
       if (input$tab_bottom == "Production Activities") {
         df <- proddf_prac |>
@@ -102,7 +113,10 @@ app_server <- function(input, output, session) {
             variable %in%
               c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
           )
-      } else if (input$tab_bottom == "Region") {
+      } else if (
+        # "By Product Type" and "Region"
+        input$tab_bottom == "Region"
+      ) {
         df <- proddf_reg |>
           dplyr::filter(
             # top tab filters
@@ -113,7 +127,10 @@ app_server <- function(input, output, session) {
             variable %in% other_tabs_inputs()$reg,
             cs %in% other_tabs_inputs()$pracs1
           )
-      } else if (input$tab_bottom == "Processor Size/Type") {
+      } else if (
+        # "By Product Type" and "Processor Size/Type"
+        input$tab_bottom == "Processor Size/Type"
+      ) {
         df <- proddf_size |>
           dplyr::filter(
             # to tab filters
@@ -176,12 +193,6 @@ app_server <- function(input, output, session) {
         lab = specs_inputs()$stat,
         group = "type",
         facet = "unit_lab",
-        # title = paste0(
-        #   specs_inputs()$metric,
-        #   ": ",
-        #   specs_inputs()$unit,
-        #   " nominal $"
-        # )
       )
     }
   )
@@ -189,7 +200,7 @@ app_server <- function(input, output, session) {
   ##################### Reactive Data Table  #########################
 
   ##Creating the data table
-  output$table <- DT::renderDataTable(
+  output$table <- DT::renderDT(
     {
       if (input$tab_top == "Summary") {
         df <- sum_plot_df()
