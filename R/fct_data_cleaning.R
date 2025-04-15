@@ -195,27 +195,8 @@ specsdf <- raw_purcprod |>
 #   unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
 # )
 
-thornyheads <- specsdf |>
-  dplyr::filter(
-    variable == "Thornyheads",
-    statistic == "Median",
-    metric == "Production weight"
-  )
-
-other_gs <- specsdf |>
-  dplyr::filter(
-    # tab == "Product",
-    variable == "Other groundfish species",
-    statistic == "Mean",
-    metric == "Production weight",
-    type == "Frozen"
-  )
-# metric == "Production weight")
-
-grouped <- specsdf |>
-  dplyr::filter(metric == "Production weight", statistic == "Mean") |>
-  dplyr::group_by(variable, type, year) |>
-  dplyr::summarize(mean_new = mean(value))
+prod_test <- proddf |>
+  dplyr::filter(metric == "Production price (per lb)")
 
 
 ####################### helper function to process data ############################

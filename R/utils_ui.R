@@ -6,6 +6,17 @@
 #'
 #' @noRd
 
+############## Overview Page #################
+year_func <- function(inputID, label, choices, selected) {
+  selectInput(
+    inputId = inputID,
+    label = label,
+    choices = choices,
+    selected = selected
+  )
+}
+
+############## Explore Data Page #################
 metric_func1 <- function(inputID) {
   checkboxGroupInput(
     inputId = inputID,

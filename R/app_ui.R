@@ -30,6 +30,10 @@ app_ui <- function(request) {
       title = "Purchase Production App",
 
       header(),
+      bslib::nav_panel(
+        "Overview",
+        mod_overview_ui("overview_1")
+      ),
 
       bslib::nav_panel(
         "Explore the Data",

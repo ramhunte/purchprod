@@ -12,6 +12,9 @@ app_server <- function(input, output, session) {
   other_tabs_inputs <- mod_other_tabs_server("other_tabs_1")
   specs_tabs_inputs <- mod_specs_tabs_server("specs_tabs_1")
 
+  ##################### Loading Module Server Outputs #########################
+  mod_overview_server("overview_1")
+
   ##################### Conditional Panel Render in UI #########################
 
   # conditional panel render if top nav_panels are "Summary" or "By Product Type"
