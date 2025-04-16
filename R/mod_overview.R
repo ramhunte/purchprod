@@ -42,7 +42,7 @@ mod_overview_ui <- function(id) {
         bslib::value_box(
           title = "Year",
           value = textOutput(ns("year1_text")),
-          theme = bslib::value_box_theme(bg = "#005E5E"),
+          theme = bslib::value_box_theme(bg = "#056FB7", fg = "#E9F3F6"),
           showcase = bsicons::bs_icon("calendar")
         ),
 
@@ -50,23 +50,23 @@ mod_overview_ui <- function(id) {
         bslib::value_box(
           title = "Total Production Value",
           value = textOutput(ns("pval_text")),
-          theme = bslib::value_box_theme(bg = "#005E5E"),
+          theme = bslib::value_box_theme(bg = "#5EB6D9", fg = "#E9F3F6"),
           showcase = bsicons::bs_icon("currency-dollar")
         ),
 
         # Change since year 2
         bslib::value_box(
-          title = "Difference",
-          value = textOutput(ns("diff_text")),
-          theme = bslib::value_box_theme(bg = "#005E5E"),
-          showcase = bsicons::bs_icon("filter")
+          title = textOutput(ns("value_box_title")),
+          value = uiOutput(ns("diff_text")),
+          theme = bslib::value_box_theme(bg = "#1EBEC7", fg = "#E9F3F6"),
+          showcase = bsicons::bs_icon("percent")
         ),
 
         # placeholder vlaue box
         bslib::value_box(
           title = "Placeholder",
           value = "Statistic",
-          theme = bslib::value_box_theme(bg = "#005E5E"),
+          theme = bslib::value_box_theme(bg = "#90DFE3", fg = "#E9F3F6"),
           showcase = bsicons::bs_icon("calendar")
         ),
       ),
@@ -142,13 +142,37 @@ mod_overview_server <- function(id) {
         paste("M")
     })
 
-    #   # Year 1 text render
-    output$diff_text <- renderText({
-      round(
-        df()$value[df()$year == input$year1Input] -
-          df()$value[df()$year == input$year2Input],
-        2
+    # Difference title render
+    output$value_box_title <- renderText({
+      paste0("Change since ", input$year2Input) # or whatever reactive source you're using
+    })
+
+    # Difference value render
+    # output$diff_text <- renderText({
+    #   diff <- round(
+    #     (df()$value[df()$year == input$year1Input] -
+    #       df()$value[df()$year == input$year2Input]) /
+    #       df()$value[df()$year == input$year1Input] *
+    #       100,
+    #     1
+    #   )
+    #
+    #   ifelse(diff > 0, paste0("+", diff), diff)
+    # })
+
+    output$diff_text <- renderUI({
+      diff <- round(
+        (df()$value[df()$year == input$year1Input] -
+          df()$value[df()$year == input$year2Input]) /
+          df()$value[df()$year == input$year1Input] *
+          100,
+        1
       )
+
+      color <- if (diff > 0) "green" else "red"
+      sign <- if (diff > 0) "+" else ""
+
+      HTML(paste0("<span style='color:", color, "'>", sign, diff, "</span>"))
     })
 
     # Species barchart

@@ -8,7 +8,7 @@
 
 ############## Overview Page #################
 year_func <- function(inputID, label, choices, selected) {
-  selectInput(
+  shinyWidgets::pickerInput(
     inputId = inputID,
     label = label,
     choices = choices,

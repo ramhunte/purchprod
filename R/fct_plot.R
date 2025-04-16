@@ -10,7 +10,13 @@
 
 # setting aesthetics of plot
 
-pal <- c(light_text = "#0085CA", dark_text = "#003087", value1 = "#005E5E")
+pal <- c(
+  light_text = "#0085CA",
+  dark_text = "#003087",
+  value1 = "#005E5E",
+  value2 = "#C2D9E3",
+  bg_plot = "#E9F3F6"
+)
 
 
 # line colors ----
@@ -122,7 +128,7 @@ barplot_func <- function(data, year1, year2) {
         c(year1, year2)
       )
     ) +
-    ggplot2::scale_y_continuous(limits = c(0, 800)) +
+    ggplot2::scale_y_continuous(limits = c(0, 780)) +
     ggplot2::scale_x_discrete(
       labels = c(
         "All production" = "All production",
@@ -149,8 +155,14 @@ barplot_func <- function(data, year1, year2) {
     ggplot2::theme(
       # note: need to make these fills as transparent for final figure when stitching together
       # they are colored right now so we can show the bacgkround color in the individual plot
-      panel.background = ggplot2::element_rect(fill = NA, color = NA),
-      plot.background = ggplot2::element_rect(fill = NA, color = NA),
+      panel.background = ggplot2::element_rect(
+        fill = pal[["bg_plot"]],
+        color = pal[["bg_plot"]]
+      ),
+      plot.background = ggplot2::element_rect(
+        fill = pal[["bg_plot"]],
+        color = pal[["bg_plot"]]
+      ),
       # axis
       axis.line.x = ggplot2::element_blank(),
       axis.line.y = ggplot2::element_blank(),
@@ -167,10 +179,14 @@ barplot_func <- function(data, year1, year2) {
       ),
       # axis.text.x = element_blank(),
       axis.ticks.y = ggplot2::element_blank(),
-      axis.ticks.x = ggplot2::element_line(color = pal["dark_text"]),
+      axis.ticks.x = ggplot2::element_blank(),
+      # axis.ticks.x = ggplot2::element_line(color = pal["dark_text"]),
 
       # grids
-      # panel.grid.major.x = element_line(color = "black", linetype = "dashed"),
+      panel.grid.major.x = element_line(color = pal[["value2"]]),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank(),
       # legend
       legend.position = "none"
     )
@@ -217,7 +233,15 @@ plot_func <- function(data, lab, group, facet, title = NULL) {
       panel.grid.major.y = element_line(size = 1.2),
       panel.grid.minor.x = element_blank(),
       panel.grid.major.x = element_line(size = 1.2),
-      axis.line = element_line(color = "grey", linewidth = 1) # Adds borders to only x and y axes
+      axis.line = element_line(color = "grey", linewidth = 1), # Adds borders to only x and y axes
+      panel.background = ggplot2::element_rect(
+        fill = pal[["bg_plot"]],
+        color = pal[["bg_plot"]]
+      ),
+      plot.background = ggplot2::element_rect(
+        fill = pal[["bg_plot"]],
+        color = pal[["bg_plot"]]
+      )
     ) +
     geom_point(aes(color = .data[[group]]), size = 4) +
     geom_line(
