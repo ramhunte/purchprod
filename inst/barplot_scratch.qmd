@@ -1,0 +1,77 @@
+
+# fmt: skip file
+
+```{r}
+
+
+library(ggplot2)
+library(forcats)
+
+bd_df <- sumdf_prac |> 
+  dplyr::filter(
+          year %in% c("2023", "2022"),
+          statistic == "Total",
+          metric == "Production value"
+          # variable == "All production"
+        )
+
+# making a barchart
+barchart <- ggplot(data = bd_df, 
+                   aes(x = fct_reorder(variable, value), 
+                                           y = value, fill = factor(year))) +
+  # adding count text to each bar
+  geom_col(position = "dodge") +
+  labs(fill = "Year", 
+       x = "", 
+       y = "Millions") +
+  scale_fill_manual(values = c("blue", "pink")) +
+  scale_y_continuous(limits = c(0, 800)) +
+  scale_x_discrete(labels = c(
+      "All production" = "All production",
+      "Groundfish production" = "Groundfish production",
+      "Pacific whiting" = "Pacific whiting",
+      "Non-whiting groundfish" =  "Non-whiting groundfish",
+      "Sablefish" = "Sablefish",
+      "Rockfish" = "Rockfish",
+      "Dover sole" = "Dover sole",
+      "Petrale sole" = "Petrale sole",
+      "Thornyheads" = "Thornyheads",
+      "Other groundfish species" = "Other groundfish species",
+       "Other species production" = "Other species production",
+        "Crab" = "Crab",
+        "Shrimp" = "Shrimp",
+        "Salmon" = "Salmon",
+        "Tuna" = "Tuna",
+        "Coastal pelagics" = "Coastal pelagics",
+        "Other shellfish" = "Other shellfish",
+        "Other species" = "Other species")) +
+  coord_flip() +
+  theme(
+    # note: need to make these fills as transparent for final figure when stitching together
+    # they are colored right now so we can show the bacgkround color in the individual plot
+    panel.background = element_rect(fill = NA, color = NA),
+    plot.background = element_rect(fill = NA, color = NA),
+    # axis 
+    axis.line.x = element_blank(),
+    axis.line.y = element_blank(),
+    axis.text.y = element_text(color = "black",
+                               # family = "sen",
+                               # size = 48,
+                              hjust = 1,     
+                               margin = margin(-10, -20, -50, 0)),
+    # axis.text.x = element_blank(),
+     axis.ticks.y = element_blank(),
+    axis.ticks.x = element_line(color = ),
+    
+    # grids 
+     # panel.grid.major.x = element_line(color = "black", linetype = "dashed"),
+    # legend
+    legend.position = "none"
+  )
+
+
+# making a barchart with colored background for displaying individually
+barchart_filled <- barchart +
+  theme(panel.background = element_rect(fill = pal["bg"], color = NA),
+    plot.background = element_rect(fill = pal["bg"], color = NA))
+```

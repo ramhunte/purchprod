@@ -10,6 +10,9 @@
 
 # setting aesthetics of plot
 
+pal <- c(light_text = "#0085CA", dark_text = "#003087", value1 = "#005E5E")
+
+
 # line colors ----
 line_col <- c(
   # species
@@ -97,6 +100,86 @@ line_ty <- c(
   "Unprocessed" = "solid",
   "Smoked" = "solid"
 )
+
+############################## Overview plots ##################################
+barplot_func <- function(data, year1, year2) {
+  # making a barchart
+  barchart <- ggplot2::ggplot(
+    data = data,
+    ggplot2::aes(
+      x = forcats::fct_reorder(variable, value),
+      y = value,
+      fill = factor(year)
+    )
+  ) +
+    # adding count text to each bar
+    ggplot2::geom_col(position = "dodge") +
+    ggplot2::labs(fill = "Year", x = "", y = "") +
+    ggplot2::scale_fill_manual(
+      # values = c(year1 = pal["value1"], year2 = pal["dark_text"])
+      values = setNames(
+        c(pal[["light_text"]], pal[["dark_text"]]),
+        c(year1, year2)
+      )
+    ) +
+    ggplot2::scale_y_continuous(limits = c(0, 800)) +
+    ggplot2::scale_x_discrete(
+      labels = c(
+        "All production" = "All production",
+        "Groundfish production" = "Groundfish production",
+        "Pacific whiting" = "Pacific whiting",
+        "Non-whiting groundfish" = "Non-whiting groundfish",
+        "Sablefish" = "Sablefish",
+        "Rockfish" = "Rockfish",
+        "Dover sole" = "Dover sole",
+        "Petrale sole" = "Petrale sole",
+        "Thornyheads" = "Thornyheads",
+        "Other groundfish species" = "Other groundfish species",
+        "Other species production" = "Other species production",
+        "Crab" = "Crab",
+        "Shrimp" = "Shrimp",
+        "Salmon" = "Salmon",
+        "Tuna" = "Tuna",
+        "Coastal pelagics" = "Coastal pelagics",
+        "Other shellfish" = "Other shellfish",
+        "Other species" = "Other species"
+      )
+    ) +
+    ggplot2::coord_flip() +
+    ggplot2::theme(
+      # note: need to make these fills as transparent for final figure when stitching together
+      # they are colored right now so we can show the bacgkround color in the individual plot
+      panel.background = ggplot2::element_rect(fill = NA, color = NA),
+      plot.background = ggplot2::element_rect(fill = NA, color = NA),
+      # axis
+      axis.line.x = ggplot2::element_blank(),
+      axis.line.y = ggplot2::element_blank(),
+      axis.text.y = ggplot2::element_text(
+        color = pal["value1"],
+        # family = "sen",
+        size = 14,
+        hjust = 1,
+        margin = margin(-10, -20, -50, 0)
+      ),
+      axis.text.x = ggplot2::element_text(
+        color = pal["value1"],
+        size = 18
+      ),
+      # axis.text.x = element_blank(),
+      axis.ticks.y = ggplot2::element_blank(),
+      axis.ticks.x = ggplot2::element_line(color = pal["dark_text"]),
+
+      # grids
+      # panel.grid.major.x = element_line(color = "black", linetype = "dashed"),
+      # legend
+      legend.position = "none"
+    )
+
+  return(barchart)
+}
+
+
+############################## Explore the Data plots ##################################
 
 plot_func <- function(data, lab, group, facet, title = NULL) {
   # return nothing if plot is Null

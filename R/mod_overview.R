@@ -60,35 +60,38 @@ mod_overview_ui <- function(id) {
           value = textOutput(ns("diff_text")),
           theme = bslib::value_box_theme(bg = "#005E5E"),
           showcase = bsicons::bs_icon("filter")
-        )
+        ),
+
+        # placeholder vlaue box
+        bslib::value_box(
+          title = "Placeholder",
+          value = "Statistic",
+          theme = bslib::value_box_theme(bg = "#005E5E"),
+          showcase = bsicons::bs_icon("calendar")
+        ),
       ),
 
       ######################### Plot Cards ##########################
 
+      # middle cards
       bslib::layout_column_wrap(
-        width = 1 / 3,
-        height = 100,
+        width = 1 / 2,
+        height = 200,
         bslib::card(
           full_screen = FALSE,
           class = "custom-card",
-          bslib::card_header("Year", class = "bg-dark")
+          bslib::card_header(
+            "Production Value ($ Millions)",
+            class = "bg-dark"
+          ),
+          # plotOutput(ns("specs_bar"))
+          plotOutput(ns("specs_bar"))
         ),
         bslib::card(
           full_screen = FALSE,
           class = "custom-card",
           bslib::card_header("A test plot", class = "bg-dark")
-        ),
-        bslib::card(
-          full_screen = FALSE,
-          class = "custom-card",
-          bslib::card_header("A filling map", class = "bg-dark"),
-          bslib::card_body(class = "p-0")
         )
-      ),
-      bslib::card(
-        full_screen = FALSE,
-        class = "custom-card",
-        bslib::card_header("A test plot", class = "bg-dark")
       )
     )
   )
@@ -105,12 +108,23 @@ mod_overview_server <- function(id) {
     ns <- session$ns
 
     df <- reactive({
-      clean_purcprod |>
+      sumdf_prac |>
         dplyr::filter(
           year %in% c(input$year1Input, input$year2Input),
           statistic == "Total",
           metric == "Production value",
           variable == "All production"
+        )
+    })
+
+    # barplot df
+
+    df_bp <- reactive({
+      sumdf_prac |>
+        dplyr::filter(
+          year %in% c(input$year1Input, input$year2Input),
+          statistic == "Total",
+          metric == "Production value"
         )
     })
 
@@ -134,6 +148,15 @@ mod_overview_server <- function(id) {
         df()$value[df()$year == input$year1Input] -
           df()$value[df()$year == input$year2Input],
         2
+      )
+    })
+
+    # Species barchart
+    output$specs_bar <- renderPlot({
+      barplot_func(
+        data = df_bp(),
+        year1 = input$year1,
+        year2 = input$year2
       )
     })
   })
