@@ -7,10 +7,14 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+
+######################### UI ##########################
+
 mod_overview_ui <- function(id) {
   ns <- NS(id)
   tagList(
     bslib::page_sidebar(
+      ######################### Siderbar ##########################
       sidebar = bslib::sidebar(
         # START sidebar
         # Year 1
@@ -29,28 +33,37 @@ mod_overview_ui <- function(id) {
         )
       ), #END sidebar
 
+      ######################### Value Boxes ##########################
+
+      # Year 1
+
       bslib::layout_columns(
         fill = FALSE,
-        uiOutput(ns("year1_box")), # this replaces the static value box,
-
         bslib::value_box(
-          title = "Average bill depth",
-          value = "2-19",
+          title = "Year",
+          value = textOutput(ns("year1_text")),
           theme = bslib::value_box_theme(bg = "#005E5E"),
-          p("The 2nd detail"),
-          p("The 3rd detail"),
-          showcase = bsicons::bs_icon("filter")
+          showcase = bsicons::bs_icon("calendar")
         ),
+
+        # Total production value
         bslib::value_box(
-          title = "Average body mass",
-          value = "2-19",
+          title = "Total Production Value",
+          value = textOutput(ns("pval_text")),
           theme = bslib::value_box_theme(bg = "#005E5E"),
-          p("The 4th detail"),
-          p("The 5th detail"),
-          p("The 6th detail"),
           showcase = bsicons::bs_icon("currency-dollar")
+        ),
+
+        # Change since year 2
+        bslib::value_box(
+          title = "Difference",
+          value = textOutput(ns("diff_text")),
+          theme = bslib::value_box_theme(bg = "#005E5E"),
+          showcase = bsicons::bs_icon("filter")
         )
       ),
+
+      ######################### Plot Cards ##########################
 
       bslib::layout_column_wrap(
         width = 1 / 3,
@@ -81,6 +94,9 @@ mod_overview_ui <- function(id) {
   )
 }
 
+
+######################### Server ##########################
+
 #' overview Server Functions
 #'
 #' @noRd
@@ -88,13 +104,36 @@ mod_overview_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    output$year1_box <- renderUI({
-      bslib::value_box(
-        title = "Year",
-        value = input$year1Input,
-        theme = bslib::value_box_theme(bg = "#005E5E"),
-        p("The 1st detail"),
-        showcase = bsicons::bs_icon("calendar")
+    df <- reactive({
+      clean_purcprod |>
+        dplyr::filter(
+          year %in% c(input$year1Input, input$year2Input),
+          statistic == "Total",
+          metric == "Production value",
+          variable == "All production"
+        )
+    })
+
+    # Year 1 text render
+    output$year1_text <- renderText({
+      input$year1Input
+    })
+
+    # Production Value Text
+    output$pval_text <- renderText({
+      df() |>
+        dplyr::filter(year == input$year1Input) |>
+        dplyr::pull(value) |>
+        round(2) |>
+        paste("M")
+    })
+
+    #   # Year 1 text render
+    output$diff_text <- renderText({
+      round(
+        df()$value[df()$year == input$year1Input] -
+          df()$value[df()$year == input$year2Input],
+        2
       )
     })
   })
