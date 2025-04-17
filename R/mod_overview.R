@@ -14,31 +14,26 @@ mod_overview_ui <- function(id) {
   ns <- NS(id)
   tagList(
     bslib::page_sidebar(
-      ######################### Siderbar ##########################
+      ######################### Year Selectors #########################
       sidebar = bslib::sidebar(
-        # START sidebar
-        # Year 1
+        title = "Select years to compare",
         year_func(
           inputID = ns("year1Input"),
-          label = "Pick Year 1",
+          label = "Year 1",
           choices = unique(clean_purcprod$year),
           selected = "2023"
         ),
-        # Year 2
         year_func(
           inputID = ns("year2Input"),
-          label = "Pick Year 2",
+          label = "Year 2",
           choices = unique(clean_purcprod$year),
           selected = "2022"
         )
-      ), #END sidebar
-
-      ######################### Value Boxes ##########################
-
-      # Year 1
-
+      ),
       bslib::layout_columns(
         fill = FALSE,
+
+        ######################### Value Boxes #########################
         bslib::value_box(
           title = "Year",
           value = textOutput(ns("year1_text")),
@@ -62,12 +57,12 @@ mod_overview_ui <- function(id) {
           showcase = bsicons::bs_icon("percent")
         ),
 
-        # placeholder vlaue box
+        # number of observations
         bslib::value_box(
-          title = "Placeholder",
-          value = "Statistic",
+          title = "Number of observations",
+          value = textOutput(ns("n_text")),
           theme = bslib::value_box_theme(bg = "#90DFE3", fg = "#E9F3F6"),
-          showcase = bsicons::bs_icon("calendar")
+          showcase = bsicons::bs_icon("hash")
         ),
       ),
 
@@ -77,20 +72,28 @@ mod_overview_ui <- function(id) {
       bslib::layout_column_wrap(
         width = 1 / 2,
         height = 200,
+
+        # species barplot
         bslib::card(
-          full_screen = FALSE,
-          class = "custom-card",
+          full_screen = TRUE,
+          class = "custom-card p-0",
           bslib::card_header(
             "Production Value ($ Millions)",
             class = "bg-dark"
           ),
-          # plotOutput(ns("specs_bar"))
-          plotOutput(ns("specs_bar"))
+
+          bslib::card_body(
+            plotOutput(ns("specs_bar")),
+            class = "p-0" # remove padding
+          )
         ),
+
+        # other plot
         bslib::card(
-          full_screen = FALSE,
+          full_screen = TRUE,
           class = "custom-card",
-          bslib::card_header("A test plot", class = "bg-dark")
+          bslib::card_header("A test plot", class = "bg-dark"),
+          plotOutput(ns("tree_plot"))
         )
       )
     )
@@ -107,6 +110,7 @@ mod_overview_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    # overall data frame
     df <- reactive({
       sumdf_prac |>
         dplyr::filter(
@@ -117,7 +121,7 @@ mod_overview_server <- function(id) {
         )
     })
 
-    # barplot df
+    # barplot data frame
 
     df_bp <- reactive({
       sumdf_prac |>
@@ -147,20 +151,9 @@ mod_overview_server <- function(id) {
       paste0("Change since ", input$year2Input) # or whatever reactive source you're using
     })
 
-    # Difference value render
-    # output$diff_text <- renderText({
-    #   diff <- round(
-    #     (df()$value[df()$year == input$year1Input] -
-    #       df()$value[df()$year == input$year2Input]) /
-    #       df()$value[df()$year == input$year1Input] *
-    #       100,
-    #     1
-    #   )
-    #
-    #   ifelse(diff > 0, paste0("+", diff), diff)
-    # })
-
+    # Difference change value
     output$diff_text <- renderUI({
+      # calculating % change
       diff <- round(
         (df()$value[df()$year == input$year1Input] -
           df()$value[df()$year == input$year2Input]) /
@@ -169,19 +162,33 @@ mod_overview_server <- function(id) {
         1
       )
 
-      color <- if (diff > 0) "green" else "red"
+      # assigning colros and +/- sign to value
+      color <- if (diff > 0) "#4B8320" else "#DB2207"
       sign <- if (diff > 0) "+" else ""
 
+      # HTML to change colors depending on value
       HTML(paste0("<span style='color:", color, "'>", sign, diff, "</span>"))
     })
 
+    # number of observations output
+    output$n_text <- renderText({
+      df()$n[df()$year == input$year1Input]
+    })
+
+    ################# Plots ####################
+
     # Species barchart
     output$specs_bar <- renderPlot({
-      barplot_func(
+      lollipop_func(
         data = df_bp(),
         year1 = input$year1,
         year2 = input$year2
       )
+    })
+
+    # tree plot
+    output$tree_plot <- renderPlot({
+      tree_fig # your static ggplot object
     })
   })
 }

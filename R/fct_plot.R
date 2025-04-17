@@ -108,28 +108,124 @@ line_ty <- c(
 )
 
 ############################## Overview plots ##################################
-barplot_func <- function(data, year1, year2) {
-  # making a barchart
-  barchart <- ggplot2::ggplot(
+# barplot_func <- function(data, year1, year2) {
+#   # making a barchart
+#   barchart <- ggplot2::ggplot(
+#     data = data,
+#     ggplot2::aes(
+#       x = forcats::fct_reorder(variable, value),
+#       y = value,
+#       fill = factor(year)
+#     )
+#   ) +
+#     # adding count text to each bar
+#     ggplot2::geom_col(position = "dodge") +
+#     ggplot2::labs(fill = "Year", x = "", y = "") +
+#     ggplot2::scale_fill_manual(
+#       # values = c(year1 = pal["value1"], year2 = pal["dark_text"])
+#       values = setNames(
+#         c(pal[["light_text"]], pal[["dark_text"]]),
+#         c(year1, year2)
+#       )
+#     ) +
+#     ggplot2::scale_y_continuous(limits = c(0, 780)) +
+#     ggplot2::scale_x_discrete(
+#       labels = c(
+#         "All production" = "All production",
+#         "Groundfish production" = "Groundfish production",
+#         "Pacific whiting" = "Pacific whiting",
+#         "Non-whiting groundfish" = "Non-whiting groundfish",
+#         "Sablefish" = "Sablefish",
+#         "Rockfish" = "Rockfish",
+#         "Dover sole" = "Dover sole",
+#         "Petrale sole" = "Petrale sole",
+#         "Thornyheads" = "Thornyheads",
+#         "Other groundfish species" = "Other groundfish species",
+#         "Other species production" = "Other species production",
+#         "Crab" = "Crab",
+#         "Shrimp" = "Shrimp",
+#         "Salmon" = "Salmon",
+#         "Tuna" = "Tuna",
+#         "Coastal pelagics" = "Coastal pelagics",
+#         "Other shellfish" = "Other shellfish",
+#         "Other species" = "Other species"
+#       )
+#     ) +
+#     ggplot2::coord_flip() +
+#     ggplot2::theme(
+#       # note: need to make these fills as transparent for final figure when stitching together
+#       # they are colored right now so we can show the bacgkround color in the individual plot
+#       panel.background = ggplot2::element_rect(
+#         fill = pal[["bg_plot"]],
+#         color = pal[["bg_plot"]]
+#       ),
+#       plot.background = ggplot2::element_rect(
+#         fill = pal[["bg_plot"]],
+#         color = pal[["bg_plot"]]
+#       ),
+#       # axis
+#       axis.line.x = ggplot2::element_blank(),
+#       axis.line.y = ggplot2::element_blank(),
+#       axis.text.y = ggplot2::element_text(
+#         color = pal["value1"],
+#         # family = "sen",
+#         size = 18,
+#         hjust = 1,
+#         margin = margin(-10, -20, -50, 0)
+#       ),
+#       axis.text.x = ggplot2::element_text(
+#         color = pal["value1"],
+#         size = 18
+#       ),
+#       # axis.text.x = element_blank(),
+#       axis.ticks.y = ggplot2::element_blank(),
+#       axis.ticks.x = ggplot2::element_blank(),
+#       # axis.ticks.x = ggplot2::element_line(color = pal["dark_text"]),
+#
+#       # grids
+#       panel.grid.major.x = element_line(color = pal[["value2"]]),
+#       panel.grid.minor.x = element_blank(),
+#       panel.grid.major.y = element_blank(),
+#       panel.grid.minor.y = element_blank(),
+#       # legend
+#       legend.position = "none"
+#     )
+#
+#   return(barchart)
+# }
+
+lollipop_func <- function(data, year1, year2) {
+  ggplot2::ggplot(
     data = data,
     ggplot2::aes(
-      x = forcats::fct_reorder(variable, value),
-      y = value,
-      fill = factor(year)
+      x = value,
+      y = forcats::fct_reorder(variable, value),
+      group = variable,
+      color = factor(year)
     )
   ) +
-    # adding count text to each bar
-    ggplot2::geom_col(position = "dodge") +
-    ggplot2::labs(fill = "Year", x = "", y = "") +
-    ggplot2::scale_fill_manual(
-      # values = c(year1 = pal["value1"], year2 = pal["dark_text"])
+    # Draw segments connecting the two years for each variable
+    ggplot2::geom_line(
+      aes(group = variable),
+      color = pal[["value2"]],
+      linewidth = 1
+    ) +
+
+    # Add points for each year
+    ggplot2::geom_point(size = 4) +
+
+    ggplot2::labs(color = "Year", x = "", y = "") +
+
+    ggplot2::scale_color_manual(
       values = setNames(
         c(pal[["light_text"]], pal[["dark_text"]]),
         c(year1, year2)
       )
     ) +
-    ggplot2::scale_y_continuous(limits = c(0, 780)) +
-    ggplot2::scale_x_discrete(
+
+    ggplot2::scale_x_continuous(limits = c(0, 780)) +
+
+    ggplot2::scale_y_discrete(
       labels = c(
         "All production" = "All production",
         "Groundfish production" = "Groundfish production",
@@ -151,10 +247,8 @@ barplot_func <- function(data, year1, year2) {
         "Other species" = "Other species"
       )
     ) +
-    ggplot2::coord_flip() +
+
     ggplot2::theme(
-      # note: need to make these fills as transparent for final figure when stitching together
-      # they are colored right now so we can show the bacgkround color in the individual plot
       panel.background = ggplot2::element_rect(
         fill = pal[["bg_plot"]],
         color = pal[["bg_plot"]]
@@ -163,13 +257,11 @@ barplot_func <- function(data, year1, year2) {
         fill = pal[["bg_plot"]],
         color = pal[["bg_plot"]]
       ),
-      # axis
       axis.line.x = ggplot2::element_blank(),
       axis.line.y = ggplot2::element_blank(),
       axis.text.y = ggplot2::element_text(
         color = pal["value1"],
-        # family = "sen",
-        size = 14,
+        size = 18,
         hjust = 1,
         margin = margin(-10, -20, -50, 0)
       ),
@@ -177,21 +269,12 @@ barplot_func <- function(data, year1, year2) {
         color = pal["value1"],
         size = 18
       ),
-      # axis.text.x = element_blank(),
-      axis.ticks.y = ggplot2::element_blank(),
-      axis.ticks.x = ggplot2::element_blank(),
-      # axis.ticks.x = ggplot2::element_line(color = pal["dark_text"]),
-
-      # grids
-      panel.grid.major.x = element_line(color = pal[["value2"]]),
-      panel.grid.minor.x = element_blank(),
-      panel.grid.major.y = element_blank(),
-      panel.grid.minor.y = element_blank(),
-      # legend
+      axis.ticks = ggplot2::element_blank(),
+      panel.grid.major.x = ggplot2::element_line(color = pal[["value2"]]),
+      panel.grid.major.y = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
       legend.position = "none"
     )
-
-  return(barchart)
 }
 
 

@@ -75,3 +75,71 @@ barchart_filled <- barchart +
   theme(panel.background = element_rect(fill = pal["bg"], color = NA),
     plot.background = element_rect(fill = pal["bg"], color = NA))
 ```
+
+
+# radar plot 
+```{r}
+library(fmsb)
+library(ggradar)
+
+
+radar_df <- proddf_prac |> 
+  dplyr::filter(
+          year %in% c("2021", "2022"),
+          statistic == "Total",
+          metric == "Production value",
+          variable == "All production"
+        )  |> 
+  tidyr::pivot_wider(names_from = type, values_from = value) |> 
+  dplyr::rename(group = year) |> 
+  dplyr::select(c(group, Canned:Unprocessed)) |> 
+  dplyr::group_by(group) |> 
+  dplyr::summarise(across(c(Canned:Unprocessed), ~ sum(.x, na.rm = TRUE)))
+
+ggradar::ggradar(radar_df)
+
+
+
+
+```
+
+
+# tree plot
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(treemapify)
+
+
+tree_df <- proddf_prac |> 
+  dplyr::filter(
+          year %in% c("2021", "2022"),
+          statistic == "Total",
+          metric == "Production value",
+          variable == "All production"
+        ) 
+
+# making a tree map
+tree_fig <-  ggplot2::ggplot(tree_df, ggplot2::aes(area = value, fill = factor(year),
+                                 label = factor(year), 
+                                 subgroup = type)) +
+  # labs(title = "Comparing the World's 10 Largest Fishing Fleets") +
+  ggplot2::scale_fill_manual(values = c("#5EB6D9", "darkblue")) +
+  treemapify::geom_treemap() +
+  treemapify::geom_treemap_subgroup_border(colour = "white", size = 2) +
+  treemapify::geom_treemap_subgroup_text(place = "centre", grow = TRUE,
+                             alpha = 0.7, 
+                             lineheight = 0.3,
+                             colour = "white",
+                             size = 2) +
+  ggplot2::theme(
+    panel.background = ggplot2::element_rect(fill = "transparent", color = NA),
+    plot.background = ggplot2::element_rect(fill = "transparent", color = NA),
+    legend.position = "none")
+
+
+tree_fig
+
+```
+
