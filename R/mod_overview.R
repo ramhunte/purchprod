@@ -54,8 +54,16 @@ mod_overview_ui <- function(id) {
           title = textOutput(ns("value_box_title")),
           value = uiOutput(ns("diff_text")),
           theme = bslib::value_box_theme(bg = "#1EBEC7", fg = "#E9F3F6"),
-          showcase = bsicons::bs_icon("percent")
+          showcase = bsicons::bs_icon("graph-up")
         ),
+
+        # # State
+        # bslib::value_box(
+        #   title = "California vs Oregon & Washington",
+        #   value = "test",
+        #   theme = bslib::value_box_theme(bg = "#1EBEC7", fg = "#E9F3F6"),
+        #   showcase = bsicons::bs_icon("geo-alt")
+        # ),
 
         # number of observations
         bslib::value_box(
@@ -83,7 +91,7 @@ mod_overview_ui <- function(id) {
           ),
 
           bslib::card_body(
-            plotOutput(ns("specs_bar")),
+            plotOutput(ns("specs_plot")),
             class = "p-0" # remove padding
           )
         ),
@@ -93,7 +101,10 @@ mod_overview_ui <- function(id) {
           full_screen = TRUE,
           class = "custom-card",
           bslib::card_header("A test plot", class = "bg-dark"),
-          plotOutput(ns("tree_plot"))
+          bslib::card_body(
+            plotOutput(ns("type_plot")),
+            class = "p-0" # remove padding
+          )
         )
       )
     )
@@ -123,12 +134,22 @@ mod_overview_server <- function(id) {
 
     # barplot data frame
 
-    df_bp <- reactive({
+    df_loli <- reactive({
       sumdf_prac |>
         dplyr::filter(
           year %in% c(input$year1Input, input$year2Input),
           statistic == "Total",
           metric == "Production value"
+        )
+    })
+
+    df_bar <- reactive({
+      proddf_prac |>
+        dplyr::filter(
+          year %in% c(input$year1Input, input$year2Input),
+          statistic == "Total",
+          metric == "Production value",
+          variable == "All production"
         )
     })
 
@@ -167,7 +188,7 @@ mod_overview_server <- function(id) {
       sign <- if (diff > 0) "+" else ""
 
       # HTML to change colors depending on value
-      HTML(paste0("<span style='color:", color, "'>", sign, diff, "</span>"))
+      HTML(paste0("<span style='color:", color, "'>", sign, diff, "%</span>"))
     })
 
     # number of observations output
@@ -178,9 +199,17 @@ mod_overview_server <- function(id) {
     ################# Plots ####################
 
     # Species barchart
-    output$specs_bar <- renderPlot({
+    output$specs_plot <- renderPlot({
       lollipop_func(
-        data = df_bp(),
+        data = df_loli(),
+        year1 = input$year1,
+        year2 = input$year2
+      )
+    })
+
+    output$type_plot <- renderPlot({
+      barplot_func(
+        data = df_bar(),
         year1 = input$year1,
         year2 = input$year2
       )
