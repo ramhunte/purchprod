@@ -15,8 +15,7 @@ mod_specs_tabs_ui <- function(id) {
         "Product Type",
         class = "custom-card",
         prodtype_func(inputID = ns("protype2Input"))
-      ),
-      id = "tab_bottom"
+      )
     )
   )
 }

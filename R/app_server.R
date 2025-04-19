@@ -236,4 +236,8 @@ app_server <- function(input, output, session) {
       }
     }
   )
+
+  observe({
+    print(paste("Current tab:", input$tab_bottom))
+  })
 }
