@@ -226,28 +226,28 @@ lollipop_func <- function(data, year1, year2) {
 
     ggplot2::scale_x_continuous(limits = c(0, 780)) +
 
-    ggplot2::scale_y_discrete(
-      labels = c(
-        "All production" = "All production",
-        "Groundfish production" = "Groundfish production",
-        "Pacific whiting" = "Pacific whiting",
-        "Non-whiting groundfish" = "Non-whiting groundfish",
-        "Sablefish" = "Sablefish",
-        "Rockfish" = "Rockfish",
-        "Dover sole" = "Dover sole",
-        "Petrale sole" = "Petrale sole",
-        "Thornyheads" = "Thornyheads",
-        "Other groundfish species" = "Other groundfish species",
-        "Other species production" = "Other species production",
-        "Crab" = "Crab",
-        "Shrimp" = "Shrimp",
-        "Salmon" = "Salmon",
-        "Tuna" = "Tuna",
-        "Coastal pelagics" = "Coastal pelagics",
-        "Other shellfish" = "Other shellfish",
-        "Other species" = "Other species"
-      )
-    ) +
+    # ggplot2::scale_y_discrete(
+    #   labels = c(
+    #     "All production" = "All production",
+    #     "Groundfish production" = "Groundfish production",
+    #     "Pacific whiting" = "Pacific whiting",
+    #     "Non-whiting groundfish" = "Non-whiting groundfish",
+    #     "Sablefish" = "Sablefish",
+    #     "Rockfish" = "Rockfish",
+    #     "Dover sole" = "Dover sole",
+    #     "Petrale sole" = "Petrale sole",
+    #     "Thornyheads" = "Thornyheads",
+    #     "Other groundfish species" = "Other groundfish species",
+    #     "Other species production" = "Other species production",
+    #     "Crab" = "Crab",
+    #     "Shrimp" = "Shrimp",
+    #     "Salmon" = "Salmon",
+    #     "Tuna" = "Tuna",
+    #     "Coastal pelagics" = "Coastal pelagics",
+    #     "Other shellfish" = "Other shellfish",
+    #     "Other species" = "Other species"
+    #   )
+    # ) +
 
     ggplot2::theme(
       panel.background = ggplot2::element_rect(
@@ -281,7 +281,8 @@ lollipop_func <- function(data, year1, year2) {
 
 ############################## Explore the Data plots ##################################
 
-plot_func <- function(data, lab, group, facet, title = NULL) {
+# line graph
+plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
   # return nothing if plot is Null
   validate(
     need(data, "No data available for these selected inputs"),
@@ -340,8 +341,9 @@ plot_func <- function(data, lab, group, facet, title = NULL) {
     facet_wrap(as.formula(paste("~", facet)), scales = 'free_y', ncol = 2)
 }
 
-############################## DT render data frame ##################################
+############################## DT render data ##################################
 
+# cleaning up data frame to be rendered under the "Table" panel
 process_df <- function(df) {
   # list of colsumns to remove that are not needed
   cols_to_remove <- c("ylab", "tab", "unit_lab")

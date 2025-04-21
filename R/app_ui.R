@@ -106,7 +106,7 @@ app_ui <- function(request) {
                 condition = "input.tab_top == 'Summary'",
                 shinycssloaders::withSpinner(
                   # adding a cool loader
-                  plotOutput("sumplot", width = "100%", height = "575px")
+                  plotOutput("sumplot", width = "100%", height = "620px")
                 )
               ),
 
@@ -115,7 +115,7 @@ app_ui <- function(request) {
                 condition = "input.tab_top == 'By Product Type'",
                 shinycssloaders::withSpinner(
                   # adding a cool loader
-                  plotOutput("productplot", width = "100%", height = "575px")
+                  plotOutput("productplot", width = "100%", height = "620px")
                 )
               ),
 
@@ -124,7 +124,7 @@ app_ui <- function(request) {
                 condition = "input.tab_top == 'By Species'",
                 shinycssloaders::withSpinner(
                   # adding a cool loader
-                  plotOutput("specsplot", width = "100%", height = "575px")
+                  plotOutput("specsplot", width = "100%", height = "620px")
                 )
               )
             ), # END Plot nav_panel
