@@ -169,7 +169,7 @@ app_server <- function(input, output, session) {
 
   # reactive data frame for By Product Type tab
   specs_plot_df <- reactive({
-    if (input$tab_top == "Species") {
+    if (input$tab_top == "By Species") {
       df <- specsdf |>
         dplyr::filter(
           # top tab filters
@@ -209,7 +209,7 @@ app_server <- function(input, output, session) {
         df <- sum_plot_df()
       } else if (input$tab_top == "By Product Type") {
         df <- prod_plot_df()
-      } else if (input$tab_top == "Species") {
+      } else if (input$tab_top == "By Species") {
         df <- specs_plot_df()
       }
 
@@ -233,6 +233,8 @@ app_server <- function(input, output, session) {
         write.csv(sum_plot_df(), file)
       } else if (input$tab_top == "By Product Type") {
         write.csv(prod_plot_df(), file)
+      } else if (input$tab_top == "By Product Type") {
+        write.csv(specs_plot_df(), file)
       }
     }
   )

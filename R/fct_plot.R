@@ -293,7 +293,7 @@ plot_func <- function(data, lab, group, facet, title = NULL) {
   # ggplot code
   ggplot2::ggplot(
     data,
-    ggplot2::aes(x = year, y = value, group = .data[[group]])
+    ggplot2::aes(x = factor(year), y = value, group = .data[[group]])
   ) +
     scale_fill_manual(values = line_col) +
     scale_color_manual(values = line_col) +
@@ -304,8 +304,8 @@ plot_func <- function(data, lab, group, facet, title = NULL) {
       x = "Year",
       title = title
     ) +
-    scale_x_continuous(breaks = scales::pretty_breaks()) +
-    scale_y_continuous(expand = c(0, 0)) +
+    scale_x_discrete(breaks = scales::pretty_breaks()) +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
     theme(
       text = element_text(size = 22),
       axis.text = element_text(size = 18),
@@ -341,8 +341,10 @@ plot_func <- function(data, lab, group, facet, title = NULL) {
 
 # function for processing DT render data
 process_df <- function(df) {
+  cols_to_remove <- c("ylab", "tab", "unit_lab")
+
   df |>
-    dplyr::select(-c(ylab, tab, unit_lab)) |>
+    dplyr::select(-any_of(cols_to_remove)) |>
     dplyr::mutate(
       variance = round(variance, 2),
       q25 = round(q25, 2),

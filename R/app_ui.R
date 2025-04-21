@@ -40,7 +40,6 @@ app_ui <- function(request) {
 
         # START sidebarLayout
         bslib::page_sidebar(
-          # style = "min-height: 80vh;",
           ########################### Top tabSet ######################################
           #################### (Summary; By Product Type) #############################
 
@@ -62,7 +61,7 @@ app_ui <- function(request) {
                 mod_prod_type_ui("prod_type_1")
               ), #END Product Type nav_panel
               bslib::nav_panel(
-                "Species",
+                "By Species",
                 class = "custom-card",
                 mod_specs_ui("specs_1")
               ), # END Species nav_panel
@@ -74,13 +73,13 @@ app_ui <- function(request) {
             # START tabsetPanel
 
             conditionalPanel(
-              condition = "input.tab_top != 'Species'",
+              condition = "input.tab_top != 'By Species'",
               # mod_other_tabs_ui("other_tabs_1")
               uiOutput("otherTabs")
             ),
 
             conditionalPanel(
-              condition = "input.tab_top == 'Species'",
+              condition = "input.tab_top == 'By Species'",
               # mod_specs_tabs_ui("specs_tabs_1")
               uiOutput("speciesTabs")
             ),
@@ -113,7 +112,7 @@ app_ui <- function(request) {
               ),
 
               conditionalPanel(
-                condition = "input.tab_top == 'Species'",
+                condition = "input.tab_top == 'By Species'",
                 shinycssloaders::withSpinner(
                   # adding a cool loader
                   plotOutput("specsplot", width = "100%", height = "575px")
