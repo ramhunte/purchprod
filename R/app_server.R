@@ -5,31 +5,43 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  ##################### Loading Module Server Outputs #########################
+  #################################################################################
+  #################################### Overview ###################################
+  #################################################################################
+
+  # Loading Module Server Outputs
+  mod_overview_server("overview_1")
+
+  #################################################################################
+  ################################ Explore the Data ###############################
+  #################################################################################
+
+  # NOTE: so much of the Explore the Data tab's server is in this app_server.R and not
+  # the module_*_.R servers because the inputs for the graphs/tables/data frames come
+  # from various modules. Therefore, components of each of the modules themselves all
+  # feed into global server components that needed to be stored in the app_server.R file
+
+  # Loading Module Server Outputs
   summary_inputs <- mod_summary_server("summary_1")
   prod_type_inputs <- mod_prod_type_server("prod_type_1")
   specs_inputs <- mod_specs_server("specs_1")
   other_tabs_inputs <- mod_other_tabs_server("other_tabs_1")
   specs_tabs_inputs <- mod_specs_tabs_server("specs_tabs_1")
 
-  ##################### Loading Module Server Outputs #########################
-  mod_overview_server("overview_1")
-
-  ##################### Conditional Panel Render in UI #########################
-
-  # conditional panel render if top nav_panels are "Summary" or "By Product Type"
+  # Conditional nav_panel
+  # if top nav_panels are "Summary" or "By Product Type" ("other)
   output$otherTabs <- renderUI({
     mod_other_tabs_ui("other_tabs_1")
   })
 
-  # conditional panel render if top nav_panels is "Species"
+  # conditional panel render if top nav_panel is "Species"
   output$speciesTabs <- renderUI({
     mod_specs_tabs_ui("specs_tabs_1")
   })
 
-  ##################### Reactive Summary DF #########################
+  ##################### Summary: Data Frame  #########################
 
-  # reactive DF for summary tab plot data frame
+  # reactive data frame for Summary tab
   sum_plot_df <- reactive({
     req(
       input$tab_top == "Summary",
@@ -41,7 +53,7 @@ app_server <- function(input, output, session) {
 
     # Conditional rendering depending on the tab_bottom select
     if (
-      # "Summary" and "Production Acitviites"
+      # "Summary" and "Production Activities"
       input$tab_top == "Summary" && input$tab_bottom == "Production Activities"
     ) {
       df <- sumdf_prac |>
@@ -84,7 +96,7 @@ app_server <- function(input, output, session) {
     return(df)
   })
 
-  ##################### Reactive Summary Plots #########################
+  ##################### Summary: Plot  #########################
 
   # plot for summary tab selections
   output$sumplot <- renderPlot(
@@ -99,7 +111,7 @@ app_server <- function(input, output, session) {
     }
   )
 
-  ##################### Reactive By Product Type DF ########################### ----
+  ##################### By Product Type: Data Frame  #########################
 
   # reactive data frame for By Product Type tab
   prod_plot_df <- reactive({
@@ -116,10 +128,7 @@ app_server <- function(input, output, session) {
             variable %in%
               c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
           )
-      } else if (
-        # "By Product Type" and "Region"
-        input$tab_bottom == "Region"
-      ) {
+      } else if (input$tab_bottom == "Region") {
         df <- proddf_reg |>
           dplyr::filter(
             # top tab filters
@@ -130,10 +139,7 @@ app_server <- function(input, output, session) {
             variable %in% other_tabs_inputs()$reg,
             cs %in% other_tabs_inputs()$pracs1
           )
-      } else if (
-        # "By Product Type" and "Processor Size/Type"
-        input$tab_bottom == "Processor Size/Type"
-      ) {
+      } else if (input$tab_bottom == "Processor Size/Type") {
         df <- proddf_size |>
           dplyr::filter(
             # to tab filters
@@ -150,12 +156,12 @@ app_server <- function(input, output, session) {
     }
   })
 
-  ##################### Reactive By Product Type Plot ###########################
+  ##################### By Product Type: Plot #########################
 
-  ##Plot for the product tab
+  # Plot for the product tab
   output$productplot <- renderPlot(
     {
-      # run function to create plot with summary tab data
+      # run function to create plot with By Product Type tab data
       plot_func(
         data = prod_plot_df(),
         lab = prod_type_inputs()$stat,
@@ -165,9 +171,9 @@ app_server <- function(input, output, session) {
     }
   )
 
-  ##################### Reactive Species DF ########################### ----
+  ##################### By Species: Data Frame  #########################
 
-  # reactive data frame for By Product Type tab
+  # reactive data frame for By Species tab
   specs_plot_df <- reactive({
     if (input$tab_top == "By Species") {
       df <- specsdf |>
@@ -185,7 +191,7 @@ app_server <- function(input, output, session) {
     return(NULL) # If tab_bottom is not valid
   })
 
-  ##################### Reactive Species tab Plot ###########################
+  ##################### By Species: Plot  #########################
 
   ##Plot for the species tab
   output$specsplot <- renderPlot(
@@ -233,13 +239,9 @@ app_server <- function(input, output, session) {
         write.csv(sum_plot_df(), file)
       } else if (input$tab_top == "By Product Type") {
         write.csv(prod_plot_df(), file)
-      } else if (input$tab_top == "By Product Type") {
+      } else if (input$tab_top == "By Species") {
         write.csv(specs_plot_df(), file)
       }
     }
   )
-
-  observe({
-    print(paste("Current tab:", input$tab_bottom))
-  })
 }

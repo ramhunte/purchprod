@@ -8,8 +8,9 @@
 #'
 #' @noRd
 
-# setting aesthetics of plot
+########################### Plot Aesthetics ###########################
 
+# color pallet
 pal <- c(
   light_text = "#0085CA",
   dark_text = "#003087",
@@ -339,12 +340,16 @@ plot_func <- function(data, lab, group, facet, title = NULL) {
     facet_wrap(as.formula(paste("~", facet)), scales = 'free_y', ncol = 2)
 }
 
-# function for processing DT render data
+############################## DT render data frame ##################################
+
 process_df <- function(df) {
+  # list of colsumns to remove that are not needed
   cols_to_remove <- c("ylab", "tab", "unit_lab")
 
   df |>
+    # remove cols if they exist
     dplyr::select(-any_of(cols_to_remove)) |>
+    # round numbers
     dplyr::mutate(
       variance = round(variance, 2),
       q25 = round(q25, 2),

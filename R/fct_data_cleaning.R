@@ -1,19 +1,22 @@
 #' data_cleaning
 #'
-#' @description A fct function
+#' @description functions for cleaning the data going into the app
 #'
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
 
-########################### Cleaning Raw data #################################
+########################### Reading  Raw data #################################
 
 raw_purcprod <- readRDS("data/mini_purcprod.RDS")
 
+########################### Cleaning Raw data #################################
+
+# clean master dataframe
 clean_purcprod <- raw_purcprod |>
   # making all variable names lowercase
   janitor::clean_names() |>
-  # reducing values by units
+  # adjusting raw values by their assigned units
   dplyr::mutate(
     variance = dplyr::case_when(
       unit == '' ~ variance,
@@ -59,40 +62,31 @@ clean_purcprod <- raw_purcprod |>
     unit_lab = stringr::str_replace(
       ylab,
       "(?<=:)(.*)",
+      # removing statistic
       ~ stringr::str_remove_all(.x, "(Mean|Median|Total|[()])")
     ) |>
+      # removing extra blank space
       stringr::str_squish()
   ) |>
   data.frame()
-
-# Data formatting for table#####
-data_table <- clean_purcprod |>
-  dplyr::mutate(
-    variance = round(variance, 2),
-    q25 = round(q25, 2),
-    q75 = round(q75, 2),
-    value = round(value, 2)
-  ) |>
-  data.frame()
-
 
 ####################### Cleaning "Summary" tab data ###########################
 
 # subsetting data for the "Summary" tab
 sumdf <- dplyr::filter(clean_purcprod, tab == 'Summary')
 
-# subsetting data for the "Production Activities" subtab under "Summary"
+# subsetting data for the "Production Activities" bottom tab under "Summary"
 sumdf_prac <- sumdf |>
   dplyr::filter(cs == "")
 
-# subsetting data for the "Region" subtab under "Summary"
+# subsetting data for the "Region" bottom tab under "Summary"
 sumdf_reg <- sumdf |>
   dplyr::filter(
     cs != "",
     variable %in% c("California", "Washington and Oregon")
   )
 
-# subsetting data for the "Processor size/type" subtab under "Summary"
+# subsetting data for the "Processor size/type" bottom tab under "Summary"
 sumdf_size <- sumdf |>
   dplyr::filter(
     cs != "",
@@ -112,18 +106,18 @@ proddf <- dplyr::filter(clean_purcprod, tab == 'Product') |> # production tab da
   ) |>
   dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1))
 
-# subsetting data for the "Production Activities" subtab under "By Product Type"
+# subsetting data for the "Production Activities" bottom tab under "By Product Type"
 proddf_prac <- proddf |>
   dplyr::filter(cs == "")
 
-# subsetting data for the "Region" subtab under "By Product Type"
+# subsetting data for the "Region" bottom tab under "By Product Type"
 proddf_reg <- proddf |>
   dplyr::filter(
     cs != "",
     variable %in% c("California", "Washington and Oregon")
   )
 
-# subsetting data for the "Processor size/type" subtab under "By Product Type"
+# subsetting data for the "Processor size/type" bottom tab under "By Product Type"
 proddf_size <- proddf |>
   dplyr::filter(
     cs != "",
@@ -131,7 +125,12 @@ proddf_size <- proddf |>
   )
 
 
-####################### Cleaning "By Product Type" tab data ###########################
+####################### Cleaning "Species" tab data ###########################
+
+# this data set is going to be similar to the By Product Type tab but flipped. However,
+# some data labeled a "thousands" and some as "millions" will be put on the same plot
+# here (unlike in the previous data frames), so I am restructuring raw data so it is
+# all shown as numbers in the millions and not also thousands.
 
 specsdf <- raw_purcprod |>
   dplyr::select(-c(ylab)) |>
@@ -191,24 +190,3 @@ specsdf <- raw_purcprod |>
     ),
     unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
   )
-# dplyr::mutate(
-#   unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
-# )
-
-prod_test <- proddf |>
-  dplyr::filter(metric == "Production price (per lb)")
-
-
-####################### helper function to process data ############################
-process_df <- function(df) {
-  df |>
-    dplyr::select(-c(ylab, tab, unit_lab)) |>
-    dplyr::mutate(
-      variance = round(variance, 2),
-      q25 = round(q25, 2),
-      q75 = round(q75, 2),
-      value = round(value, 2),
-      lower = round(lower, 2),
-      upper = round(upper, 2)
-    )
-}

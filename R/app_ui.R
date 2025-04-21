@@ -8,8 +8,7 @@ app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
-    # Your application UI logic
-    # page_fluid(
+
     bslib::page_navbar(
       # calling themes for the page elements
       theme = bslib::bs_theme(
@@ -19,26 +18,27 @@ app_ui <- function(request) {
         bg = "#C2D9E3",
         # "#00797F",
         primary = "#00559B",
-
-        # "#00559B",
         'navbar-bg' = "#001743"
       ),
 
       # START page_navbar
-      # page_navbar(
       id = "navbar",
       title = "Purchase Production App",
 
+      # NOAA Fisheries logo
       header(),
+
+      # Overview tab
       bslib::nav_panel(
         "Overview",
         mod_overview_ui("overview_1")
       ),
 
+      # Explore the Data tab
       bslib::nav_panel(
         "Explore the Data",
 
-        # START sidebarLayout
+        # START page_sidebar
         bslib::page_sidebar(
           ########################### Top tabSet ######################################
           #################### (Summary; By Product Type) #############################
@@ -46,31 +46,33 @@ app_ui <- function(request) {
           # START sidbarPanel
           sidebar = bslib::sidebar(
             width = 500,
-            # START tabsetPanel
+            # START "Summary" nav_panel
             bslib::navset_card_pill(
               bslib::nav_panel(
                 "Summary",
                 class = "custom-card",
                 mod_summary_ui("summary_1")
               ), # END Summary nav_panel
-              # START "Product Type" tabPanel
+              # START By Product Type nav_panel
               bslib::nav_panel(
                 "By Product Type",
                 class = "custom-card",
                 # Metric
                 mod_prod_type_ui("prod_type_1")
-              ), #END Product Type nav_panel
+              ), # END By Product Type nav_panel
+
+              # START By Species nav_panel
               bslib::nav_panel(
                 "By Species",
                 class = "custom-card",
                 mod_specs_ui("specs_1")
-              ), # END Species nav_panel
+              ), # END By Species nav_panel
               id = "tab_top"
             ), #END navset_card_pill
             ############################### Bottom tabSet ###################################
             ############# (Production Activities; Region; Processor size/type) ##############
 
-            # START tabsetPanel
+            # START lower nav_panel
 
             conditionalPanel(
               condition = "input.tab_top != 'By Species'",
@@ -84,18 +86,22 @@ app_ui <- function(request) {
               uiOutput("speciesTabs")
             ),
 
+            # END lower nav_panel
+
             # downloadButton
             down_func(outputID = "downloadData")
           ), # END sidebar,
 
           ########################### mainPanel #######################################
 
-          # START mainPanel
+          # START main panel navset_card_pill
           bslib::navset_card_pill(
-            # START "Plot" nav_panel
+            # START Plot nav_panel main
             bslib::nav_panel(
               title = "Plot",
               class = "custom-card",
+
+              # condition for summary tab
               conditionalPanel(
                 condition = "input.tab_top == 'Summary'",
                 shinycssloaders::withSpinner(
@@ -103,6 +109,8 @@ app_ui <- function(request) {
                   plotOutput("sumplot", width = "100%", height = "575px")
                 )
               ),
+
+              #condition for By product Type tab
               conditionalPanel(
                 condition = "input.tab_top == 'By Product Type'",
                 shinycssloaders::withSpinner(
@@ -111,6 +119,7 @@ app_ui <- function(request) {
                 )
               ),
 
+              # condition for By Species tab
               conditionalPanel(
                 condition = "input.tab_top == 'By Species'",
                 shinycssloaders::withSpinner(
@@ -120,7 +129,7 @@ app_ui <- function(request) {
               )
             ), # END Plot nav_panel
 
-            # START "Table" nav_panel
+            # START Table nav_panel
             bslib::nav_panel(
               "Table",
               class = "custom-card",
@@ -128,12 +137,12 @@ app_ui <- function(request) {
                 # adding a cool loader
                 dataTableOutput("table")
               )
-            ) # END  "Table" nav_panel
-          ) # END main panel
+            ) # END  Table nav_panel
+          ) # END main panel navset_card_pill
         ) # END page_sidebar
-      ), # END "Explore the Data" nav_panel
+      ), # END Explore the Data nav_panel
 
-      # START "Information Page" nav_panel
+      # START Information Page nav_panel
       bslib::nav_panel(
         "Information Page",
         # style = page_height,
@@ -145,23 +154,21 @@ app_ui <- function(request) {
         ),
       ), # END "Information Page" nav_panel
 
-      # START "Bulletin Board" nav_panel
+      # START Bulletin Board nav_panel
       bslib::nav_panel(
         "Bulletin Board",
-        # style = page_height,
       ), # END "Bulletin Board" nav_panel
 
-      # START "Contact" Us nav_panel
+      # START Contact Us nav_panel
       bslib::nav_panel(
         "Contact Us",
-        # style = page_height,
         fluidRow(
           # use columns to create white space on sides
           column(2),
           column(8, includeMarkdown("inst/app/text/contact.md")),
           column(2)
         )
-      ), # "Contact" Us nav_panel
+      ), # Contact Us nav_panel
 
       footer = footer() # END footer
     ) # END page_navbar
