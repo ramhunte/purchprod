@@ -1,5 +1,20 @@
 /* fmt: skip file */
 
+/* Overview page */
+
+/* year picker buttons */
+.btn-year1 {
+    background-color: #0085CA !important;  /* light green */
+    color: white !important;
+    border: 1px solid #0085CA !important;
+  }
+
+  .btn-year2 {
+    background-color: #003087 !important;  /* light green */
+    color: white !important;
+    border: 1px solid #003087 !important;
+  }
+
 
 .shiny-output-error-validation {
       color: #2593AF;
@@ -37,28 +52,12 @@ div.dataTables_wrapper div.dataTables_length select {
   --bs-nav-link-padding-x: .8rem;
 }
 
-/*
-.bslib-sidebar-layout>.sidebar {
-  background-color: #001743;
-} */
 
 /* scroll bar */
 
   .bslib-sidebar-layout > .sidebar::-webkit-scrollbar {
     display: none; /* Chrome, Safari */
   }
-
-  .custom-card {
-  background-color: #E9F3F6; /* light blue, change as needed */
-}
-
-/*
-.bslib-card .card-header {
-      background-color: #001743;
-      color: #001743;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-*/
 
   .dataTables_wrapper {
     background-color: white !important;
@@ -86,3 +85,30 @@ div.dataTables_wrapper div.dataTables_length select {
   background-color: #f8f9fa !important; /* or white */
   color: black !important;
 }
+
+
+/* custom card for Explore the Data page */
+  .custom-card {
+  background-color: #E9F3F6; /* light blue, change as needed */
+}
+
+
+/* custom cards */
+
+/* card for Explore the data page */
+
+  .custom-card {
+  background-color: #E9F3F6; /* light blue, change as needed */
+}
+
+
+/* custom card for Oerview page with external card scroll display */
+.card-overflow-fix {
+  overflow: visible !important;
+  background-color: #E9F3F6;
+}
+
+.card-overflow-fix .card-body {
+  overflow: visible !important;
+}
+

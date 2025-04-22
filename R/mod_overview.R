@@ -13,31 +13,37 @@
 mod_overview_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    bslib::page_sidebar(
-      ######################### Year Selectors #########################
-      sidebar = bslib::sidebar(
-        title = "Select years to compare",
-        year_func(
-          inputID = ns("year1Input"),
-          label = "Year 1",
-          choices = unique(clean_purcprod$year),
-          selected = "2023"
-        ),
-        year_func(
-          inputID = ns("year2Input"),
-          label = "Year 2",
-          choices = unique(clean_purcprod$year),
-          selected = "2022"
-        )
-      ),
+    bslib::page_fillable(
       bslib::layout_columns(
         fill = FALSE,
+        ######################### pickerInput Card #########################
+        bslib::card(
+          class = "card-overflow-fix",
+          year_func(
+            inputID = ns("year1Input"),
+            label = "Compare years:",
+            choices = unique(clean_purcprod$year),
+            selected = "2023",
+            options = list(`style` = "btn-year1")
+          ),
 
-        ######################### Value Boxes #########################
+          ######################### Value Boxes #########################
+          year_func(
+            inputID = ns("year2Input"),
+            label = NULL,
+            choices = unique(clean_purcprod$year),
+            selected = "2022",
+            options = list(`style` = "btn-year2")
+          )
+        ),
+
         bslib::value_box(
           title = "Year",
           value = textOutput(ns("year1_text")),
-          theme = bslib::value_box_theme(bg = "#056FB7", fg = "#E9F3F6"),
+          theme = bslib::value_box_theme(
+            bg = pal[["light_text"]],
+            fg = "#E9F3F6"
+          ),
           showcase = bsicons::bs_icon("calendar")
         ),
 
@@ -51,19 +57,15 @@ mod_overview_ui <- function(id) {
 
         # Change since year 2
         bslib::value_box(
+          # title = uiOutput(ns("value_box_title")),
           title = textOutput(ns("value_box_title")),
           value = uiOutput(ns("diff_text")),
-          theme = bslib::value_box_theme(bg = "#1EBEC7", fg = "#E9F3F6"),
+          theme = bslib::value_box_theme(
+            bg = pal[["dark_text"]],
+            fg = "#E9F3F6"
+          ),
           showcase = bsicons::bs_icon("graph-up")
         ),
-
-        # # State
-        # bslib::value_box(
-        #   title = "California vs Oregon & Washington",
-        #   value = "test",
-        #   theme = bslib::value_box_theme(bg = "#1EBEC7", fg = "#E9F3F6"),
-        #   showcase = bsicons::bs_icon("geo-alt")
-        # ),
 
         # number of observations
         bslib::value_box(
@@ -79,14 +81,14 @@ mod_overview_ui <- function(id) {
       # middle cards
       bslib::layout_column_wrap(
         width = 1 / 2,
-        height = 200,
+        # height = 250,
 
         # species barplot
         bslib::card(
           full_screen = TRUE,
           class = "custom-card p-0",
           bslib::card_header(
-            "Production Value ($ Millions)",
+            "Species Production Value ($ Millions)",
             class = "bg-dark"
           ),
 
@@ -100,7 +102,10 @@ mod_overview_ui <- function(id) {
         bslib::card(
           full_screen = TRUE,
           class = "custom-card",
-          bslib::card_header("A test plot", class = "bg-dark"),
+          bslib::card_header(
+            "Product Type Production Value ($ Millions)",
+            class = "bg-dark"
+          ),
           bslib::card_body(
             plotOutput(ns("type_plot")),
             class = "p-0" # remove padding
