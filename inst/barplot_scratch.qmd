@@ -2,6 +2,28 @@
 # fmt: skip file
 
 
+```{r}
+sumdf_prac |>
+        dplyr::filter(
+          year %in%
+            c(
+              2017,
+              seq(2012, 2019)
+            ),
+          statistic == "Total",
+          metric == "Production value"
+        ) |>
+        dplyr::mutate(
+          period = dplyr::case_when(
+            year == 2017 ~ "Selected Year",
+            TRUE ~ "Range Years"
+          )
+        )  |> 
+  dplyr::filter(variable == "All production")
+
+```
+
+
 # bar plot 
 ```{r}
 library(ggplot2)
@@ -65,7 +87,7 @@ barchart <- ggplot2::ggplot(
         # family = "sen",
         size = 18,
         hjust = 1,
-        margin = margin(-10, -20, -50, 0)
+        margin = ggplot2::margin(-10, -20, -50, 0)
       ),
       axis.text.x = ggplot2::element_text(
         color = pal["value1"],
@@ -88,72 +110,4 @@ barchart <- ggplot2::ggplot(
 barchart
 ```
 
-
-
-
-# radar plot 
-```{r}
-library(fmsb)
-library(ggradar)
-
-
-radar_df <- proddf_prac |> 
-  dplyr::filter(
-          year %in% c("2021", "2022"),
-          statistic == "Total",
-          metric == "Production value",
-          variable == "All production"
-        )  |> 
-  tidyr::pivot_wider(names_from = type, values_from = value) |> 
-  dplyr::rename(group = year) |> 
-  dplyr::select(c(group, Canned:Unprocessed)) |> 
-  dplyr::group_by(group) |> 
-  dplyr::summarise(across(c(Canned:Unprocessed), ~ sum(.x, na.rm = TRUE)))
-
-ggradar::ggradar(radar_df)
-
-
-
-
-```
-
-
-# tree plot
-
-```{r}
-library(ggplot2)
-library(dplyr)
-library(treemapify)
-
-
-tree_df <- proddf_prac |> 
-  dplyr::filter(
-          year %in% c("2021", "2022"),
-          statistic == "Total",
-          metric == "Production value",
-          variable == "All production"
-        ) 
-
-# making a tree map
-tree_fig <-  ggplot2::ggplot(tree_df, ggplot2::aes(area = value, fill = factor(year),
-                                 label = factor(year), 
-                                 subgroup = type)) +
-  # labs(title = "Comparing the World's 10 Largest Fishing Fleets") +
-  ggplot2::scale_fill_manual(values = c("#5EB6D9", "darkblue")) +
-  treemapify::geom_treemap() +
-  treemapify::geom_treemap_subgroup_border(colour = "white", size = 2) +
-  treemapify::geom_treemap_subgroup_text(place = "centre", grow = TRUE,
-                             alpha = 0.7, 
-                             lineheight = 0.3,
-                             colour = "white",
-                             size = 2) +
-  ggplot2::theme(
-    panel.background = ggplot2::element_rect(fill = "transparent", color = NA),
-    plot.background = ggplot2::element_rect(fill = "transparent", color = NA),
-    legend.position = "none")
-
-
-tree_fig
-
-```
 

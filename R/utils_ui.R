@@ -7,6 +7,8 @@
 #' @noRd
 
 ############## Overview Page #################
+
+# pick a year
 year_func <- function(inputID, label, choices, selected, options = NULL) {
   shinyWidgets::pickerInput(
     inputId = inputID,
@@ -14,6 +16,19 @@ year_func <- function(inputID, label, choices, selected, options = NULL) {
     choices = choices,
     selected = selected,
     options = options
+  )
+}
+
+# pick a year range
+year_range_func <- function(inputID, label, min, max, value) {
+  sliderInput(
+    inputId = inputID,
+    label = label,
+    min = min,
+    max = max,
+    value = value,
+    sep = ""
+    # options = options
   )
 }
 

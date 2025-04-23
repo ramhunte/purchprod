@@ -195,7 +195,7 @@ barplot_func <- function(data, year1, year2) {
 
 ############################### lolipop chart  ##################################
 
-lollipop_func <- function(data, year1, year2) {
+lollipop_func <- function(data, year1, range1, range2) {
   ggplot2::ggplot(
     data = data,
     ggplot2::aes(
@@ -220,34 +220,11 @@ lollipop_func <- function(data, year1, year2) {
     ggplot2::scale_color_manual(
       values = setNames(
         c(pal[["light_text"]], pal[["dark_text"]]),
-        c(year1, year2)
+        c(as.character(year1), paste0(range1, "–", range2))
       )
     ) +
 
     ggplot2::scale_x_continuous(limits = c(0, 780)) +
-
-    # ggplot2::scale_y_discrete(
-    #   labels = c(
-    #     "All production" = "All production",
-    #     "Groundfish production" = "Groundfish production",
-    #     "Pacific whiting" = "Pacific whiting",
-    #     "Non-whiting groundfish" = "Non-whiting groundfish",
-    #     "Sablefish" = "Sablefish",
-    #     "Rockfish" = "Rockfish",
-    #     "Dover sole" = "Dover sole",
-    #     "Petrale sole" = "Petrale sole",
-    #     "Thornyheads" = "Thornyheads",
-    #     "Other groundfish species" = "Other groundfish species",
-    #     "Other species production" = "Other species production",
-    #     "Crab" = "Crab",
-    #     "Shrimp" = "Shrimp",
-    #     "Salmon" = "Salmon",
-    #     "Tuna" = "Tuna",
-    #     "Coastal pelagics" = "Coastal pelagics",
-    #     "Other shellfish" = "Other shellfish",
-    #     "Other species" = "Other species"
-    #   )
-    # ) +
 
     ggplot2::theme(
       panel.background = ggplot2::element_rect(
