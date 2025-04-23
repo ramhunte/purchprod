@@ -307,11 +307,11 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
       title = title
     ) +
     scale_x_discrete(breaks = scales::pretty_breaks()) +
-    scale_y_continuous(expand = c(0, 0), limits = c(0, NA)) +
+    scale_y_continuous(expand = c(0, 0)) +
     theme(
       text = element_text(size = 22),
-      axis.text = element_text(size = 18),
-      strip.text = element_text(size = 18),
+      axis.text = element_text(size = 18, color = pal["value1"], ),
+      strip.text = element_text(size = 18, color = pal["value1"], ),
       legend.title = element_blank(),
       legend.position = "bottom", # Moves the legend to the bottom
       panel.grid.minor.y = element_blank(),
