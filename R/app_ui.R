@@ -154,11 +154,6 @@ app_ui <- function(request) {
         ),
       ), # END "Information Page" nav_panel
 
-      # START Bulletin Board nav_panel
-      bslib::nav_panel(
-        "Bulletin Board",
-      ), # END "Bulletin Board" nav_panel
-
       # START Contact Us nav_panel
       bslib::nav_panel(
         "Contact Us",

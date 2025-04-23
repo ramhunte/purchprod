@@ -8,7 +8,9 @@
 #'
 #' @importFrom shiny NS tagList
 
-######################### UI ##########################
+######################################################################################
+####################################### UI ###########################################
+######################################################################################
 
 mod_overview_ui <- function(id) {
   ns <- NS(id)
@@ -16,7 +18,7 @@ mod_overview_ui <- function(id) {
     bslib::page_fillable(
       bslib::layout_columns(
         fill = FALSE,
-        ######################### pickerInput Card #########################
+        ######################### Year Picker Card #########################
         bslib::card(
           class = "card-overflow-fix",
           year_func(
@@ -27,7 +29,7 @@ mod_overview_ui <- function(id) {
             options = list(`style` = "btn-year1")
           ),
 
-          ######################### Value Boxes #########################
+          # year picker value box
           year_range_func(
             inputID = ns("yearrangeInput"),
             label = "Select a date range:",
@@ -38,6 +40,9 @@ mod_overview_ui <- function(id) {
           )
         ),
 
+        ######################### Value Boxes #########################
+
+        # year display value box
         bslib::value_box(
           title = "Year",
           value = textOutput(ns("year1_text")),
@@ -48,7 +53,7 @@ mod_overview_ui <- function(id) {
           showcase = bsicons::bs_icon("calendar")
         ),
 
-        # Total production value
+        # Production value box
         bslib::value_box(
           title = "Total Production Value",
           value = textOutput(ns("pval_text")),
@@ -56,7 +61,7 @@ mod_overview_ui <- function(id) {
           showcase = bsicons::bs_icon("currency-dollar")
         ),
 
-        # Change since year 2
+        # Percent change value box
         bslib::value_box(
           # title = uiOutput(ns("value_box_title")),
           title = textOutput(ns("value_box_title")),
@@ -68,7 +73,7 @@ mod_overview_ui <- function(id) {
           showcase = bsicons::bs_icon("graph-up")
         ),
 
-        # number of observations
+        # Number of observations value box
         bslib::value_box(
           title = "Number of observations",
           value = textOutput(ns("n_text")),
@@ -79,12 +84,10 @@ mod_overview_ui <- function(id) {
 
       ######################### Plot Cards ##########################
 
-      # middle cards
       bslib::layout_column_wrap(
         width = 1 / 2,
-        # height = 250,
 
-        # species barplot
+        # lollipop chart
         bslib::card(
           full_screen = TRUE,
           class = "custom-card p-0",
@@ -99,7 +102,7 @@ mod_overview_ui <- function(id) {
           )
         ),
 
-        # other plot
+        # bar chart
         bslib::card(
           full_screen = TRUE,
           class = "custom-card",
@@ -108,7 +111,7 @@ mod_overview_ui <- function(id) {
             class = "bg-dark"
           ),
           bslib::card_body(
-            plotOutput(ns("type_plot")),
+            plotOutput(ns("bar_plot")),
             class = "p-0" # remove padding
           )
         )
@@ -117,8 +120,9 @@ mod_overview_ui <- function(id) {
   )
 }
 
-
-######################### Server ##########################
+######################################################################################
+#################################### Server ##########################################
+######################################################################################
 
 #' overview Server Functions
 #'
@@ -169,11 +173,12 @@ mod_overview_server <- function(id) {
     ############################# lollipop data frame ################################
 
     df_loli <- reactive({
-      # selectign data for just the range of dates
+      # selecting data for just the range of dates
       range_data <- master_df() |>
         dplyr::filter(
           year %in% c(seq(input$yearrangeInput[1], input$yearrangeInput[2]))
         ) |>
+        # summarizing means of the values across range
         dplyr::group_by(variable) |>
         dplyr::summarise(value = mean(value, na.rm = TRUE), .groups = "drop") |>
         dplyr::mutate(
@@ -186,6 +191,7 @@ mod_overview_server <- function(id) {
         dplyr::mutate(year = as.character(year)) |>
         dplyr::select(variable, value, year)
 
+      # binding data together for plotting
       plot_data <- dplyr::bind_rows(year1_data, range_data)
 
       return(plot_data)
@@ -201,12 +207,13 @@ mod_overview_server <- function(id) {
     #     )
     # })
 
-    # Year 1 text render
+    ############################## Value Box Render #################################
+    # Value Box Year 1 text render
     output$year1_text <- renderText({
       input$year1Input
     })
 
-    # Production Value Text
+    # Value Box Production Value Text
     output$pval_text <- renderText({
       df() |>
         dplyr::filter(year == input$year1Input) |>
@@ -215,8 +222,9 @@ mod_overview_server <- function(id) {
         paste("M")
     })
 
-    # Difference title render
+    # Value Box Difference title render
     output$value_box_title <- renderText({
+      # text for date range
       if (input$yearrangeInput[1] != input$yearrangeInput[2]) {
         paste0(
           "Change since ",
@@ -225,6 +233,7 @@ mod_overview_server <- function(id) {
           input$yearrangeInput[2],
           " average"
         )
+        # text for single year
       } else {
         paste0(
           "Change since ",
@@ -233,7 +242,7 @@ mod_overview_server <- function(id) {
       }
     })
 
-    # Difference change value
+    # Value box percent change value
     output$diff_text <- renderUI({
       # calculating % change
       diff <- round(
@@ -257,7 +266,7 @@ mod_overview_server <- function(id) {
       df()$n[df()$year == input$year1Input]
     })
 
-    ################# Plots ####################
+    ############################# Plots ##################################
 
     # lollipot chart
     output$lolli_plot <- renderPlot({
@@ -269,7 +278,8 @@ mod_overview_server <- function(id) {
       )
     })
 
-    output$type_plot <- renderPlot({
+    # bar chart
+    output$bar_plot <- renderPlot({
       barplot_func(
         data = df_bar(),
         year1 = input$year1,
