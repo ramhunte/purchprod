@@ -1,4 +1,4 @@
-## Purchase and Production App
+## About the app
 <br>
 
 <span  style="font-size:1.5em;">This Shiny App (built in R) is designed to show various facets of the production of fisheries catch data relating to the purchase and production of the US west coast fisheries.
@@ -17,4 +17,4 @@ date range onto the same point so that only one single year is selected.</span>
 
 <span  style="font-size:1.5em;">The **Explore the Data** page provides a more granular look 
 at metrics, statistics, and other variables related to the data and how they change over time. Data can be viewed as a summary, by product type, and by species. Filtered data can be downloaded using the **DOWNLOAD** button at the 
-bottom of the left hand side panel. Data can be viewed both as a time series plot and in tabular form using the **Plot** and **Table** panels.</span>
+bottom of the left hand side panel. Data can be viewed both as a time series plot and in tabular form using the **Plot** and **Table** panels on the right hand side.</span>
