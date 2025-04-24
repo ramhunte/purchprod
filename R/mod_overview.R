@@ -36,7 +36,6 @@ mod_overview_ui <- function(id) {
             min = min(clean_purcprod$year),
             max = max(clean_purcprod$year),
             value = c(2015, 2020)
-            # options = list(`style` = "btn-year2")
           )
         ),
 
@@ -87,7 +86,7 @@ mod_overview_ui <- function(id) {
       bslib::layout_column_wrap(
         width = 1 / 2,
 
-        # lollipop chart
+        # production value
         bslib::card(
           full_screen = TRUE,
           class = "custom-card p-0",
@@ -97,21 +96,21 @@ mod_overview_ui <- function(id) {
           ),
 
           bslib::card_body(
-            plotOutput(ns("lolli_plot")),
+            plotOutput(ns("pv_plot")),
             class = "p-0" # remove padding
           )
         ),
 
-        # bar chart
+        # production weight
         bslib::card(
           full_screen = TRUE,
           class = "custom-card",
           bslib::card_header(
-            "Product Type Production Value ($ Millions)",
+            "Production Weight (lb Millions)",
             class = "bg-dark"
           ),
           bslib::card_body(
-            plotOutput(ns("bar_plot")),
+            plotOutput(ns("pw_plot")),
             class = "p-0" # remove padding
           )
         )
@@ -141,11 +140,11 @@ mod_overview_server <- function(id) {
               seq(input$yearrangeInput[1], input$yearrangeInput[2])
             ),
           statistic == "Total",
-          metric == "Production value"
+          metric %in% c("Production value", "Production weight")
         ) |>
         dplyr::mutate(
           period = dplyr::case_when(
-            year == 2017 ~ "Selected Year",
+            year == input$year1Input ~ "Selected Year",
             TRUE ~ "Range Years"
           )
         )
@@ -154,7 +153,10 @@ mod_overview_server <- function(id) {
     # data frame for All production
     df <- reactive({
       master_df() |>
-        dplyr::filter(variable == "All production")
+        dplyr::filter(
+          metric == "Production value",
+          variable == "All production"
+        )
     })
 
     # summary data frame for All production year 1 and range
@@ -179,7 +181,7 @@ mod_overview_server <- function(id) {
           year %in% c(seq(input$yearrangeInput[1], input$yearrangeInput[2]))
         ) |>
         # summarizing means of the values across range
-        dplyr::group_by(variable) |>
+        dplyr::group_by(variable, metric) |>
         dplyr::summarise(value = mean(value, na.rm = TRUE), .groups = "drop") |>
         dplyr::mutate(
           year = paste0(input$yearrangeInput[1], "–", input$yearrangeInput[2])
@@ -189,23 +191,13 @@ mod_overview_server <- function(id) {
       year1_data <- master_df() |>
         dplyr::filter(year == input$year1Input) |>
         dplyr::mutate(year = as.character(year)) |>
-        dplyr::select(variable, value, year)
+        dplyr::select(variable, metric, value, year)
 
       # binding data together for plotting
       plot_data <- dplyr::bind_rows(year1_data, range_data)
 
       return(plot_data)
     })
-    ######################################################################################
-    # df_bar <- reactive({
-    #   proddf_prac |>
-    #     dplyr::filter(
-    #       year %in% c(input$year1Input, input$year2Input),
-    #       statistic == "Total",
-    #       metric == "Production value",
-    #       variable == "All production"
-    #     )
-    # })
 
     ############################## Value Box Render #################################
     # Value Box Year 1 text render
@@ -245,13 +237,18 @@ mod_overview_server <- function(id) {
     # Value box percent change value
     output$diff_text <- renderUI({
       # calculating % change
-      diff <- round(
-        (df_sum()$value[df_sum()$period == "Selected Year"] -
-          df_sum()$value[df_sum()$period == "Range Years"]) /
-          df_sum()$value[df_sum()$period == "Selected Year"] *
-          100,
-        1
-      )
+
+      # creating reactive values
+      selected_val <- df_sum()$value[df_sum()$period == "Selected Year"]
+      range_val <- df_sum()$value[df_sum()$period == "Range Years"]
+
+      # calculate percent change if years are different
+      diff <- if (length(selected_val) == 1 && length(range_val) == 1) {
+        round((selected_val - range_val) / selected_val * 100, 1)
+      } else {
+        # make the vlaue 0 if they are the same
+        0
+      }
 
       # assigning colros and +/- sign to value
       color <- if (diff > 0) "#4B8320" else "#DB2207"
@@ -268,22 +265,25 @@ mod_overview_server <- function(id) {
 
     ############################# Plots ##################################
 
-    # lollipot chart
-    output$lolli_plot <- renderPlot({
+    # production value chart
+    output$pv_plot <- renderPlot({
       lollipop_func(
-        data = df_loli(),
+        data = dplyr::filter(df_loli(), metric == "Production value"),
         year1 = input$year1Input,
         range1 = input$yearrangeInput[1],
-        range2 = input$yearrangeInput[2]
+        range2 = input$yearrangeInput[2],
+        upper_lim = 780
       )
     })
 
-    # bar chart
-    output$bar_plot <- renderPlot({
-      barplot_func(
-        data = df_bar(),
-        year1 = input$year1,
-        year2 = input$year2
+    # Production weight chart
+    output$pw_plot <- renderPlot({
+      lollipop_func(
+        data = dplyr::filter(df_loli(), metric == "Production weight"),
+        year1 = input$year1Input,
+        range1 = input$yearrangeInput[1],
+        range2 = input$yearrangeInput[2],
+        upper_lim = 450
       )
     })
   })
