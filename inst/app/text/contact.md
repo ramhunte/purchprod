@@ -4,31 +4,26 @@
 
 <br>
 
-#### We look forward to receiving feedback and questions.
-
-<br>
-
-#### Please email us at **nmfs.nwfsc.fisheye@noaa.gov**
+#### We look forward to receiving feedback and questions. Please email us at **nmfs.nwfsc.fisheye@noaa.gov**
 
 <br>
 <br>
 
 
-**Erin Steiner**
+### **Erin Steiner**
 
-Economist
+#### Economist
 
-206-860-3202
+#### 206-860-3202
 
-*Northwest Fisheries Science Center*
+#### *Northwest Fisheries Science Center*
 
 <br>
 <br>
 
-**Amanda Phillips**
+### **Amanda Phillips**
 
-Contractor-ECS Federal, Inc.
+#### Economist
 
-In support of NMFS
 
-*Northwest Fisheries Science Center*
+#### *Northwest Fisheries Science Center*
