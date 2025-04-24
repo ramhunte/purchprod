@@ -101,32 +101,37 @@ app_ui <- function(request) {
               title = "Plot",
               class = "custom-card",
 
-              # condition for summary tab
-              conditionalPanel(
-                condition = "input.tab_top == 'Summary'",
-                shinycssloaders::withSpinner(
-                  # adding a cool loader
-                  plotOutput("sumplot", width = "100%", height = "620px")
-                )
-              ),
+              # plotOutput("sumplot")
+              # shinycssloaders::withSpinner(
+              plotOutput("exp_plot_ui")
+              # )
 
-              #condition for By product Type tab
-              conditionalPanel(
-                condition = "input.tab_top == 'By Product Type'",
-                shinycssloaders::withSpinner(
-                  # adding a cool loader
-                  plotOutput("productplot", width = "100%", height = "620px")
-                )
-              ),
-
-              # condition for By Species tab
-              conditionalPanel(
-                condition = "input.tab_top == 'By Species'",
-                shinycssloaders::withSpinner(
-                  # adding a cool loader
-                  plotOutput("specsplot", width = "100%", height = "620px")
-                )
-              )
+              # # condition for summary tab
+              # conditionalPanel(
+              #   condition = "input.tab_top == 'Summary'",
+              #   shinycssloaders::withSpinner(
+              #     # adding a cool loader
+              #     plotOutput("sumplot")
+              #   )
+              # ),
+              #
+              # #condition for By product Type tab
+              # conditionalPanel(
+              #   condition = "input.tab_top == 'By Product Type'",
+              #   shinycssloaders::withSpinner(
+              #     # adding a cool loader
+              #     plotOutput("productplot")
+              #   )
+              # ),
+              #
+              # # condition for By Species tab
+              # conditionalPanel(
+              #   condition = "input.tab_top == 'By Species'",
+              #   shinycssloaders::withSpinner(
+              #     # adding a cool loader
+              #     plotOutput("specsplot", width = "100%", height = "620px")
+              #   )
+              # )
             ), # END Plot nav_panel
 
             # START Table nav_panel

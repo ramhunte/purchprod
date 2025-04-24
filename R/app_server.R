@@ -96,21 +96,6 @@ app_server <- function(input, output, session) {
     return(df)
   })
 
-  ##################### Summary: Plot  #########################
-
-  # plot for summary tab selections
-  output$sumplot <- renderPlot(
-    {
-      # run function to create plot with summary tab data
-      plot_func(
-        data = sum_plot_df(),
-        lab = summary_inputs()$stat,
-        group = "variable",
-        facet = "unit_lab"
-      )
-    }
-  )
-
   ##################### By Product Type: Data Frame  #########################
 
   # reactive data frame for By Product Type tab
@@ -156,21 +141,6 @@ app_server <- function(input, output, session) {
     }
   })
 
-  ##################### By Product Type: Plot #########################
-
-  # Plot for the product tab
-  output$productplot <- renderPlot(
-    {
-      # run function to create plot with By Product Type tab data
-      plot_func(
-        data = prod_plot_df(),
-        lab = prod_type_inputs()$stat,
-        group = "variable",
-        facet = "unit_lab"
-      )
-    }
-  )
-
   ##################### By Species: Data Frame  #########################
 
   # reactive data frame for By Species tab
@@ -191,11 +161,33 @@ app_server <- function(input, output, session) {
     return(NULL) # If tab_bottom is not valid
   })
 
-  ##################### By Species: Plot  #########################
+  ##################### Plots ######################
 
-  ##Plot for the species tab
-  output$specsplot <- renderPlot(
-    {
+  # render plot depending on which tab is selected
+  output$exp_plot_ui <- renderPlot({
+    # Summary plot
+    if (input$tab_top == "Summary") {
+      # shinycssloaders::withSpinner(
+      # run function to create plot with summary tab data
+      plot_func(
+        data = sum_plot_df(),
+        lab = summary_inputs()$stat,
+        group = "variable",
+        facet = "unit_lab"
+        # )
+      )
+      # Product Type plot
+    } else if (input$tab_top == "By Product Type") {
+      # run function to create plot with By Product Type tab data
+      plot_func(
+        data = prod_plot_df(),
+        lab = prod_type_inputs()$stat,
+        group = "variable",
+        facet = "unit_lab"
+        # )
+      )
+      # Species plot
+    } else if (input$tab_top == "By Species") {
       # run function to create plot with summary tab data
       plot_func(
         data = specs_plot_df(),
@@ -204,9 +196,9 @@ app_server <- function(input, output, session) {
         facet = "unit_lab",
       )
     }
-  )
+  })
 
-  ##################### Reactive Data Table  #########################
+  ##################### Table  #########################
 
   ##Creating the data table
   output$table <- DT::renderDT(
