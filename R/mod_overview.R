@@ -138,9 +138,16 @@ mod_overview_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # master reactive data frame for values and plotting
-    master_df <- reactive({
-      sumdf_prac |>
+    ############################# master data frame ################################
+
+    # creating a reactive value to chache df
+    master_df_cache <- reactiveVal()
+
+    # creating a statement to re-rnder master df only when years change
+    observe({
+      req(input$year1Input, input$yearrangeInput)
+
+      filtered <- sumdf_prac |>
         dplyr::filter(
           year %in% # selecting just years that user is interested in
             c(
@@ -156,11 +163,22 @@ mod_overview_server <- function(id) {
             TRUE ~ "Range Years"
           )
         )
+      master_df_cache(filtered) # chaching master df in reactive value
     })
 
+    # making master df a reactive of the chached results
+    master_df <- reactive({
+      req(master_df_cache())
+      master_df_cache()
+    })
+
+    ############################# master data frame summary ################################
+
     # summary data frame for All production year 1 and range
-    df_sum <- reactive({
-      master_df() |>
+    master_sum <- reactive({
+      df <- master_df()
+
+      df |>
         dplyr::filter(
           metric == "Production value",
           variable == "All production"
@@ -172,8 +190,10 @@ mod_overview_server <- function(id) {
     ############################# lollipop data frame ################################
 
     df_loli <- reactive({
+      df <- master_df()
+
       # selecting data for just the range of dates
-      range_data <- master_df() |>
+      range_data <- df |>
         dplyr::filter(
           year %in% c(seq(input$yearrangeInput[1], input$yearrangeInput[2]))
         ) |>
@@ -185,7 +205,7 @@ mod_overview_server <- function(id) {
         ) # Label for legend
 
       # data for just the year
-      year1_data <- master_df() |>
+      year1_data <- df |>
         dplyr::filter(year == input$year1Input) |>
         dplyr::mutate(year = as.character(year)) |>
         dplyr::select(variable, metric, value, year)
@@ -239,9 +259,11 @@ mod_overview_server <- function(id) {
     output$diff_text <- renderUI({
       # calculating % change
 
+      df <- master_sum()
+
       # creating reactive values
-      selected_val <- df_sum()$value[df_sum()$period == "Selected Year"]
-      range_val <- df_sum()$value[df_sum()$period == "Range Years"]
+      selected_val <- df$value[df$period == "Selected Year"]
+      range_val <- df$value[df$period == "Range Years"]
 
       # calculate percent change if years are different
       diff <- if (length(selected_val) == 1 && length(range_val) == 1) {
@@ -252,7 +274,7 @@ mod_overview_server <- function(id) {
       }
 
       # assigning colros and +/- sign to value
-      color <- if (diff > 0) "#4B8320" else "#DB2207"
+      color <- if (diff > 0) "#76BC21" else "#DB2207"
       sign <- if (diff > 0) "+" else ""
 
       # HTML to change colors depending on value

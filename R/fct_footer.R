@@ -5,6 +5,8 @@
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
+
+# this script makes a function that places a footer at the bottom of the app with links to external NOAA websites
 footer <- function() {
   tags$footer(
     class = "footer text-center",

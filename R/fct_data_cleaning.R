@@ -12,11 +12,13 @@ raw_purcprod <- readRDS("data/mini_purcprod.RDS")
 
 ########################### Cleaning Raw data #################################
 
-# clean master dataframe
+# this df is a cleaned version of the raw data
 clean_purcprod <- raw_purcprod |>
-  # making all variable names lowercase
+  # making all variable names lowercase for consistency
   janitor::clean_names() |>
   # adjusting raw values by their assigned units
+  # ex: if a value is labeled "millions", then we divide it by 1,000,000 to make it abbreviated
+  # do this for variance, quartiles, value, upper/lower
   dplyr::mutate(
     variance = dplyr::case_when(
       unit == '' ~ variance,
@@ -58,7 +60,7 @@ clean_purcprod <- raw_purcprod |>
     )
   ) |>
   dplyr::mutate(
-    # new labels for plots
+    # new labels for plot facets
     unit_lab = stringr::str_replace(
       ylab,
       "(?<=:)(.*)",
@@ -71,24 +73,24 @@ clean_purcprod <- raw_purcprod |>
   data.frame()
 
 ####################### Cleaning "Summary" tab data ###########################
-
-# subsetting data for the "Summary" tab
-sumdf <- dplyr::filter(clean_purcprod, tab == 'Summary')
+# this section subsets the data to be used for the "Summary" tab on the "Explore the Data" page
 
 # subsetting data for the "Production Activities" bottom tab under "Summary"
-sumdf_prac <- sumdf |>
-  dplyr::filter(cs == "")
+sumdf_prac <- clean_purcprod |>
+  dplyr::filter(tab == 'Summary', cs == "")
 
 # subsetting data for the "Region" bottom tab under "Summary"
-sumdf_reg <- sumdf |>
+sumdf_reg <- clean_purcprod |>
   dplyr::filter(
+    tab == 'Summary',
     cs != "",
     variable %in% c("California", "Washington and Oregon")
   )
 
 # subsetting data for the "Processor size/type" bottom tab under "Summary"
-sumdf_size <- sumdf |>
+sumdf_size <- clean_purcprod |>
   dplyr::filter(
+    tab == 'Summary',
     cs != "",
     variable %in% c("Small", "Medium", "Large", "Non-processor")
   )
@@ -96,7 +98,9 @@ sumdf_size <- sumdf |>
 
 ####################### Cleaning "By Product Type" tab data ###########################
 
-# subsetting data for the "By Product Type" tab
+# this section subsets the data to be used for the "By Product Type" tab on the "Explore the Data" page
+
+# cleaning data for the "By Product Type" tab
 proddf <- dplyr::filter(clean_purcprod, tab == 'Product') |> # production tab data
   tidyr::separate(
     metric,

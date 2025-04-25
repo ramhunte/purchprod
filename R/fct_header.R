@@ -5,6 +5,9 @@
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
+
+# this script makes a function that places the NOAA logo in the navbar top right hand corner
+
 header <- function() {
   # adding NOAA logo
   tags$head(

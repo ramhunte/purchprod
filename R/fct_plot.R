@@ -22,9 +22,9 @@ pal <- c(
 )
 
 
-# line colors ----
+# line colors
 line_col <- c(
-  # species
+  # species colors
   "All production" = "black",
   "Groundfish production" = '#C1052F',
   "Pacific whiting" = '#D89B2C',
@@ -44,17 +44,17 @@ line_col <- c(
   "Other shellfish" = '#595478',
   "Other species" = '#C0B3B6',
 
-  # states
+  # state colors
   "California" = '#001B70',
   "Washington and Oregon" = '#C1052F',
 
-  # processor size
+  # processor size colors
   "Small" = '#001B70',
   "Medium" = '#C1052F',
   "Large" = '#648C1C',
   "Non-processor" = '#D89B2C',
 
-  # product type
+  # product type colors
   "Canned" = "#287271",
   "Fillet" = "#9E2B25",
   "Fresh" = "#208AAE",
@@ -65,7 +65,7 @@ line_col <- c(
   "Smoked" = "#D77A61"
 )
 
-# line type ----
+# line type
 line_ty <- c(
   # states
   "California" = 'solid',
@@ -110,7 +110,6 @@ line_ty <- c(
   "Smoked" = "solid"
 )
 
-############################## Overview plots ##################################
 
 ############################## Barplot  ##################################
 
@@ -196,6 +195,8 @@ line_ty <- c(
 
 ############################### lolipop chart  ##################################
 
+# this function creates lollipop charts that are used on the "Overview" page
+
 lollipop_func <- function(data, year1, range1, range2, upper_lim) {
   # range labe;
   range_label <- paste0(range1, "–", range2)
@@ -270,9 +271,10 @@ lollipop_func <- function(data, year1, range1, range2, upper_lim) {
 }
 
 
-############################## Explore the Data plots ##################################
+############################## Line Graph ##################################
 
-# line graph
+# this function creates line graphs that are used in the "Plot" tab on the "Explore the Data" page
+
 plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
   # return nothing if plot is Null
   validate(
@@ -332,16 +334,16 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
     facet_wrap(as.formula(paste("~", facet)), scales = 'free_y', ncol = 2)
 }
 
-############################## DT render data ##################################
+############################## Dat Table render processing ##################################
 
-# cleaning up data frame to be rendered under the "Table" panel
+# function for cleaning up data frame to be rendered under the "Table" panel of "Explore the Data" page
 process_df <- function(df) {
-  # list of colsumns to remove that are not needed
+  # list of columns to remove that are not needed
   cols_to_remove <- c("ylab", "tab", "unit_lab")
 
   df |>
     # remove cols if they exist
-    dplyr::select(-any_of(cols_to_remove)) |>
+    dplyr::select(-any_of(cols_to_remove)) |> # remove cols if they exist
     # round numbers
     dplyr::mutate(
       variance = round(variance, 2),
