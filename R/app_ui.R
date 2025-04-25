@@ -9,6 +9,7 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
 
+    # START page_navbar
     bslib::page_navbar(
       # calling themes for the page elements
       theme = bslib::bs_theme(
@@ -16,23 +17,29 @@ app_ui <- function(request) {
         secondary = "#5EB6D9",
         fg = "#001743",
         bg = "#C2D9E3",
-        # "#00797F",
         primary = "#00559B",
         'navbar-bg' = "#001743"
       ),
 
-      # START page_navbar
       id = "navbar",
       title = "Purchase Production App",
 
       # NOAA Fisheries logo
       header(),
 
+      #################################################################################
+      #################################### Overview ###################################
+      #################################################################################
+
       # Overview tab
       bslib::nav_panel(
         "Overview",
-        mod_overview_ui("overview_1")
+        mod_overview_ui("overview_1") # calling overview module UI
       ),
+
+      #################################################################################
+      ################################ Explore the Data ###############################
+      #################################################################################
 
       # Explore the Data tab
       bslib::nav_panel(
@@ -40,19 +47,19 @@ app_ui <- function(request) {
 
         # START page_sidebar
         bslib::page_sidebar(
-          ########################### Top tabSet ######################################
-          #################### (Summary; By Product Type) #############################
-
-          # START sidbarPanel
+          # START sidebar
           sidebar = bslib::sidebar(
             width = 500,
             # START "Summary" nav_panel
             bslib::navset_card_pill(
+              ########################### Top nav_panels ######################################
+
               bslib::nav_panel(
                 "Summary",
                 class = "custom-card",
                 mod_summary_ui("summary_1")
               ), # END Summary nav_panel
+
               # START By Product Type nav_panel
               bslib::nav_panel(
                 "By Product Type",
@@ -69,69 +76,36 @@ app_ui <- function(request) {
               ), # END By Species nav_panel
               id = "tab_top"
             ), #END navset_card_pill
-            ############################### Bottom tabSet ###################################
-            ############# (Production Activities; Region; Processor size/type) ##############
+
+            ############################### Bottom nav_panels ###################################
 
             # START lower nav_panel
 
+            # condition for lower tabs if By Species is NOT selected
             conditionalPanel(
               condition = "input.tab_top != 'By Species'",
-              # mod_other_tabs_ui("other_tabs_1")
               uiOutput("otherTabs")
             ),
 
+            # condition for lower tabs if By Species IS selected
             conditionalPanel(
               condition = "input.tab_top == 'By Species'",
-              # mod_specs_tabs_ui("specs_tabs_1")
               uiOutput("speciesTabs")
-            ),
-
-            # END lower nav_panel
+            ), # END lower nav_panel
 
             # downloadButton
             down_func(outputID = "downloadData")
           ), # END sidebar,
 
-          ########################### mainPanel #######################################
+          ########################### main panel #######################################
 
           # START main panel navset_card_pill
           bslib::navset_card_pill(
-            # START Plot nav_panel main
+            # START Plot nav_panel
             bslib::nav_panel(
               title = "Plot",
               class = "custom-card",
-
-              # plotOutput("sumplot")
-              # shinycssloaders::withSpinner(
-              plotOutput("exp_plot_ui")
-              # )
-
-              # # condition for summary tab
-              # conditionalPanel(
-              #   condition = "input.tab_top == 'Summary'",
-              #   shinycssloaders::withSpinner(
-              #     # adding a cool loader
-              #     plotOutput("sumplot")
-              #   )
-              # ),
-              #
-              # #condition for By product Type tab
-              # conditionalPanel(
-              #   condition = "input.tab_top == 'By Product Type'",
-              #   shinycssloaders::withSpinner(
-              #     # adding a cool loader
-              #     plotOutput("productplot")
-              #   )
-              # ),
-              #
-              # # condition for By Species tab
-              # conditionalPanel(
-              #   condition = "input.tab_top == 'By Species'",
-              #   shinycssloaders::withSpinner(
-              #     # adding a cool loader
-              #     plotOutput("specsplot", width = "100%", height = "620px")
-              #   )
-              # )
+              plotOutput("exp_plot_ui") # plot output
             ), # END Plot nav_panel
 
             # START Table nav_panel
@@ -140,17 +114,20 @@ app_ui <- function(request) {
               class = "custom-card",
               shinycssloaders::withSpinner(
                 # adding a cool loader
-                dataTableOutput("table")
+                dataTableOutput("table") # table output
               )
             ) # END  Table nav_panel
           ) # END main panel navset_card_pill
         ) # END page_sidebar
       ), # END Explore the Data nav_panel
 
+      #################################################################################
+      ################################ Information Page ###############################
+      #################################################################################
+
       # START Information Page nav_panel
       bslib::nav_panel(
         "Information Page",
-        # style = page_height,
         fluidRow(
           # use columns to create white space on sides
           column(2),
@@ -158,6 +135,10 @@ app_ui <- function(request) {
           column(2)
         ),
       ), # END "Information Page" nav_panel
+
+      #################################################################################
+      ################################ Contact US ###############################
+      #################################################################################
 
       # START Contact Us nav_panel
       bslib::nav_panel(
@@ -168,9 +149,9 @@ app_ui <- function(request) {
           column(8, includeMarkdown("inst/app/text/contact.md")),
           column(2)
         )
-      ), # Contact Us nav_panel
+      ), # END Contact Us nav_panel
 
-      footer = footer() # END footer
+      footer = footer() # footer
     ) # END page_navbar
   ) # END tagList
 }

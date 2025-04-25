@@ -21,9 +21,8 @@
 <br>
 <br>
 
-### **Amanda Phillips**
+### Amanda Phillips
+#### Natural Resource Management Specialist
+#### Fishery Resource Analysis and Monitoring Division
+#### NOAA Fisheries | U.S. Department of Commerce
 
-#### Economist
-
-
-#### *Northwest Fisheries Science Center*
