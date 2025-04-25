@@ -16,32 +16,36 @@ app_server <- function(input, output, session) {
   ################################ Explore the Data ###############################
   #################################################################################
 
-  # NOTE: so much of the Explore the Data tab's server is in this app_server.R and not
+  # NOTE: so much of the "Explore the Data" tab's server is in this app_server.R and not
   # the module_*_.R servers because the inputs for the graphs/tables/data frames come
   # from various modules. Therefore, components of each of the modules themselves all
-  # feed into global server components that needed to be stored in the app_server.R file
+  # feed into global server file (app_server.R) components
 
   # Loading Module Server Outputs
+
+  # top tabs
   summary_inputs <- mod_summary_server("summary_1")
   prod_type_inputs <- mod_prod_type_server("prod_type_1")
   specs_inputs <- mod_specs_server("specs_1")
+
+  # bottom tabs
   other_tabs_inputs <- mod_other_tabs_server("other_tabs_1")
   specs_tabs_inputs <- mod_specs_tabs_server("specs_tabs_1")
 
-  # Conditional nav_panel
-  # if top nav_panels are "Summary" or "By Product Type" ("other)
+  # output for conditional bottom tabs
+
+  # if top nav_panels are "Summary" or "By Product Type", then "other_tabs_1"
   output$otherTabs <- renderUI({
     mod_other_tabs_ui("other_tabs_1")
   })
 
-  # conditional panel render if top nav_panel is "Species"
+  # if top nav_panels are "By Species", then "specs_tabs_1"
   output$speciesTabs <- renderUI({
     mod_specs_tabs_ui("specs_tabs_1")
   })
 
-  ##################### Summary: Data Frame  #########################
+  ############################# "Summary" tab: reactive data frame  #################################
 
-  # reactive data frame for Summary tab
   sum_plot_df <- reactive({
     req(
       input$tab_top == "Summary",
@@ -58,10 +62,10 @@ app_server <- function(input, output, session) {
     ) {
       df <- sumdf_prac |>
         dplyr::filter(
-          # top tab filters
+          # "Summary" tab filters
           metric %in% summary_inputs()$metric,
           statistic %in% summary_inputs()$stat,
-          # bottom tab filters
+          # "Production Activities"
           variable %in%
             c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
         )
@@ -71,10 +75,10 @@ app_server <- function(input, output, session) {
     ) {
       df <- sumdf_reg |>
         dplyr::filter(
-          # top tab filters
+          # "Summary" tab filters
           metric %in% summary_inputs()$metric,
           statistic %in% summary_inputs()$stat,
-          # bottom tab filters
+          # "Region" tab filters
           variable %in% other_tabs_inputs()$reg,
           cs %in% other_tabs_inputs()$pracs1
         )
@@ -84,10 +88,10 @@ app_server <- function(input, output, session) {
     ) {
       df <- sumdf_size |>
         dplyr::filter(
-          # top tab filters
+          # "Summary" tab filters
           metric %in% summary_inputs()$metric,
           statistic %in% summary_inputs()$stat,
-          # bottom tab filters
+          # "Processor Size/Type" tab filters
           variable %in% other_tabs_inputs()$size,
           cs %in% other_tabs_inputs()$pracs2
         )
@@ -96,42 +100,48 @@ app_server <- function(input, output, session) {
     return(df)
   })
 
-  ##################### By Product Type: Data Frame  #########################
+  ############################ "By Product Type" tab: reactive data frame  ###############################
 
-  # reactive data frame for By Product Type tab
+  # reactive data frame for "By Product Type" tab
   prod_plot_df <- reactive({
     # "By Product Type" and "Production Acitivities"
     if (input$tab_top == "By Product Type") {
       if (input$tab_bottom == "Production Activities") {
         df <- proddf_prac |>
           dplyr::filter(
-            # top tab filters
+            # "By Product Type" tab filters
             metric %in% prod_type_inputs()$metric,
             type %in% prod_type_inputs()$prod_type,
             statistic == prod_type_inputs()$stat,
-            # bottom tab filters
+            # "Production Activities" tab filters
             variable %in%
               c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
           )
-      } else if (input$tab_bottom == "Region") {
+      } else if (
+        # "By Product Type" and "Region"
+        input$tab_bottom == "Region"
+      ) {
         df <- proddf_reg |>
           dplyr::filter(
-            # top tab filters
+            # "By Product Type" tab filters
             metric %in% prod_type_inputs()$metric,
             type %in% prod_type_inputs()$prod_type,
             statistic %in% prod_type_inputs()$stat,
-            # bottom tab filters
+            # "Region" tab filters
             variable %in% other_tabs_inputs()$reg,
             cs %in% other_tabs_inputs()$pracs1
           )
-      } else if (input$tab_bottom == "Processor Size/Type") {
+      } else if (
+        # "By Product Type" and "Processor Size/Type"
+        input$tab_bottom == "Processor Size/Type"
+      ) {
         df <- proddf_size |>
           dplyr::filter(
-            # to tab filters
+            # "By Product Type" tab filters
             metric %in% prod_type_inputs()$metric,
             type %in% prod_type_inputs()$prod_type,
             statistic == prod_type_inputs()$stat,
-            # bottom tab filters
+            # "Processor Size/Type" tab filters
             variable %in% other_tabs_inputs()$size,
             cs %in% other_tabs_inputs()$pracs2
           )
@@ -141,14 +151,14 @@ app_server <- function(input, output, session) {
     }
   })
 
-  ##################### By Species: Data Frame  #########################
+  ########################### "By Species" tab: reactive data frame #################################
 
-  # reactive data frame for By Species tab
   specs_plot_df <- reactive({
+    # only one option here b/c not multiple tabs on tab_bottom panel. Just 1
     if (input$tab_top == "By Species") {
       df <- specsdf |>
         dplyr::filter(
-          # top tab filters
+          # "By Species" tab filters
           metric %in% specs_inputs()$metric,
           variable %in% c(specs_inputs()$specs, specs_inputs()$os),
           statistic == specs_inputs()$stat,
@@ -161,57 +171,57 @@ app_server <- function(input, output, session) {
     return(NULL) # If tab_bottom is not valid
   })
 
-  ##################### Plots ######################
+  ############################################ Plots  ############################################
 
-  # render plot depending on which tab is selected
+  # this chunk renders the the main panel "Plot" tab plot in the UI
+  # conditional render depending on which tab_top is selected
+
   output$exp_plot_ui <- renderPlot({
-    # Summary plot
+    # "Summary" tab plot
     if (input$tab_top == "Summary") {
-      # shinycssloaders::withSpinner(
-      # run function to create plot with summary tab data
       plot_func(
-        data = sum_plot_df(),
-        lab = summary_inputs()$stat,
-        group = "variable",
-        facet = "unit_lab"
+        # plot function
+        data = sum_plot_df(), # "Summary" tab reactive data frame
+        lab = summary_inputs()$stat, # using the statistic as label
+        group = "variable", # grouping by variable
+        facet = "unit_lab" # facetign by unit label
         # )
       )
-      # Product Type plot
+      # "By Product Type" tab plot
     } else if (input$tab_top == "By Product Type") {
-      # run function to create plot with By Product Type tab data
       plot_func(
-        data = prod_plot_df(),
+        data = prod_plot_df(), # same steps as above for "Summary" ^^
         lab = prod_type_inputs()$stat,
         group = "variable",
         facet = "unit_lab"
         # )
       )
-      # Species plot
+      # "By Species" tab plot
     } else if (input$tab_top == "By Species") {
-      # run function to create plot with summary tab data
       plot_func(
         data = specs_plot_df(),
         lab = specs_inputs()$stat,
-        group = "type",
+        group = "type", # faceting by product type (different column than variable for previous examples ^)
         facet = "unit_lab",
       )
     }
   })
 
-  ##################### Table  #########################
+  ############################################ Table  ############################################
 
-  ##Creating the data table
+  # this chunk renders the the main panel "Table" tab table in the UI
+  # conditional render depending on which tab_top is selected
   output$table <- DT::renderDT(
     {
       if (input$tab_top == "Summary") {
-        df <- sum_plot_df()
+        df <- sum_plot_df() #render "Summary" tab table
       } else if (input$tab_top == "By Product Type") {
-        df <- prod_plot_df()
+        df <- prod_plot_df() #render "By Product Type" tab table
       } else if (input$tab_top == "By Species") {
-        df <- specs_plot_df()
+        df <- specs_plot_df() #render "By Species" tab table
       }
 
-      # Process the data using the helper function
+      # Process the data using the function to make it pretty for the table
       process_df(df)
     },
     options = list(
@@ -220,13 +230,15 @@ app_server <- function(input, output, session) {
     )
   )
 
-  ##################### Data Table Download #########################
+  ####################################### Data Table Download #######################################
 
+  # download data button
   output$downloadData <- downloadHandler(
     filename = function() {
-      paste("purchprod", input$tab_top, "data.csv", sep = "_")
+      paste("purchprod", input$tab_top, "data.csv", sep = "_") # title for csv
     },
     content = function(file) {
+      # conditional table render tdepnding on tab_top selection
       if (input$tab_top == "Summary") {
         write.csv(sum_plot_df(), file)
       } else if (input$tab_top == "By Product Type") {

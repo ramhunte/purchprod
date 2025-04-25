@@ -8,6 +8,8 @@
 #'
 #' @importFrom shiny NS tagList
 
+# this script dictates the UI and server of the Overview landing page
+
 ######################################################################################
 ####################################### UI ###########################################
 ######################################################################################
@@ -20,7 +22,8 @@ mod_overview_ui <- function(id) {
         fill = FALSE,
         ######################### Year Picker Card #########################
         bslib::card(
-          class = "card-overflow-fix",
+          class = "card-overflow-fix", # assigning a custom css class to card to allow dropdown overflow
+          # Select a year:
           year_func(
             inputID = ns("year1Input"),
             label = "Select a year:",
@@ -29,7 +32,7 @@ mod_overview_ui <- function(id) {
             options = list(`style` = "btn-year1")
           ),
 
-          # year picker value box
+          # Select a date range:
           year_range_func(
             inputID = ns("yearrangeInput"),
             label = "Select a date range:",
@@ -41,33 +44,35 @@ mod_overview_ui <- function(id) {
 
         ######################### Value Boxes #########################
 
-        # year display value box
+        # Year value box
         bslib::value_box(
           title = "Year",
           value = textOutput(ns("year1_text")),
           theme = bslib::value_box_theme(
             bg = pal[["light_text"]],
-            fg = "#E9F3F6"
+            fg = pal[["bg_plot"]]
           ),
           showcase = bsicons::bs_icon("calendar")
         ),
 
-        # Production value box
+        # Total Production Value value box
         bslib::value_box(
           title = "Total Production Value",
           value = textOutput(ns("pval_text")),
-          theme = bslib::value_box_theme(bg = "#5EB6D9", fg = "#E9F3F6"),
+          theme = bslib::value_box_theme(
+            bg = pal[["value3"]],
+            fg = pal[["bg_plot"]]
+          ),
           showcase = bsicons::bs_icon("currency-dollar")
         ),
 
-        # Percent change value box
+        # Change since year value box
         bslib::value_box(
-          # title = uiOutput(ns("value_box_title")),
           title = textOutput(ns("value_box_title")),
           value = uiOutput(ns("diff_text")),
           theme = bslib::value_box_theme(
             bg = pal[["dark_text"]],
-            fg = "#E9F3F6"
+            fg = pal[["bg_plot"]]
           ),
           showcase = bsicons::bs_icon("graph-up")
         ),
@@ -76,7 +81,10 @@ mod_overview_ui <- function(id) {
         bslib::value_box(
           title = "Number of observations",
           value = textOutput(ns("n_text")),
-          theme = bslib::value_box_theme(bg = "#90DFE3", fg = "#E9F3F6"),
+          theme = bslib::value_box_theme(
+            bg = pal[["value4"]],
+            fg = pal[["bg_plot"]]
+          ),
           showcase = bsicons::bs_icon("hash")
         ),
       ),
@@ -86,10 +94,10 @@ mod_overview_ui <- function(id) {
       bslib::layout_column_wrap(
         width = 1 / 2,
 
-        # production value
+        # production value lollipop graph
         bslib::card(
           full_screen = TRUE,
-          class = "custom-card p-0",
+          class = "custom-card",
           bslib::card_header(
             "Species Production Value ($ Millions)",
             class = "bg-dark"
@@ -101,7 +109,7 @@ mod_overview_ui <- function(id) {
           )
         ),
 
-        # production weight
+        # production weight lollipop graph
         bslib::card(
           full_screen = TRUE,
           class = "custom-card",
@@ -134,39 +142,28 @@ mod_overview_server <- function(id) {
     master_df <- reactive({
       sumdf_prac |>
         dplyr::filter(
-          year %in%
+          year %in% # selecting just years that user is interested in
             c(
-              input$year1Input,
-              seq(input$yearrangeInput[1], input$yearrangeInput[2])
+              input$year1Input, # from first year picker
+              seq(input$yearrangeInput[1], input$yearrangeInput[2]) # from second year range slider
             ),
           statistic == "Total",
-          metric %in% c("Production value", "Production weight")
+          metric %in% c("Production value", "Production weight") # production value and weight for graphs
         ) |>
         dplyr::mutate(
           period = dplyr::case_when(
-            year == input$year1Input ~ "Selected Year",
+            year == input$year1Input ~ "Selected Year", # labeling slected single year and range years for plotting
             TRUE ~ "Range Years"
           )
-        )
-    })
-
-    # data frame for All production
-    df <- reactive({
-      master_df() |>
-        dplyr::filter(
-          metric == "Production value",
-          variable == "All production"
         )
     })
 
     # summary data frame for All production year 1 and range
     df_sum <- reactive({
-      df() |>
-        dplyr::mutate(
-          period = dplyr::case_when(
-            year == input$year1Input ~ "Selected Year",
-            TRUE ~ "Range Years"
-          )
+      master_df() |>
+        dplyr::filter(
+          metric == "Production value",
+          variable == "All production"
         ) |>
         dplyr::group_by(period) |>
         dplyr::summarise(value = mean(value, na.rm = TRUE))
@@ -207,8 +204,12 @@ mod_overview_server <- function(id) {
 
     # Value Box Production Value Text
     output$pval_text <- renderText({
-      df() |>
-        dplyr::filter(year == input$year1Input) |>
+      master_df() |>
+        dplyr::filter(
+          metric == "Production value",
+          variable == "All production",
+          year == input$year1Input
+        ) |>
         dplyr::pull(value) |>
         round(2) |>
         paste("M")
@@ -260,7 +261,13 @@ mod_overview_server <- function(id) {
 
     # number of observations output
     output$n_text <- renderText({
-      df()$n[df()$year == input$year1Input]
+      master_df() |>
+        dplyr::filter(
+          metric == "Production value",
+          variable == "All production",
+          year == input$year1Input
+        ) |>
+        dplyr::pull(n)
     })
 
     ############################# Plots ##################################

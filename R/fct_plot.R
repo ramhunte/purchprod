@@ -16,6 +16,8 @@ pal <- c(
   dark_text = "#003087",
   value1 = "#005E5E",
   value2 = "#C2D9E3",
+  value3 = "#5EB6D9",
+  value4 = "#90DFE3",
   bg_plot = "#E9F3F6"
 )
 

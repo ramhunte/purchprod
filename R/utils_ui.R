@@ -6,9 +6,13 @@
 #'
 #' @noRd
 
-############## Overview Page #################
+# This script contains all of the functions I used for UI widgets and conditional panel display
+# these are called throughout the mod_*.R files and the app_*.R files
+# some are repeated in modules and some are used only once
 
-# pick a year
+################################ Overview page ################################
+
+# creates a select year picker (single year)
 year_func <- function(inputID, label, choices, selected, options = NULL) {
   shinyWidgets::pickerInput(
     inputId = inputID,
@@ -19,7 +23,7 @@ year_func <- function(inputID, label, choices, selected, options = NULL) {
   )
 }
 
-# pick a year range
+# creates a select year slider (multiple years/range)
 year_range_func <- function(inputID, label, min, max, value) {
   sliderInput(
     inputId = inputID,
@@ -28,11 +32,12 @@ year_range_func <- function(inputID, label, min, max, value) {
     max = max,
     value = value,
     sep = ""
-    # options = options
   )
 }
 
-############## Explore Data Page #################
+################################ Explore the Data page ################################
+
+# creates a checkbox option for metric to choose from
 metric_func1 <- function(inputID) {
   checkboxGroupInput(
     inputId = inputID,
@@ -60,6 +65,8 @@ metric_func1 <- function(inputID) {
   )
 }
 
+
+# creates a select dropdown option for metric to choose from (less options than metric_func1)
 metric_func2 <- function(inputID) {
   selectInput(
     inputId = inputID,
@@ -73,7 +80,7 @@ metric_func2 <- function(inputID) {
   )
 }
 
-# statostic UI function
+# creates a radiobutton picker to choose statistic
 stat_func <- function(inputID) {
   radioButtons(
     inputId = inputID,
@@ -83,7 +90,7 @@ stat_func <- function(inputID) {
   )
 }
 
-# Product Type function
+# creates a checkbox to choose product type
 prodtype_func <- function(inputID) {
   checkboxGroupInput(
     inputId = inputID,
@@ -111,7 +118,7 @@ prodtype_func <- function(inputID) {
   )
 }
 
-
+# creates a checkbox to choose species
 specs_func <- function(inputID) {
   checkboxGroupInput(
     inputId = inputID,
@@ -132,6 +139,7 @@ specs_func <- function(inputID) {
   )
 }
 
+# creates a dropdown to choose other species (not main species of interest)
 os_func <- function(inputID1, inputID2) {
   shinyWidgets::dropdownButton(
     inputId = inputID1,
@@ -154,6 +162,7 @@ os_func <- function(inputID1, inputID2) {
   )
 }
 
+# creates a checkbox to choose region
 reg_func <- function(inputID) {
   checkboxGroupInput(
     inputId = inputID,
@@ -169,7 +178,7 @@ reg_func <- function(inputID) {
   )
 }
 
-# production activities function
+# creates a radio buttons list to choose production activities (species) (less options than specs_func)
 pracs_func <- function(inputID) {
   radioButtons(
     inputId = inputID,
@@ -183,7 +192,7 @@ pracs_func <- function(inputID) {
   )
 }
 
-# processor size function
+# creates a checkbox to choose processor size
 size_func <- function(inputID) {
   checkboxGroupInput(
     inputId = inputID,
@@ -202,6 +211,7 @@ size_func <- function(inputID) {
   )
 }
 
+# creates a download button for csv
 down_func <- function(outputID) {
   downloadButton(
     outputId = outputID,
@@ -210,19 +220,12 @@ down_func <- function(outputID) {
   )
 }
 
-# conditional panel functions
 
-species_tabs_func <- function() {
-  bslib::navset_card_pill(
-    bslib::nav_panel(
-      "Product Type",
-      class = "custom-card",
-      prodtype_func("protype2Input")
-    ),
-    id = "tab_bottom"
-  )
-}
+# conditional nav_panel render depending on which tab_top is selected
+# essentially these functions display nav_panels() in the bottom left sidebar of the page. The data
+# to be show is different depending on which tab_top you are looking at ("Summary" or "By Product Type" vs "Species")
 
+# this renders a navset_card_pill() + panels when tab_top "Summary" or "By Product Type" is selected
 other_tabs_func <- function() {
   bslib::navset_card_pill(
     bslib::nav_panel(
@@ -242,6 +245,18 @@ other_tabs_func <- function() {
       class = "custom-card",
       size_func(inputID = "sizeInput"),
       pracs_func(inputID = "pracs2Input")
+    ),
+    id = "tab_bottom"
+  )
+}
+
+# this renders a navset_card_pill() + panels when tab_top "By Species" is selected
+species_tabs_func <- function() {
+  bslib::navset_card_pill(
+    bslib::nav_panel(
+      "Product Type",
+      class = "custom-card",
+      prodtype_func("protype2Input")
     ),
     id = "tab_bottom"
   )
