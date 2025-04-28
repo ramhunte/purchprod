@@ -4,6 +4,9 @@
 # purchprod
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/ramhunte/purchprod/graph/badge.svg)](https://app.codecov.io/gh/ramhunte/purchprod)
 <!-- badges: end -->
 
 The goal of purchprod is to …
