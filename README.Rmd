@@ -5,55 +5,51 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
-  knitr::opts_chunk$set(
-    collapse = TRUE,
-    comment = "#>",
-    fig.path = "man/figures/README-",
-    out.width = "100%"
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
 )
 ```
 
-# `{purchprod}`
+# purchprod
 
 <!-- badges: start -->
 <!-- badges: end -->
 
+The goal of purchprod is to ...
+
 ## Installation
 
-You can install the development version of `{purchprod}` like so:
+You can install the development version of purchprod from [GitHub](https://github.com/) with:
 
-```{r}
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+``` r
+# install.packages("pak")
+pak::pak("ramhunte/purchprod")
 ```
 
-## Run
+## Example
 
-You can launch the application by running:
+This is a basic example which shows you how to solve a common problem:
 
-```{r, eval = FALSE}
-purchprod::run_app()
+```{r example}
+library(purchprod)
+## basic example code
 ```
 
-## About
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-You are reading the doc about version : `r golem::pkg_version()`
-
-This README has been compiled on the
-
-```{r}
-Sys.time()
+```{r cars}
+summary(cars)
 ```
 
-Here are the tests results and package coverage:
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
 
-```{r, error = TRUE}
-devtools::check(quiet = TRUE)
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
 ```
 
-```{r echo = FALSE}
-unloadNamespace("purchprod")
-```
-
-```{r, error = TRUE}
-covr::package_coverage()
-```
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
