@@ -1,4 +1,5 @@
 
+
 ## Contact us
 
 
@@ -10,19 +11,21 @@
 <br>
 
 
-### **Erin Steiner**
+<div style="text-align: center; line-height: 1.6;">
 
-#### Economist
+<span style="font-size:2em; font-weight:bold;">Erin Steiner</span><br>
+<span style="font-size:1.5em;">Economist</span><br>
 
-#### (206)-860-3202
+<i>Northwest Fisheries Science Center</i><br>
+NOAA Fisheries | U.S. Department of Commerce
 
-#### *Northwest Fisheries Science Center*
+<br><br><br>
 
-<br>
-<br>
+<span style="font-size:2em; font-weight:bold;">Amanda Phillips</span><br>
+<span style="font-size:1.5em;">Natural Resource Management Specialist</span><br>
 
-### Amanda Phillips
-#### Natural Resource Management Specialist
-#### Fishery Resource Analysis and Monitoring Division
-#### NOAA Fisheries | U.S. Department of Commerce
+<i>Northwest Fisheries Science Center</i><br>
+NOAA Fisheries | U.S. Department of Commerce
+
+</div>
 

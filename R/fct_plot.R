@@ -10,7 +10,7 @@
 
 ########################### Plot Aesthetics ###########################
 
-# color pallet
+# color pallete
 pal <- c(
   light_text = "#0085CA",
   dark_text = "#003087",
@@ -113,6 +113,8 @@ line_ty <- c(
 
 ############################## Barplot  ##################################
 
+# used in original version but not anymore. keeping code just in case
+
 # remotes::install_github("hrbrmstr/ggchicklet")
 #
 # barplot_func <- function(data, year1, year2) {
@@ -198,12 +200,21 @@ line_ty <- c(
 # this function creates lollipop charts that are used on the "Overview" page
 
 lollipop_func <- function(data, year1, range1, range2, upper_lim) {
-  # range labe;
-  range_label <- paste0(range1, "–", range2)
+  # range label for the graph legend
+  # if year range is the same (e.g. 2020-2020 avg., then making it show just 2020)
+  range_label <- if (range1 != range2) {
+    paste0(range1, "–", range2, " avg.")
+  } else {
+    range2
+  }
 
-  # factor the year
-  data$year <- factor(data$year, levels = c(as.character(year1), range_label))
+  # factor the year so year 1 always shows up first and same color on graph
+  data$year <- factor(
+    data$year,
+    levels = unique(c(as.character(year1), range_label))
+  )
 
+  # ggplot graph code
   ggplot2::ggplot(
     data = data,
     ggplot2::aes(
@@ -288,8 +299,24 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
   # ggplot code
   ggplot2::ggplot(
     data,
-    ggplot2::aes(x = factor(year), y = value, group = .data[[group]])
+    ggplot2::aes(
+      x = factor(year),
+      y = value,
+      group = .data[[group]]
+    )
   ) +
+    geom_point(aes(color = .data[[group]]), size = 4) +
+    geom_line(
+      aes(
+        color = .data[[group]],
+        linetype = .data[[group]]
+      ),
+      linewidth = 0.75
+    ) +
+    geom_ribbon(
+      aes(ymax = upper, ymin = lower, fill = .data[[group]]),
+      alpha = .2
+    ) +
     scale_fill_manual(values = line_col) +
     scale_color_manual(values = line_col) +
     scale_linetype_manual(values = line_ty) +
@@ -302,9 +329,10 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
     scale_x_discrete(breaks = scales::pretty_breaks()) +
     scale_y_continuous(expand = c(0, 0)) +
     theme(
-      text = element_text(size = 22),
-      axis.text = element_text(size = 18, color = pal["value1"], ),
-      strip.text = element_text(size = 18, color = pal["value1"], ),
+      text = element_text(size = 22, color = pal["value1"]),
+      axis.text = element_text(size = 18, color = pal["value1"]),
+      strip.text = element_text(size = 18, color = pal["value1"]),
+      legend.tex = element_text(color = pal["value1"]),
       legend.title = element_blank(),
       legend.position = "bottom", # Moves the legend to the bottom
       panel.grid.minor.y = element_blank(),
@@ -321,20 +349,11 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
         color = pal[["bg_plot"]]
       )
     ) +
-    geom_point(aes(color = .data[[group]]), size = 4) +
-    geom_line(
-      aes(color = .data[[group]], linetype = .data[[group]]),
-      linewidth = 0.75
-    ) +
-    geom_ribbon(
-      aes(ymax = upper, ymin = lower, fill = .data[[group]]),
-      alpha = .2
-    ) +
     # facet wrap based on the column specified to be faceted in the function
     facet_wrap(as.formula(paste("~", facet)), scales = 'free_y', ncol = 2)
 }
 
-############################## Dat Table render processing ##################################
+############################## Data Table render processing ##################################
 
 # function for cleaning up data frame to be rendered under the "Table" panel of "Explore the Data" page
 process_df <- function(df) {

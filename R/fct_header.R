@@ -15,7 +15,7 @@ header <- function() {
       '$(document).ready(function() {
         $(".navbar .container-fluid")
           .css({"position": "relative"})
-          .append("<img id=\'myImage\' src=\'www/noaa_header.png\'>");
+          .append("<a href=\'https://www.fisheries.noaa.gov\' target=\'_blank\'><img id=\'myImage\' src=\'www/noaa_header.png\'></a>");
       });'
     )),
     tags$style(HTML(

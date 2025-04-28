@@ -23,6 +23,18 @@ mod_overview_ui <- function(id) {
         ######################### Year Picker Card #########################
         bslib::card(
           class = "card-overflow-fix", # assigning a custom css class to card to allow dropdown overflow
+          # style = "position: relative", # Make the card a positioned container
+
+          # # Tooltip icon in top right (absolutely positioned)
+          # bslib::tooltip(
+          #   span(
+          #     bsicons::bs_icon("info-circle")
+          #   ),
+          #   "Here is the message",
+          #   options = list(container = "body"), # optional: avoids overflow issues
+          #   style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
+          # ),
+
           # Select a year:
           year_func(
             inputID = ns("year1Input"),
@@ -35,7 +47,15 @@ mod_overview_ui <- function(id) {
           # Select a date range:
           year_range_func(
             inputID = ns("yearrangeInput"),
-            label = "Select a date range:",
+            label = bslib::tooltip(
+              span(
+                "Select a date range (average) or year:",
+                bsicons::bs_icon("info-circle")
+              ),
+              "By selecting a year range (e.g. 2015-2020), the values are averaged across all selected years. To select just a single year to compare, slide both ends of the range onto the same year. You can click across the year slider to change the selected year. To return back to a year range, click and drag the point right along the range.",
+              options = list(container = "body"), # optional: avoids overflow issues
+              style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
+            ),
             min = min(clean_purcprod$year),
             max = max(clean_purcprod$year),
             value = c(2015, 2020)
@@ -201,7 +221,16 @@ mod_overview_server <- function(id) {
         dplyr::group_by(variable, metric) |>
         dplyr::summarise(value = mean(value, na.rm = TRUE), .groups = "drop") |>
         dplyr::mutate(
-          year = paste0(input$yearrangeInput[1], "–", input$yearrangeInput[2])
+          year = ifelse(
+            input$yearrangeInput[1] != input$yearrangeInput[2],
+            paste0(
+              input$yearrangeInput[1],
+              "–",
+              input$yearrangeInput[2],
+              " avg."
+            ),
+            as.character(input$yearrangeInput[2])
+          )
         ) # Label for legend
 
       # data for just the year
