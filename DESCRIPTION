@@ -6,20 +6,21 @@ Authors@R:
 Description: Placeholder for package description.
 License: What license is it under?
 Imports: 
+    bsicons,
+    bslib,
     config,
     dplyr,
     DT,
+    forcats,
     ggplot2,
     golem,
-    grid,
+    janitor,
     scales,
     shiny,
-    shinyBS,
     shinycssloaders,
-    shinyjs,
     shinyWidgets,
     stringr,
-    thematic
+    tidyr
 Suggests: 
     spelling,
     testthat (>= 3.0.0)
