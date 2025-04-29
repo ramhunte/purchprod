@@ -22,7 +22,7 @@ lollipop_func <- function(data, year1, range1, range2, upper_lim) {
   # range label for the graph legend
   # if year range is the same (e.g. 2020-2020 avg., then making it show just 2020)
   range_label <- if (range1 != range2) {
-    paste0(range1, "–", range2, " avg.")
+    paste0(range1, "-", range2, " avg.")
   } else {
     range2
   }
