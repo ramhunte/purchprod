@@ -10,47 +10,43 @@ coverage](https://codecov.io/gh/ramhunte/purchprod/graph/badge.svg)](https://app
 [![R-CMD-check](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of purchprod is to …
+## About the app
 
-## Installation
+This Shiny App (built in R) is a tool that was developed to assist the
+Economic Data Collection Program at the
+<a href="https://www.fisheries.noaa.gov/about/northwest-fisheries-science-center" target="_blank">Northwest
+Fisheries Science Center</a> make its economic data available to the
+public. Data is collected annually from the West Coast Groundfish Trawl
+Fishery as required by
+<a href="https://www.ecfr.gov/current/title-50/chapter-VI/part-660/subpart-D/section-660.114" target="_blank">regulation
+50 CFR 660.114</a>. This app aggregates, summarizes, and compares
+various facets of this data pertaining to the purchase and production of
+the West Coast Groundfish Trawl Catch Share Program.
 
-You can install the development version of purchprod from
-[GitHub](https://github.com/) with:
+## Usin gthe app
 
-``` r
-# install.packages("pak")
-pak::pak("ramhunte/purchprod")
-```
+The **Overview** page provides a broad look the production value and
+weight of species across years. In the top left hand corner, use the
+**Select a year** drop down to filter data to a single year that you are
+wanting to investigate. You can then compare this to the average across
+a range of years or another single year in the **Select a date range**
+slider below. By clicking and dragging the slider, you can adjust the
+date range. If you want to compare to a single year, drag both ends of
+the date range onto the same year so that only one single year is
+selected.
 
-## Example
+The **Explore the Data** page provides a more granular look at metrics,
+statistics, and other variables related to the data and how they change
+over time. Data can be viewed as a summary, by product type, or by
+species. Filtered data can be downloaded using the **DOWNLOAD** button
+at the bottom of the left hand side panel. Data can be viewed both as a
+time series plot or in tabular form using the **Plot** and **Table**
+panels on the right hand side.
 
-This is a basic example which shows you how to solve a common problem:
+## Contact us
 
-``` r
-library(purchprod)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+We look forward to receiving feedback, suggestions, and questions.
+Please email us at **<nmfs.nwfsc.fisheye@noaa.gov>**
 
 You’ll still need to render `README.Rmd` regularly, to keep `README.md`
 up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
