@@ -7,6 +7,9 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+
+# this script dictates the UI and server of the "By Species" tab on the Explore the Data page
+
 mod_specs_ui <- function(id) {
   ns <- NS(id)
   tagList(

@@ -1,7 +1,7 @@
 ## About the app
 <br>
 
-<div style="font-size:1.4em;">
+<div style="font-size:1.2em;">
 
 This Shiny App (built in R) is a tool that was developed to assist the Economic Data Collection Program at the
 <a href="https://www.fisheries.noaa.gov/about/northwest-fisheries-science-center" target="_blank">Northwest Fisheries Science Center</a> 

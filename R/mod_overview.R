@@ -23,23 +23,12 @@ mod_overview_ui <- function(id) {
         ######################### Year Picker Card #########################
         bslib::card(
           class = "card-overflow-fix", # assigning a custom css class to card to allow dropdown overflow
-          # style = "position: relative", # Make the card a positioned container
-
-          # # Tooltip icon in top right (absolutely positioned)
-          # bslib::tooltip(
-          #   span(
-          #     bsicons::bs_icon("info-circle")
-          #   ),
-          #   "Here is the message",
-          #   options = list(container = "body"), # optional: avoids overflow issues
-          #   style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
-          # ),
 
           # Select a year:
           year_func(
             inputID = ns("year1Input"),
             label = "Select a year:",
-            choices = unique(clean_purcprod$year),
+            choices = unique(sumdf_prac$year),
             selected = "2023",
             options = list(`style` = "btn-year1")
           ),
@@ -56,8 +45,8 @@ mod_overview_ui <- function(id) {
               options = list(container = "body"), # optional: avoids overflow issues
               style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
             ),
-            min = min(clean_purcprod$year),
-            max = max(clean_purcprod$year),
+            min = min(sumdf_prac$year),
+            max = max(sumdf_prac$year),
             value = c(2015, 2020)
           )
         ),

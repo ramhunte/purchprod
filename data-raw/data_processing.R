@@ -1,14 +1,12 @@
-#' data_cleaning
-#'
-#' @description functions for cleaning the data going into the app
-#'
-#' @return The return value, if any, from executing the function.
-#'
-#' @noRd
+## this script processes the raw data stored in the data-raw file
+# it is used for development purposes only. I take the raw data (raw_purcprod), clean it (clean_purcprod)
+# and then subset it into smaller data frames for individual tabs and their associated plots
+# I intentionally do not save raw_purcprod, clean_purcprod, nor proddf to the 'data' folder
+# as they are not called in the app itself. just used in this script for cleaning
 
 ########################### Reading  Raw data #################################
 
-raw_purcprod <- readRDS("data/mini_purcprod.RDS")
+raw_purcprod <- readRDS("data-raw/mini_purcprod.RDS")
 
 ########################### Cleaning Raw data #################################
 
@@ -194,3 +192,20 @@ specsdf <- raw_purcprod |>
     ),
     unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
   )
+
+####################### writing to data folder ###########################
+
+# this function writes the desired data frames that are used in the app into the 'data' folder
+usethis::use_data(
+  ########### for "Summary" tab on the Explore the Data page
+  sumdf_prac,
+  sumdf_reg,
+  sumdf_size,
+  ###########  for "By Product Type" tab on the Explore the Data page
+  proddf_prac,
+  proddf_reg,
+  proddf_size,
+  ###########  for "By Species" tab on the Explore the Data page
+  specsdf,
+  overwrite = TRUE
+)
