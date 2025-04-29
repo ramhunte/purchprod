@@ -214,7 +214,7 @@ mod_overview_server <- function(id) {
             input$yearrangeInput[1] != input$yearrangeInput[2],
             paste0(
               input$yearrangeInput[1],
-              "–",
+              "-",
               input$yearrangeInput[2],
               " avg."
             ),

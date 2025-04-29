@@ -4,7 +4,9 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Raymond", "Hunter", , "raymond.hunter@noaa.gov", role = "cre")
 Description: Placeholder for package description.
-License: What license is it under?
+License: MIT + file LICENSE
+Depends: 
+    R (>= 2.10)
 Imports: 
     bsicons,
     bslib,
@@ -14,13 +16,10 @@ Imports:
     forcats,
     ggplot2,
     golem,
-    janitor,
     scales,
     shiny,
     shinycssloaders,
-    shinyWidgets,
-    stringr,
-    tidyr
+    shinyWidgets
 Suggests: 
     spelling,
     testthat (>= 3.0.0)
@@ -29,5 +28,3 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 RoxygenNote: 7.3.2
-Depends: 
-    R (>= 2.10)

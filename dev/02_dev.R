@@ -19,20 +19,14 @@
 attachment::att_amend_desc()
 usethis::use_package("bslib")
 usethis::use_package("config")
-usethis::use_package("stringr")
 usethis::use_package("ggplot2")
 usethis::use_package("dplyr")
 usethis::use_package("DT")
 usethis::use_package("shinyWidgets")
 usethis::use_package("shinycssloaders")
-usethis::use_package("janitor")
-usethis::use_package("tidyr")
 usethis::use_package("forcats")
 usethis::use_package("scales")
 usethis::use_package("bsicons")
-# usethis::use_package("shinyjs")
-# usethis::use_package("shinyBS")
-# usethis::use_package("grid")
 
 ## Add modules ----
 ## Create a module infrastructure in R/

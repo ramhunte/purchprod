@@ -195,7 +195,110 @@ specsdf <- raw_purcprod |>
     unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
   )
 
-####################### writing to data folder ###########################
+########################### Plot aesthetics #################################
+
+# color pallete
+pal <- c(
+  light_text = "#0085CA",
+  dark_text = "#003087",
+  value1 = "#005E5E",
+  value2 = "#C2D9E3",
+  value3 = "#5EB6D9",
+  value4 = "#90DFE3",
+  bg_plot = "#E9F3F6"
+)
+
+
+# line colors
+line_col <- c(
+  # species colors
+  "All production" = "black",
+  "Groundfish production" = '#C1052F',
+  "Pacific whiting" = '#D89B2C',
+  "Non-whiting groundfish" = '#C0CB81',
+  "Sablefish" = '#648C1C',
+  "Rockfish" = '#6FB1C9',
+  "Dover sole" = '#001B70',
+  "Petrale sole" = '#595478',
+  "Thornyheads" = '#C0B3B6',
+  "Other groundfish species" = '#B56C97',
+  "Other species production" = '#C1052F',
+  "Crab" = '#D89B2C',
+  "Shrimp" = '#C0CB81',
+  "Salmon" = '#648C1C',
+  "Tuna" = '#6FB1C9',
+  "Coastal pelagics" = '#001B70',
+  "Other shellfish" = '#595478',
+  "Other species" = '#C0B3B6',
+
+  # state colors
+  "California" = '#001B70',
+  "Washington and Oregon" = '#C1052F',
+
+  # processor size colors
+  "Small" = '#001B70',
+  "Medium" = '#C1052F',
+  "Large" = '#648C1C',
+  "Non-processor" = '#D89B2C',
+
+  # product type colors
+  "Canned" = "#287271",
+  "Fillet" = "#9E2B25",
+  "Fresh" = "#208AAE",
+  "Frozen" = "#FF9F1C",
+  "Headed-and-gutted" = "#8E6C8A",
+  "Other" = "#B1B695",
+  "Unprocessed" = "#607744",
+  "Smoked" = "#D77A61"
+)
+
+# line type
+line_ty <- c(
+  # states
+  "California" = 'solid',
+  "Washington and Oregon" = 'solid',
+
+  # processor size
+  "Small" = 'solid',
+  "Medium" = 'solid',
+  "Large" = 'solid',
+  "Non-processor" = 'solid',
+
+  # species
+  "All production" = "solid",
+  "Groundfish production" = 'solid',
+  "Pacific whiting" = 'solid',
+  "Non-whiting groundfish" = 'solid',
+  "Sablefish" = 'solid',
+  "Rockfish" = 'solid',
+  "Dover sole" = 'solid',
+  "Petrale sole" = 'solid',
+  "Thornyheads" = 'solid',
+  "Other groundfish species" = 'solid',
+
+  # other species
+  "Other species production" = 'dashed',
+  "Crab" = 'dashed',
+  "Shrimp" = 'dashed',
+  "Salmon" = 'dashed',
+  "Tuna" = 'dashed',
+  "Coastal pelagics" = 'dashed',
+  "Other shellfish" = 'dashed',
+  "Other species" = 'dashed',
+
+  # product type
+  "Canned" = "solid",
+  "Fillet" = "solid",
+  "Fresh" = "solid",
+  "Frozen" = "solid",
+  "Headed-and-gutted" = "solid",
+  "Other" = "solid",
+  "Unprocessed" = "solid",
+  "Smoked" = "solid"
+)
+
+
+####################### writing to R/sysdata.rda file (internal data) ###########################
 
 # this function writes the desired data frames that are used in the app into the 'data' folder
 usethis::use_data(
@@ -209,5 +312,11 @@ usethis::use_data(
   proddf_size,
   ###########  for "By Species" tab on the Explore the Data page
   specsdf,
-  overwrite = TRUE
+  ###########  plot aesthetics
+  pal,
+  line_ty,
+  line_col,
+  ###########
+  overwrite = TRUE,
+  internal = TRUE # this parameter makes it so that the user of the app does not have access to the data itself. Just usign these data to make the plots. Not so the user can wrangle it themselves
 )
