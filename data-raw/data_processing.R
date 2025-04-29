@@ -4,6 +4,8 @@
 # I intentionally do not save raw_purcprod, clean_purcprod, nor proddf to the 'data' folder
 # as they are not called in the app itself. just used in this script for cleaning
 
+#NOTE: this script does not need to be run again unless there are changes to the raw data in the future
+
 ########################### Reading  Raw data #################################
 
 raw_purcprod <- readRDS("data-raw/mini_purcprod.RDS")
