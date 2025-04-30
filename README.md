@@ -3,6 +3,11 @@
 
 # purchprod
 
+**An app built by NOAA for exploring economic data of US West Coast
+fisheries**
+
+## 🚀 Launch the app here: [link]()
+
 <!-- badges: start -->
 
 [![Codecov test
@@ -10,7 +15,9 @@ coverage](https://codecov.io/gh/ramhunte/purchprod/graph/badge.svg)](https://app
 [![R-CMD-check](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-## About the app
+------------------------------------------------------------------------
+
+## 🧭 About the app
 
 This Shiny App (built in R) is a tool that was developed to assist the
 Economic Data Collection Program at the
@@ -23,30 +30,57 @@ Fishery as required by
 various facets of this data pertaining to the purchase and production of
 the West Coast Groundfish Trawl Catch Share Program.
 
-## Usin gthe app
+------------------------------------------------------------------------
 
-The **Overview** page provides a broad look the production value and
-weight of species across years. In the top left hand corner, use the
-**Select a year** drop down to filter data to a single year that you are
-wanting to investigate. You can then compare this to the average across
-a range of years or another single year in the **Select a date range**
-slider below. By clicking and dragging the slider, you can adjust the
-date range. If you want to compare to a single year, drag both ends of
-the date range onto the same year so that only one single year is
-selected.
+## ✨ Features
 
-The **Explore the Data** page provides a more granular look at metrics,
-statistics, and other variables related to the data and how they change
-over time. Data can be viewed as a summary, by product type, or by
-species. Filtered data can be downloaded using the **DOWNLOAD** button
-at the bottom of the left hand side panel. Data can be viewed both as a
-time series plot or in tabular form using the **Plot** and **Table**
-panels on the right hand side.
+### **Overview page**
 
-## Contact us
+- A broad look at species catch value and weight by year
+- Compare total production value and weight of species over time
+- Select a specific year of interest and compare it to another year or
+  average over multiple years
+  - Use the **year selector** and **date range slider** to customize the
+    comparison
 
-We look forward to receiving feedback, suggestions, and questions.
-Please email us at **<nmfs.nwfsc.fisheye@noaa.gov>**
+### **Explore the Data**
+
+- A more granular look into the facets of the data with tabs including:
+  - **Summary**
+  - **By Product Type**
+  - **By Species**
+- Filter by a metric, statistic, region, processor type, and more
+- View output as interactive time series plots or downloadable tables
+
+### **Information**
+
+- Learn how the app works and understand key terms and filters
+
+**Contact us** - Get in touch with NOAA developers or app managers for
+support or suggestions
+
+------------------------------------------------------------------------
+
+## 📊 Data
+
+The app uses data collected annually from participants in the Groundfish
+Trawl Fishery.  
+As of **April 2025**, the app contains data through the **2023 calendar
+year**.
+
+Data collection is part of NOAA’s [Economic Data Collection
+Program](https://www.fisheries.noaa.gov/west-coast/science-data/economic-data-collection-west-coast-groundfish-trawl-fishery).
+
+------------------------------------------------------------------------
+
+## 📬 Send us a message!
+
+We welcome feedback, suggestions, and questions regarding the app and
+data.
+
+📧 **<nmfs.nwfsc.fisheye@noaa.gov>**
+
+------------------------------------------------------------------------
 
 You’ll still need to render `README.Rmd` regularly, to keep `README.md`
 up-to-date. `devtools::build_readme()` is handy for this.
