@@ -6,6 +6,16 @@
 # * https://r-pkgs.org/testing-design.html#sec-tests-files-overview
 # * https://testthat.r-lib.org/articles/special-files.html
 
+# testing tools
+
+# usethis::use_test() to create the test file (the first time it’s run) or navigate to the test file (if it already exists).
+
+# Cmd/Ctrl + Shift + T  devtools::test() to make you have accidentally broken anything else.
+
+# devtools::test_coverage()
+
+# devtools::test_coverage_active_file()
+
 library(testthat)
 library(purchprod)
 
