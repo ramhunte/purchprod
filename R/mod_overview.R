@@ -233,10 +233,10 @@ mod_overview_server <- function(id) {
         dplyr::filter(.data[["year"]] == input$year1Input) |>
         dplyr::mutate(year = as.character(.data[["year"]])) |>
         dplyr::select(
-          .data[["variable"]],
-          .data[["metric"]],
-          .data[["value"]],
-          .data[["year"]]
+          "variable",
+          "metric",
+          "value",
+          "year"
         )
 
       # binding data together for plotting

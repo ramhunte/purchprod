@@ -39,9 +39,9 @@ lollipop_func <- function(data, year1, range1, range2, upper_lim) {
   ggplot2::ggplot(
     data = data,
     ggplot2::aes(
-      x = value,
+      x = .data[["value"]],
       y = forcats::fct_reorder(.data[["variable"]], .data[["value"]]),
-      group = variable,
+      group = .data[["variable"]],
       color = factor(.data[["year"]])
     )
   ) +
