@@ -40,14 +40,14 @@ lollipop_func <- function(data, year1, range1, range2, upper_lim) {
     data = data,
     ggplot2::aes(
       x = value,
-      y = forcats::fct_reorder(variable, value),
+      y = forcats::fct_reorder(.data[["variable"]], .data[["value"]]),
       group = variable,
-      color = factor(year)
+      color = factor(.data[["year"]])
     )
   ) +
     # Draw segments connecting the two years for each variable
     ggplot2::geom_line(
-      aes(group = variable),
+      aes(group = .data[["variable"]]),
       color = pal[["value2"]],
       linewidth = 1
     ) +
@@ -58,7 +58,7 @@ lollipop_func <- function(data, year1, range1, range2, upper_lim) {
     ggplot2::labs(color = "Year", x = "", y = "") +
 
     ggplot2::scale_color_manual(
-      values = setNames(
+      values = stats::setNames(
         c(pal[["light_text"]], pal[["dark_text"]]),
         c(as.character(year1), range_label)
       )
@@ -121,8 +121,8 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
   ggplot2::ggplot(
     data,
     ggplot2::aes(
-      x = factor(year),
-      y = value,
+      x = factor(.data[["year"]]),
+      y = .data[["value"]],
       group = .data[[group]]
     )
   ) +
@@ -135,7 +135,11 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
       linewidth = 0.75
     ) +
     geom_ribbon(
-      aes(ymax = upper, ymin = lower, fill = .data[[group]]),
+      aes(
+        ymax = .data[["upper"]],
+        ymin = .data[["lower"]],
+        fill = .data[[group]]
+      ),
       alpha = .2
     ) +
     scale_fill_manual(values = line_col) +
@@ -171,7 +175,11 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
       )
     ) +
     # facet wrap based on the column specified to be faceted in the function
-    facet_wrap(as.formula(paste("~", facet)), scales = 'free_y', ncol = 2)
+    ggplot2::facet_wrap(
+      stats::as.formula(base::paste("~", facet)),
+      scales = 'free_y',
+      ncol = 2
+    )
 }
 
 ############################## Data Table render processing ##################################
@@ -183,14 +191,14 @@ process_df <- function(df) {
 
   df |>
     # remove cols if they exist
-    dplyr::select(-any_of(cols_to_remove)) |> # remove cols if they exist
+    dplyr::select(-dplyr::any_of(cols_to_remove)) |> # remove cols if they exist
     # round numbers
     dplyr::mutate(
-      variance = round(variance, 2),
-      q25 = round(q25, 2),
-      q75 = round(q75, 2),
-      value = round(value, 2),
-      lower = round(lower, 2),
-      upper = round(upper, 2)
+      variance = round(.data[["variance"]], 2),
+      q25 = round(.data[["q25"]], 2),
+      q75 = round(.data[["q75"]], 2),
+      value = round(.data[["value"]], 2),
+      lower = round(.data[["lower"]], 2),
+      upper = round(.data[["upper"]], 2)
     )
 }

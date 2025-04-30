@@ -19,7 +19,8 @@ Imports:
     scales,
     shiny,
     shinycssloaders,
-    shinyWidgets
+    shinyWidgets,
+    utils
 Suggests: 
     spelling,
     testthat (>= 3.0.0)

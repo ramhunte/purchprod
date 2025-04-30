@@ -27,6 +27,8 @@ usethis::use_package("shinycssloaders")
 usethis::use_package("forcats")
 usethis::use_package("scales")
 usethis::use_package("bsicons")
+usethis::use_package("utils")
+usethis::use_package("stats")
 
 ## Add modules ----
 ## Create a module infrastructure in R/

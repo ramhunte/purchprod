@@ -240,11 +240,11 @@ app_server <- function(input, output, session) {
     content = function(file) {
       # conditional table render tdepnding on tab_top selection
       if (input$tab_top == "Summary") {
-        write.csv(sum_plot_df(), file)
+        utils::write.csv(sum_plot_df(), file)
       } else if (input$tab_top == "By Product Type") {
-        write.csv(prod_plot_df(), file)
+        utils::write.csv(prod_plot_df(), file)
       } else if (input$tab_top == "By Species") {
-        write.csv(specs_plot_df(), file)
+        utils::write.csv(specs_plot_df(), file)
       }
     }
   )

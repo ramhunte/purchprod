@@ -318,7 +318,7 @@ mod_overview_server <- function(id) {
           .data[["variable"]] == "All production",
           .data[["year"]] == input$year1Input
         ) |>
-        dplyr::pull(n)
+        dplyr::pull(.data[["n"]])
     })
 
     ############################# Plots ##################################
