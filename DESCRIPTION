@@ -16,10 +16,12 @@ Imports:
     forcats,
     ggplot2,
     golem,
+    markdown,
     scales,
     shiny,
     shinycssloaders,
     shinyWidgets,
+    stats,
     utils
 Suggests: 
     spelling,

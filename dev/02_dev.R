@@ -29,7 +29,7 @@ usethis::use_package("scales")
 usethis::use_package("bsicons")
 usethis::use_package("utils")
 usethis::use_package("stats")
-
+usethis::use_package("markdown")
 
 ## Add modules ----
 ## Create a module infrastructure in R/

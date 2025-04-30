@@ -131,7 +131,7 @@ app_ui <- function(request) {
         fluidRow(
           # use columns to create white space on sides
           column(2),
-          column(8, includeMarkdown("inst/app/text/info.md")),
+          column(8, shiny::includeMarkdown("inst/app/text/info.md")),
           column(2)
         ),
       ), # END "Information Page" nav_panel
