@@ -12,7 +12,9 @@
 
 ########################### Plot Aesthetics ###########################
 
-# see data_processing.R scipt
+# see data_processing.R scipt where they are made
+# then stored in sysdata.R file
+# ex: pal[], line_ty, line_col,
 
 ############################### lolipop chart  ##################################
 
@@ -30,7 +32,7 @@ lollipop_func <- function(data, year1, range1, range2, upper_lim) {
   # factor the year so year 1 always shows up first and same color on graph
   data$year <- factor(
     data$year,
-    levels = unique(c(as.character(year1), range_label))
+    levels = unique(c(range_label, as.character(year1)))
   )
 
   # ggplot graph code
