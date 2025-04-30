@@ -151,13 +151,13 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
       text = element_text(size = 22, color = pal["value1"]),
       axis.text = element_text(size = 18, color = pal["value1"]),
       strip.text = element_text(size = 18, color = pal["value1"]),
-      legend.tex = element_text(color = pal["value1"]),
+      legend.text = element_text(color = pal["value1"]),
       legend.title = element_blank(),
       legend.position = "bottom", # Moves the legend to the bottom
       panel.grid.minor.y = element_blank(),
-      panel.grid.major.y = element_line(size = 1.2),
+      panel.grid.major.y = element_line(linewidth = 1.2),
       panel.grid.minor.x = element_blank(),
-      panel.grid.major.x = element_line(size = 1.2),
+      panel.grid.major.x = element_line(linewidth = 1.2),
       axis.line = element_line(color = "grey", linewidth = 1), # Adds borders to only x and y axes
       panel.background = ggplot2::element_rect(
         fill = pal[["bg_plot"]],

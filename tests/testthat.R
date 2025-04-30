@@ -17,6 +17,7 @@
 # devtools::test_coverage_active_file()
 
 library(testthat)
+library(shinytest2)
 library(purchprod)
 
 test_check("purchprod")

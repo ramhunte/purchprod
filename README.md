@@ -63,8 +63,8 @@ support or suggestions
 
 ## 📊 Data
 
-The app uses data collected annually from participants in the Groundfish
-Trawl Fishery.  
+The app uses data collected annually from participants in the West Coast
+Groundfish Trawl Fishery.  
 As of **April 2025**, the app contains data through the **2023 calendar
 year**.
 

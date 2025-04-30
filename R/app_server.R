@@ -63,10 +63,10 @@ app_server <- function(input, output, session) {
       df <- sumdf_prac |>
         dplyr::filter(
           # "Summary" tab filters
-          .data[[metric]] %in% summary_inputs()$metric,
-          .data[[statistic]] %in% summary_inputs()$stat,
+          .data$metric %in% summary_inputs()$metric,
+          .data$statistic %in% summary_inputs()$stat,
           # "Production Activities"
-          .data[[variable]] %in%
+          .data$variable %in%
             c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
         )
     } else if (
@@ -76,11 +76,11 @@ app_server <- function(input, output, session) {
       df <- sumdf_reg |>
         dplyr::filter(
           # "Summary" tab filters
-          .data[[metric]] %in% summary_inputs()$metric,
-          .data[[statistic]] %in% summary_inputs()$stat,
+          .data$metric %in% summary_inputs()$metric,
+          .data$statistic %in% summary_inputs()$stat,
           # "Region" tab filters
-          .data[[variable]] %in% other_tabs_inputs()$reg,
-          .data[[cs]] %in% other_tabs_inputs()$pracs1
+          .data$variable %in% other_tabs_inputs()$reg,
+          .data$cs %in% other_tabs_inputs()$pracs1
         )
     } else if (
       # "Summary" and "Processor Size/Type"
@@ -89,11 +89,11 @@ app_server <- function(input, output, session) {
       df <- sumdf_size |>
         dplyr::filter(
           # "Summary" tab filters
-          .data[[metric]] %in% summary_inputs()$metric,
-          .data[[statistic]] %in% summary_inputs()$stat,
+          .data$metric %in% summary_inputs()$metric,
+          .data$statistic %in% summary_inputs()$stat,
           # "Processor Size/Type" tab filters
-          .data[[variable]] %in% other_tabs_inputs()$size,
-          .data[[cs]] %in% other_tabs_inputs()$pracs2
+          .data$variable %in% other_tabs_inputs()$size,
+          .data$cs %in% other_tabs_inputs()$pracs2
         )
     }
 
@@ -110,11 +110,11 @@ app_server <- function(input, output, session) {
         df <- proddf_prac |>
           dplyr::filter(
             # "By Product Type" tab filters
-            .data[[metric]] %in% prod_type_inputs()$metric,
-            .data[[type]] %in% prod_type_inputs()$prod_type,
-            .data[[statistic]] == prod_type_inputs()$stat,
+            .data$metric %in% prod_type_inputs()$metric,
+            .data$type %in% prod_type_inputs()$prod_type,
+            .data$statistic == prod_type_inputs()$stat,
             # "Production Activities" tab filters
-            .data[[variable]] %in%
+            .data$variable %in%
               c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
           )
       } else if (
@@ -124,12 +124,12 @@ app_server <- function(input, output, session) {
         df <- proddf_reg |>
           dplyr::filter(
             # "By Product Type" tab filters
-            .data[[metric]] %in% prod_type_inputs()$metric,
-            .data[[type]] %in% prod_type_inputs()$prod_type,
-            .data[[statistic]] %in% prod_type_inputs()$stat,
+            .data$metric %in% prod_type_inputs()$metric,
+            .data$type %in% prod_type_inputs()$prod_type,
+            .data$statistic %in% prod_type_inputs()$stat,
             # "Region" tab filters
-            .data[[variable]] %in% other_tabs_inputs()$reg,
-            .data[[cs]] %in% other_tabs_inputs()$pracs1
+            .data$variable %in% other_tabs_inputs()$reg,
+            .data$cs %in% other_tabs_inputs()$pracs1
           )
       } else if (
         # "By Product Type" and "Processor Size/Type"
@@ -138,12 +138,12 @@ app_server <- function(input, output, session) {
         df <- proddf_size |>
           dplyr::filter(
             # "By Product Type" tab filters
-            .data[[metric]] %in% prod_type_inputs()$metric,
-            .data[[type]] %in% prod_type_inputs()$prod_type,
-            .data[[statistic]] == prod_type_inputs()$stat,
+            .data$metric %in% prod_type_inputs()$metric,
+            .data$type %in% prod_type_inputs()$prod_type,
+            .data$statistic == prod_type_inputs()$stat,
             # "Processor Size/Type" tab filters
-            .data[[variable]] %in% other_tabs_inputs()$size,
-            .data[[cs]] %in% other_tabs_inputs()$pracs2
+            .data$variable %in% other_tabs_inputs()$size,
+            .data$cs %in% other_tabs_inputs()$pracs2
           )
       }
 
@@ -159,11 +159,11 @@ app_server <- function(input, output, session) {
       df <- specsdf |>
         dplyr::filter(
           # "By Species" tab filters
-          .data[[metric]] %in% specs_inputs()$metric,
-          .data[[variable]] %in% c(specs_inputs()$specs, specs_inputs()$os),
-          .data[[statistic]] == specs_inputs()$stat,
+          .data$metric %in% specs_inputs()$metric,
+          .data$variable %in% c(specs_inputs()$specs, specs_inputs()$os),
+          .data$statistic == specs_inputs()$stat,
           # bottom tab filters
-          .data[[type]] %in% specs_tabs_inputs()$prodtype
+          .data$type %in% specs_tabs_inputs()$prodtype
         )
       return(df)
     }

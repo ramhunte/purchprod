@@ -62,7 +62,7 @@ This app aggregates, summarizes, and compares various facets of this data pertai
 
 ## 📊 Data
 
-The app uses data collected annually from participants in the Groundfish Trawl Fishery.  
+The app uses data collected annually from participants in the West Coast Groundfish Trawl Fishery.  
 As of **April 2025**, the app contains data through the **2023 calendar year**.
 
 Data collection is part of NOAA’s [Economic Data Collection Program](https://www.fisheries.noaa.gov/west-coast/science-data/economic-data-collection-west-coast-groundfish-trawl-fishery).

@@ -25,7 +25,7 @@ app_ui <- function(request) {
       title = "Purchase Production App",
 
       # NOAA Fisheries logo
-      header(),
+      header = header(),
 
       #################################################################################
       #################################### Overview ###################################
@@ -114,7 +114,7 @@ app_ui <- function(request) {
               class = "custom-card",
               shinycssloaders::withSpinner(
                 # adding a cool loader
-                dataTableOutput("table") # table output
+                DT::DTOutput("table") # table output
               )
             ) # END  Table nav_panel
           ) # END main panel navset_card_pill
