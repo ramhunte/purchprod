@@ -149,33 +149,33 @@ mod_overview_server <- function(id) {
 
     ############################# master data frame ################################
 
-    # creating a reactive value to chache df
+    # creating a reactive value to cache df
     master_df_cache <- reactiveVal()
 
-    # creating a statement to re-rnder master df only when years change
+    # creating a statement to re-render master df only when years change
     observe({
       req(input$year1Input, input$yearrangeInput)
 
       filtered <- sumdf_prac |>
         dplyr::filter(
-          .data$year %in% # selecting just years that user is interested in
+          .data[["year"]] %in% # selecting just years that user is interested in
             c(
               input$year1Input, # from first year picker
               seq(input$yearrangeInput[1], input$yearrangeInput[2]) # from second year range slider
             ),
-          .data$statistic == "Total",
-          .data$metric %in% c("Production value", "Production weight") # production value and weight for graphs
+          .data[["statistic"]] == "Total",
+          .data[["metric"]] %in% c("Production value", "Production weight") # production value and weight for graphs
         ) |>
         dplyr::mutate(
-          .data$period = dplyr::case_when(
-            .data$year == input$year1Input ~ "Selected Year", # labeling slected single year and range years for plotting
+          period = dplyr::case_when(
+            .data[["year"]] == input$year1Input ~ "Selected Year", # labeling selected single year and range years for plotting
             TRUE ~ "Range Years"
           )
         )
       master_df_cache(filtered) # chaching master df in reactive value
     })
 
-    # making master df a reactive of the chached results
+    # making master df a reactive of the cached results
     master_df <- reactive({
       req(master_df_cache())
       master_df_cache()
@@ -189,11 +189,11 @@ mod_overview_server <- function(id) {
 
       df |>
         dplyr::filter(
-          .data$metric == "Production value",
-          .data$variable == "All production"
+          .data[["metric"]] == "Production value",
+          .data[["variable"]] == "All production"
         ) |>
-        dplyr::group_by(period) |>
-        dplyr::summarise(value = mean(value, na.rm = TRUE))
+        dplyr::group_by(.data[["period"]]) |>
+        dplyr::summarise(value = mean(.data[["value"]], na.rm = TRUE))
     })
 
     ############################# lollipop data frame ################################
@@ -204,14 +204,17 @@ mod_overview_server <- function(id) {
       # selecting data for just the range of dates
       range_data <- df |>
         dplyr::filter(
-          .data$year %in%
+          .data[["year"]] %in%
             c(seq(input$yearrangeInput[1], input$yearrangeInput[2]))
         ) |>
         # summarizing means of the values across range
-        dplyr::group_by(variable, metric) |>
-        dplyr::summarise(value = mean(value, na.rm = TRUE), .groups = "drop") |>
+        dplyr::group_by(.data[["variable"]], .data[["metric"]]) |>
+        dplyr::summarise(
+          value = mean(.data[["value"]], na.rm = TRUE),
+          .groups = "drop"
+        ) |>
         dplyr::mutate(
-          .data$year = ifelse(
+          year = ifelse(
             # if it is a year range, bind the two years w/ "-" for the label
             input$yearrangeInput[1] != input$yearrangeInput[2],
             paste0(
@@ -220,16 +223,21 @@ mod_overview_server <- function(id) {
               input$yearrangeInput[2],
               " avg."
             ),
-            # if year range is just one year, make the lable just that year
+            # if year range is just one year, make the label just that year
             as.character(input$yearrangeInput[2])
           )
         ) # Label for legend
 
       # data for just the year
       year1_data <- df |>
-        dplyr::filter(year == input$year1Input) |>
-        dplyr::mutate(year = as.character(year)) |>
-        dplyr::select(variable, metric, value, year)
+        dplyr::filter(.data[["year"]] == input$year1Input) |>
+        dplyr::mutate(year = as.character(.data[["year"]])) |>
+        dplyr::select(
+          .data[["variable"]],
+          .data[["metric"]],
+          .data[["value"]],
+          .data[["year"]]
+        )
 
       # binding data together for plotting
       plot_data <- dplyr::bind_rows(year1_data, range_data)
@@ -247,11 +255,11 @@ mod_overview_server <- function(id) {
     output$pval_text <- renderText({
       master_df() |>
         dplyr::filter(
-          .data$metric == "Production value",
-          .data$variable == "All production",
-          .data$year == input$year1Input
+          .data[["metric"]] == "Production value",
+          .data[["variable"]] == "All production",
+          .data[["year"]] == input$year1Input
         ) |>
-        dplyr::pull(.data$value) |>
+        dplyr::pull(.data[["value"]]) |>
         round(2) |>
         paste("M")
     })
@@ -290,11 +298,11 @@ mod_overview_server <- function(id) {
       diff <- if (length(selected_val) == 1 && length(range_val) == 1) {
         round((selected_val - range_val) / selected_val * 100, 1)
       } else {
-        # make the vlaue 0 if they are the same
+        # make the value 0 if they are the same
         0
       }
 
-      # assigning colros and +/- sign to value
+      # assigning colors and +/- sign to value
       color <- if (diff > 0) "#76BC21" else "#DB2207"
       sign <- if (diff > 0) "+" else ""
 
@@ -306,9 +314,9 @@ mod_overview_server <- function(id) {
     output$n_text <- renderText({
       master_df() |>
         dplyr::filter(
-          .data$metric == "Production value",
-          .data$variable == "All production",
-          .data$year == input$year1Input
+          .data[["metric"]] == "Production value",
+          .data[["variable"]] == "All production",
+          .data[["year"]] == input$year1Input
         ) |>
         dplyr::pull(n)
     })
@@ -318,7 +326,10 @@ mod_overview_server <- function(id) {
     # production value chart
     output$pv_plot <- renderPlot({
       lollipop_func(
-        data = dplyr::filter(df_loli(), .data$metric == "Production value"),
+        data = dplyr::filter(
+          df_loli(),
+          .data[["metric"]] == "Production value"
+        ),
         year1 = input$year1Input,
         range1 = input$yearrangeInput[1],
         range2 = input$yearrangeInput[2],
@@ -329,7 +340,10 @@ mod_overview_server <- function(id) {
     # Production weight chart
     output$pw_plot <- renderPlot({
       lollipop_func(
-        data = dplyr::filter(df_loli(), .data$metric == "Production weight"),
+        data = dplyr::filter(
+          df_loli(),
+          .data[["metric"]] == "Production weight"
+        ),
         year1 = input$year1Input,
         range1 = input$yearrangeInput[1],
         range2 = input$yearrangeInput[2],
