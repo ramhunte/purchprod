@@ -40,6 +40,28 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+
+          # macOS: install gettext
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install gettext
+          brew link gettext --force
+
+      # Linux: install gettext
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgettextpo-dev
+
+      # Windows (placeholder)
+      - name: Install system dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: echo "No additional setup required on Windows"
+
+
+
       - uses: r-lib/actions/setup-renv@v2 # Step 4: Setup renv (restore the environment from renv.lock)
         with:
           # This will automatically install renv, configure it, and restore the environment using renv.lock
