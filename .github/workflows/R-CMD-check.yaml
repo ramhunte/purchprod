@@ -19,11 +19,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-latest,   r: 'release'}
+          - {os: macos-latest, r: 'release'}
           # - {os: windows-latest, r: 'release'}
-          # - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          # - {os: ubuntu-latest,   r: 'release'}
-          # - {os: ubuntu-latest,   r: 'oldrel-1'}
+          # - {os: ubuntu-latest, r: 'devel', http-user-agent: 'release'}
+          # - {os: ubuntu-latest, r: 'release'}
+          # - {os: ubuntu-latest, r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -40,7 +40,7 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-       - uses: r-lib/actions/setup-renv@v2 # Step 4: Setup renv (restore the environment from renv.lock)
+      - uses: r-lib/actions/setup-renv@v2 # Step 4: Setup renv (restore the environment from renv.lock)
         with:
           # This will automatically install renv, configure it, and restore the environment using renv.lock
           cache: true  # Use caching to speed up package installation
