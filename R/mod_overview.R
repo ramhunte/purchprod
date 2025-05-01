@@ -19,6 +19,8 @@ mod_overview_ui <- function(id) {
   tagList(
     bslib::page_fillable(
       bslib::layout_columns(
+        # width = 1 / 5,
+        # height = 175,
         fill = FALSE,
         ######################### Year Picker Card #########################
         bslib::card(
@@ -27,7 +29,15 @@ mod_overview_ui <- function(id) {
           # Select a year:
           year_func(
             inputID = ns("year1Input"),
-            label = "Select a year:",
+            label = bslib::tooltip(
+              span(
+                "Select a year and date range:",
+                bsicons::bs_icon("info-circle")
+              ),
+              "By selecting a year range (e.g. 2015-2020), the values are averaged across all selected years. To select just a single year to compare, slide both ends of the range onto the same year. You can click across the year slider to change the selected year. To return back to a year range, click and drag the point right along the range.",
+              options = list(container = "body"), # optional: avoids overflow issues
+              style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
+            ),
             choices = unique(sumdf_prac$year),
             selected = "2023",
             options = list(`style` = "btn-year1")
@@ -36,15 +46,7 @@ mod_overview_ui <- function(id) {
           # Select a date range:
           year_range_func(
             inputID = ns("yearrangeInput"),
-            label = bslib::tooltip(
-              span(
-                "Select a date range (average) or year:",
-                bsicons::bs_icon("info-circle")
-              ),
-              "By selecting a year range (e.g. 2015-2020), the values are averaged across all selected years. To select just a single year to compare, slide both ends of the range onto the same year. You can click across the year slider to change the selected year. To return back to a year range, click and drag the point right along the range.",
-              options = list(container = "body"), # optional: avoids overflow issues
-              style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
-            ),
+            label = NULL,
             min = min(sumdf_prac$year),
             max = max(sumdf_prac$year),
             value = c(2015, 2020)
