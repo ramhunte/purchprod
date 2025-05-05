@@ -10,9 +10,8 @@ fisheries**
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/ramhunte/purchprod/graph/badge.svg)](https://app.codecov.io/gh/ramhunte/purchprod)
 [![R-CMD-check](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 ------------------------------------------------------------------------
@@ -59,6 +58,71 @@ the West Coast Groundfish Trawl Catch Share Program.
 **Contact us** - Get in touch with NOAA developers or app managers for
 support or suggestions
 
+    .
+    ├── DESCRIPTION 
+    ├── LICENSE 
+    ├── LICENSE.md 
+    ├── NAMESPACE 
+    ├── R # R scripts including UI, server, modules (mod_*.R), functions (fct_*.R, utils_ui.R), and app configuration.
+    │   ├── app_config.R # reads and applies global settings from YAML config
+    │   ├── app_server.R
+    │   ├── app_ui.R
+    │   ├── fct_footer.R # fucntion that creates the footer
+    │   ├── fct_header.R # fucntion that creates the header
+    │   ├── fct_plot.R # fucntions that create plots
+    │   ├── mod_other_tabs.R 
+    │   ├── mod_overview.R
+    │   ├── mod_prod_type.R
+    │   ├── mod_specs.R
+    │   ├── mod_specs_tabs.R
+    │   ├── mod_summary.R
+    │   ├── run_app.R
+    │   ├── sysdata.rda # internal data used by app but not exported
+    │   └── utils_ui.R # helper functions that are mostly reusable (used in the UI)
+    ├── README.Rmd
+    ├── README.md
+    ├── data-raw # contains data processing script and raw data (for development only)
+    │   ├── data_processing.R
+    │   └── mini_purcprod.RDS
+    ├── dev # development scripts to set up, build, and deploy the app (made by {golem})
+    │   ├── 01_start.R
+    │   ├── 02_dev.R
+    │   ├── 03_deploy.R
+    │   ├── config_attachment.yaml
+    │   └── run_dev.R
+    ├── inst # non-code files needed by the app
+    │   ├── WORDLIST
+    │   ├── app # Contains markdown files, static images, and CSS file
+    │   │   ├── text # markdown files for text on "Information" and "Contact Us" pages
+    │   │   │   ├── contact.md
+    │   │   │   └── info.md
+    │   │   └── www # header image and CSS file
+    │   │       ├── noaa_header.png
+    │   │       └── styles.css
+    │   └── golem-config.yml # global configuration options from {golem} framework
+    ├── man # includes Rd documentation and README figure assets
+    │   ├── figures
+    │   │   └── nmfs_logo.png
+    │   └── run_app.Rd
+    ├── purchprod.Rproj
+    ├── renv # managed by {Renv} to isolate package dependencies and create reproducible environment
+    │   ├── activate.R
+    │   ├── settings.json
+    │   └── staging
+    ├── renv.lock # specifies dependencies and versions for development and time of of deployment
+    └── tests # tests to make sure app is functioning as intended using {testthat}
+        ├── spelling.R
+        ├── testthat
+        │   ├── test-app.R
+        │   ├── test-app_server.R
+        │   ├── test-app_ui.R
+        │   ├── test-other_tabs.R
+        │   ├── test-overview.R
+        │   ├── test-plot.R
+        │   ├── test-summary.R
+        │   └── test-utils_ui.R
+        └── testthat.R
+
 ------------------------------------------------------------------------
 
 ## 📊 Data
@@ -78,7 +142,16 @@ Program](https://www.fisheries.noaa.gov/west-coast/science-data/economic-data-co
 We welcome feedback, suggestions, and questions regarding the app and
 data.
 
-📧 **<nmfs.nwfsc.fisheye@noaa.gov>**
+📧 <a href="mailto:nmfs.nwfsc.fisheye@noaa.gov"
+class="email"><strong>nmfs.nwfsc.fisheye@noaa.gov</strong></a>
+
+------------------------------------------------------------------------
+
+<img src="man/figures/nmfs_logo.png" alt="NOAA Fisheries Logo" width="200" style="height: 75px !important;"/>
+
+[U.S. Department of Commerce](https://www.commerce.gov/) \| [National
+Oceanographic and Atmospheric Administration](https://www.noaa.gov) \|
+[NOAA Fisheries](https://www.fisheries.noaa.gov/)
 
 ------------------------------------------------------------------------
 

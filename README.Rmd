@@ -1,5 +1,8 @@
 ---
 output: github_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -15,70 +18,160 @@ knitr::opts_chunk$set(
 
 # purchprod
 
-**An app built by NOAA for exploring economic data of US West Coast fisheries**
+**An app built by NOAA for exploring economic data of US West Coast
+fisheries**
 
 ## 🚀 Launch the app here: [link]()
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/ramhunte/purchprod/graph/badge.svg)](https://app.codecov.io/gh/ramhunte/purchprod)
+
 [![R-CMD-check](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ramhunte/purchprod/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
----
+------------------------------------------------------------------------
 
-## 🧭 About the app 
+## 🧭 About the app
 
-This Shiny App (built in R) is a tool that was developed to assist the Economic Data Collection Program at the
-<a href="https://www.fisheries.noaa.gov/about/northwest-fisheries-science-center" target="_blank">Northwest Fisheries Science Center</a> 
-make its economic data available to the public. Data is collected annually from the West Coast Groundfish Trawl Fishery as required by
-<a href="https://www.ecfr.gov/current/title-50/chapter-VI/part-660/subpart-D/section-660.114" target="_blank">regulation 50 CFR 660.114</a>.
-This app aggregates, summarizes, and compares various facets of this data pertaining to the purchase and production of the West Coast Groundfish Trawl Catch Share Program.
+This Shiny App (built in R) is a tool that was developed to assist the
+Economic Data Collection Program at the
+<a href="https://www.fisheries.noaa.gov/about/northwest-fisheries-science-center" target="_blank">Northwest
+Fisheries Science Center</a> make its economic data available to the
+public. Data is collected annually from the West Coast Groundfish Trawl
+Fishery as required by
+<a href="https://www.ecfr.gov/current/title-50/chapter-VI/part-660/subpart-D/section-660.114" target="_blank">regulation
+50 CFR 660.114</a>. This app aggregates, summarizes, and compares
+various facets of this data pertaining to the purchase and production of
+the West Coast Groundfish Trawl Catch Share Program.
 
----
+------------------------------------------------------------------------
 
-## ✨ Features 
+## ✨ Features
 
 ### **Overview page**
-- A broad look at species catch value and weight by year
-- Compare total production value and weight of species over time
-- Select a specific year of interest and compare it to another year or average over multiple years
-    - Use the **year selector** and **date range slider** to customize the comparison
+
+-   A broad look at species catch value and weight by year
+-   Compare total production value and weight of species over time
+-   Select a specific year of interest and compare it to another year or
+    average over multiple years
+    -   Use the **year selector** and **date range slider** to customize
+        the comparison
 
 ### **Explore the Data**
-- A more granular look into the facets of the data with tabs including:
-  - **Summary**
-  - **By Product Type**
-  - **By Species**
-- Filter by a metric, statistic, region, processor type, and more
-- View output as interactive time series plots or downloadable tables
+
+-   A more granular look into the facets of the data with tabs
+    including:
+    -   **Summary**
+    -   **By Product Type**
+    -   **By Species**
+-   Filter by a metric, statistic, region, processor type, and more
+-   View output as interactive time series plots or downloadable tables
 
 ### **Information**
-- Learn how the app works and understand key terms and filters
 
-**Contact us**
-- Get in touch with NOAA developers or app managers for support or suggestions
+-   Learn how the app works and understand key terms and filters
 
----
+**Contact us** - Get in touch with NOAA developers or app managers for
+support or suggestions
+
+```         
+.
+├── DESCRIPTION 
+├── LICENSE 
+├── LICENSE.md 
+├── NAMESPACE 
+├── R #	R scripts including UI, server, modules (mod_*.R), functions (fct_*.R, utils_ui.R), and app configuration.
+│   ├── app_config.R # reads and applies global settings from YAML config
+│   ├── app_server.R
+│   ├── app_ui.R
+│   ├── fct_footer.R # fucntion that creates the footer
+│   ├── fct_header.R # fucntion that creates the header
+│   ├── fct_plot.R # fucntions that create plots
+│   ├── mod_other_tabs.R 
+│   ├── mod_overview.R
+│   ├── mod_prod_type.R
+│   ├── mod_specs.R
+│   ├── mod_specs_tabs.R
+│   ├── mod_summary.R
+│   ├── run_app.R
+│   ├── sysdata.rda # internal data used by app but not exported
+│   └── utils_ui.R # helper functions that are mostly reusable (used in the UI)
+├── README.Rmd
+├── README.md
+├── data-raw # contains data processing script and raw data (for development only)
+│   ├── data_processing.R
+│   └── mini_purcprod.RDS
+├── dev # development scripts to set up, build, and deploy the app (made by {golem})
+│   ├── 01_start.R
+│   ├── 02_dev.R
+│   ├── 03_deploy.R
+│   ├── config_attachment.yaml
+│   └── run_dev.R
+├── inst # non-code files needed by the app
+│   ├── WORDLIST
+│   ├── app # Contains markdown files, static images, and CSS file
+│   │   ├── text # markdown files for text on "Information" and "Contact Us" pages
+│   │   │   ├── contact.md
+│   │   │   └── info.md
+│   │   └── www # header image and CSS file
+│   │       ├── noaa_header.png
+│   │       └── styles.css
+│   └── golem-config.yml # global configuration options from {golem} framework
+├── man # includes Rd documentation and README figure assets
+│   ├── figures
+│   │   └── nmfs_logo.png
+│   └── run_app.Rd
+├── purchprod.Rproj
+├── renv # managed by {Renv} to isolate package dependencies and create reproducible environment
+│   ├── activate.R
+│   ├── settings.json
+│   └── staging
+├── renv.lock # specifies dependencies and versions for development and time of of deployment
+└── tests # tests to make sure app is functioning as intended using {testthat}
+    ├── spelling.R
+    ├── testthat
+    │   ├── test-app.R
+    │   ├── test-app_server.R
+    │   ├── test-app_ui.R
+    │   ├── test-other_tabs.R
+    │   ├── test-overview.R
+    │   ├── test-plot.R
+    │   ├── test-summary.R
+    │   └── test-utils_ui.R
+    └── testthat.R
+```
+
+------------------------------------------------------------------------
 
 ## 📊 Data
 
-The app uses data collected annually from participants in the West Coast Groundfish Trawl Fishery.  
-As of **April 2025**, the app contains data through the **2023 calendar year**.
+The app uses data collected annually from participants in the West Coast
+Groundfish Trawl Fishery.\
+As of **April 2025**, the app contains data through the **2023 calendar
+year**.
 
-Data collection is part of NOAA’s [Economic Data Collection Program](https://www.fisheries.noaa.gov/west-coast/science-data/economic-data-collection-west-coast-groundfish-trawl-fishery).
+Data collection is part of NOAA’s [Economic Data Collection
+Program](https://www.fisheries.noaa.gov/west-coast/science-data/economic-data-collection-west-coast-groundfish-trawl-fishery).
 
----
+------------------------------------------------------------------------
 
 ## 📬 Send us a message!
 
-We welcome feedback, suggestions, and questions regarding the app and data. 
+We welcome feedback, suggestions, and questions regarding the app and
+data.
 
-📧 **nmfs.nwfsc.fisheye@noaa.gov**
+📧
+[**nmfs.nwfsc.fisheye\@noaa.gov**](mailto:nmfs.nwfsc.fisheye@noaa.gov){.email}
 
----
+------------------------------------------------------------------------
 
+<img src="man/figures/nmfs_logo.png" alt="NOAA Fisheries Logo" width="200" style="height: 75px !important;"/>
 
+[U.S. Department of Commerce](https://www.commerce.gov/) \| [National
+Oceanographic and Atmospheric Administration](https://www.noaa.gov) \|
+[NOAA Fisheries](https://www.fisheries.noaa.gov/)
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+------------------------------------------------------------------------
 
-
+You'll still need to render `README.Rmd` regularly, to keep `README.md`
+up-to-date. `devtools::build_readme()` is handy for this.
