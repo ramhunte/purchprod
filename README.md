@@ -1,5 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- You'll still need to render `README.Rmd` regularly, to keep `README.md` -->
+<!-- up-to-date. `devtools::build_readme()` is handy for this. -->
 
 # purchprod
 
@@ -21,13 +23,31 @@ fisheries**
 This Shiny App (built in R) is a tool that was developed to assist the
 Economic Data Collection Program at the
 <a href="https://www.fisheries.noaa.gov/about/northwest-fisheries-science-center" target="_blank">Northwest
-Fisheries Science Center</a> make its economic data available to the
+Fisheries Science Center</a> make its fisheries data available to the
 public. Data is collected annually from the West Coast Groundfish Trawl
 Fishery as required by
 <a href="https://www.ecfr.gov/current/title-50/chapter-VI/part-660/subpart-D/section-660.114" target="_blank">regulation
 50 CFR 660.114</a>. This app aggregates, summarizes, and compares
 various facets of this data pertaining to the purchase and production of
 the West Coast Groundfish Trawl Catch Share Program.
+
+### Notes for Developers
+
+This app was built using the `{golem}` framework, which structures Shiny
+applications as R packages to support modular design, easier testing,
+and long-term maintainability and collaboration. The app’s
+components—UI, server logic, and supporting functions—are organized into
+clearly separated scripts (`fct_*.R`, `utils_*.R`) and modules
+(`mod_*.R`), making the codebase easier to navigate, test, and extend.
+Configuration settings are managed through the `golem-config.yml` file,
+which centralizes environment-specific options. To ensure
+reproducibility across systems and time, the project also uses `{renv}`
+to lock package versions. The `renv.lock` file captures the exact
+versions of all packages used during development, allowing collaborators
+to recreate the same environment with `renv::restore()`. If contributing
+to this application, please follow the `{golem}` and `{renv}`
+conventions to maintain consistency and reliability throughout
+development.
 
 ------------------------------------------------------------------------
 
@@ -55,8 +75,12 @@ the West Coast Groundfish Trawl Catch Share Program.
 
 - Learn how the app works and understand key terms and filters
 
-**Contact us** - Get in touch with NOAA developers or app managers for
-support or suggestions
+### **Contact us**
+
+- Get in touch with NOAA developers or app managers for support or
+  suggestions
+
+<!-- -->
 
     .
     ├── DESCRIPTION 
@@ -67,9 +91,9 @@ support or suggestions
     │   ├── app_config.R # reads and applies global settings from YAML config
     │   ├── app_server.R
     │   ├── app_ui.R
-    │   ├── fct_footer.R # fucntion that creates the footer
-    │   ├── fct_header.R # fucntion that creates the header
-    │   ├── fct_plot.R # fucntions that create plots
+    │   ├── fct_footer.R # function that creates the footer
+    │   ├── fct_header.R # function that creates the header
+    │   ├── fct_plot.R # functions that create plots
     │   ├── mod_other_tabs.R 
     │   ├── mod_overview.R
     │   ├── mod_prod_type.R
@@ -128,9 +152,8 @@ support or suggestions
 ## 📊 Data
 
 The app uses data collected annually from participants in the West Coast
-Groundfish Trawl Fishery.  
-As of **April 2025**, the app contains data through the **2023 calendar
-year**.
+Groundfish Trawl Fishery. As of **April 2025**, the app contains data
+through the **2023 calendar year**.
 
 Data collection is part of NOAA’s [Economic Data Collection
 Program](https://www.fisheries.noaa.gov/west-coast/science-data/economic-data-collection-west-coast-groundfish-trawl-fishery).
@@ -152,8 +175,3 @@ class="email"><strong>nmfs.nwfsc.fisheye@noaa.gov</strong></a>
 [U.S. Department of Commerce](https://www.commerce.gov/) \| [National
 Oceanographic and Atmospheric Administration](https://www.noaa.gov) \|
 [NOAA Fisheries](https://www.fisheries.noaa.gov/)
-
-------------------------------------------------------------------------
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.

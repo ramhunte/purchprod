@@ -135,7 +135,14 @@ specs_func <- function(inputID) {
       "Thornyheads",
       "Other groundfish species"
     ),
-    selected = c("All production", "Rockfish", "Dover sole", "Petrale sole")
+    selected = c(
+      "All production",
+      "Groundfish production",
+      "Pacific whiting",
+      "Rockfish",
+      "Dover sole",
+      "Petrale sole"
+    )
   )
 }
 
