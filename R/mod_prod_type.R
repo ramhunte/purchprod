@@ -14,8 +14,8 @@ mod_prod_type_ui <- function(id) {
   ns <- NS(id)
   tagList(
     metric_func2(inputID = ns("metricInput")),
-    prodtype_func(inputID = ns("protypeInput")),
-    stat_func(inputID = ns("statInput"))
+    prodtype_func(inputID = ns("protypeInput"))
+    # stat_func(inputID = ns("statInput"))
   )
 }
 
@@ -29,8 +29,8 @@ mod_prod_type_server <- function(id) {
     return(reactive({
       list(
         metric = input$metricInput,
-        prod_type = input$protypeInput,
-        stat = input$statInput
+        prod_type = input$protypeInput
+        # stat = input$statInput
       )
     }))
   })

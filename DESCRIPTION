@@ -6,7 +6,7 @@ Authors@R:
 Description: Placeholder for package description.
 License: MIT + file LICENSE
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 Imports: 
     bsicons,
     bslib,

@@ -64,7 +64,7 @@ app_server <- function(input, output, session) {
         dplyr::filter(
           # "Summary" tab filters
           .data$metric %in% summary_inputs()$metric,
-          .data$statistic %in% summary_inputs()$stat,
+          # .data$statistic %in% summary_inputs()$stat,
           # "Production Activities"
           .data$variable %in%
             c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
@@ -77,7 +77,7 @@ app_server <- function(input, output, session) {
         dplyr::filter(
           # "Summary" tab filters
           .data$metric %in% summary_inputs()$metric,
-          .data$statistic %in% summary_inputs()$stat,
+          # .data$statistic %in% summary_inputs()$stat,
           # "Region" tab filters
           .data$variable %in% other_tabs_inputs()$reg,
           .data$cs %in% other_tabs_inputs()$pracs1
@@ -90,7 +90,7 @@ app_server <- function(input, output, session) {
         dplyr::filter(
           # "Summary" tab filters
           .data$metric %in% summary_inputs()$metric,
-          .data$statistic %in% summary_inputs()$stat,
+          # .data$statistic %in% summary_inputs()$stat,
           # "Processor Size/Type" tab filters
           .data$variable %in% other_tabs_inputs()$size,
           .data$cs %in% other_tabs_inputs()$pracs2
@@ -112,7 +112,7 @@ app_server <- function(input, output, session) {
             # "By Product Type" tab filters
             .data$metric %in% prod_type_inputs()$metric,
             .data$type %in% prod_type_inputs()$prod_type,
-            .data$statistic == prod_type_inputs()$stat,
+            # .data$statistic == prod_type_inputs()$stat,
             # "Production Activities" tab filters
             .data$variable %in%
               c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
@@ -126,7 +126,7 @@ app_server <- function(input, output, session) {
             # "By Product Type" tab filters
             .data$metric %in% prod_type_inputs()$metric,
             .data$type %in% prod_type_inputs()$prod_type,
-            .data$statistic %in% prod_type_inputs()$stat,
+            # .data$statistic %in% prod_type_inputs()$stat,
             # "Region" tab filters
             .data$variable %in% other_tabs_inputs()$reg,
             .data$cs %in% other_tabs_inputs()$pracs1
@@ -140,7 +140,7 @@ app_server <- function(input, output, session) {
             # "By Product Type" tab filters
             .data$metric %in% prod_type_inputs()$metric,
             .data$type %in% prod_type_inputs()$prod_type,
-            .data$statistic == prod_type_inputs()$stat,
+            # .data$statistic == prod_type_inputs()$stat,
             # "Processor Size/Type" tab filters
             .data$variable %in% other_tabs_inputs()$size,
             .data$cs %in% other_tabs_inputs()$pracs2
@@ -161,7 +161,7 @@ app_server <- function(input, output, session) {
           # "By Species" tab filters
           .data$metric %in% specs_inputs()$metric,
           .data$variable %in% c(specs_inputs()$specs, specs_inputs()$os),
-          .data$statistic == specs_inputs()$stat,
+          # .data$statistic == specs_inputs()$stat,
           # bottom tab filters
           .data$type %in% specs_tabs_inputs()$prodtype
         )
@@ -182,16 +182,18 @@ app_server <- function(input, output, session) {
       plot_func(
         # plot function
         data = sum_plot_df(), # "Summary" tab reactive data frame
-        lab = summary_inputs()$stat, # using the statistic as label
+        # lab = summary_inputs()$stat, # using the statistic as label
+        lab = NULL,
         group = "variable", # grouping by variable
-        facet = "unit_lab" # facetign by unit label
+        facet = "unit_lab" # faceting by unit label
         # )
       )
       # "By Product Type" tab plot
     } else if (input$tab_top == "By Product Type") {
       plot_func(
         data = prod_plot_df(), # same steps as above for "Summary" ^^
-        lab = prod_type_inputs()$stat,
+        # lab = prod_type_inputs()$stat,
+        lab = NULL,
         group = "variable",
         facet = "unit_lab"
         # )
@@ -200,7 +202,8 @@ app_server <- function(input, output, session) {
     } else if (input$tab_top == "By Species") {
       plot_func(
         data = specs_plot_df(),
-        lab = specs_inputs()$stat,
+        lab = NULL,
+        # lab = specs_inputs()$stat,
         group = "type", # faceting by product type (different column than variable for previous examples ^)
         facet = "unit_lab",
       )

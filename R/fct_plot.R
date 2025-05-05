@@ -134,14 +134,14 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
       ),
       linewidth = 0.75
     ) +
-    geom_ribbon(
-      aes(
-        ymax = .data[["upper"]],
-        ymin = .data[["lower"]],
-        fill = .data[[group]]
-      ),
-      alpha = .2
-    ) +
+    # geom_ribbon(
+    #   aes(
+    #     ymax = .data[["upper"]],
+    #     ymin = .data[["lower"]],
+    #     fill = .data[[group]]
+    #   ),
+    #   alpha = .2
+    # ) +
     scale_fill_manual(values = line_col) +
     scale_color_manual(values = line_col) +
     scale_linetype_manual(values = line_ty) +
@@ -152,7 +152,7 @@ plot_func <- function(data, lab, group, facet, line = "solid", title = NULL) {
       title = title
     ) +
     scale_x_discrete(breaks = scales::pretty_breaks()) +
-    scale_y_continuous(expand = c(0, 0)) +
+    scale_y_continuous(breaks = scales::pretty_breaks(), expand = c(0, 0)) +
     theme(
       text = element_text(size = 22, color = pal["value1"]),
       axis.text = element_text(size = 18, color = pal["value1"]),

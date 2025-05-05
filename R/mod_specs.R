@@ -15,8 +15,8 @@ mod_specs_ui <- function(id) {
   tagList(
     metric_func2(inputID = ns("metricInput")),
     specs_func(inputID = ns("specsInput")),
-    os_func(inputID1 = ns("osDropdown"), inputID2 = ns("ospsInput")),
-    stat_func(inputID = ns("statInput"))
+    os_func(inputID1 = ns("osDropdown"), inputID2 = ns("ospsInput"))
+    # stat_func(inputID = ns("statInput"))
   )
 }
 
@@ -31,8 +31,8 @@ mod_specs_server <- function(id) {
       list(
         metric = input$metricInput,
         specs = input$specsInput,
-        os = input$ospsInput,
-        stat = input$statInput
+        os = input$ospsInput
+        # stat = input$statInput
       )
     }))
   })

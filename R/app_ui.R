@@ -11,6 +11,7 @@ app_ui <- function(request) {
 
     # START page_navbar
     bslib::page_navbar(
+      # fillable = FALSE,
       # calling themes for the page elements
       theme = bslib::bs_theme(
         bootswatch = "materia",
@@ -128,12 +129,14 @@ app_ui <- function(request) {
       # START Information Page nav_panel
       bslib::nav_panel(
         "Information Page",
-        fluidRow(
-          # use columns to create white space on sides
-          column(2),
-          column(8, shiny::includeMarkdown(app_sys("app/text/info.md"))),
-          column(2)
-        ),
+        div(
+          class = "scrollable-markdown",
+          fluidRow(
+            column(2),
+            column(8, shiny::includeMarkdown(app_sys("app/text/info.md"))),
+            column(2)
+          )
+        )
       ), # END "Information Page" nav_panel
 
       #################################################################################
@@ -143,11 +146,13 @@ app_ui <- function(request) {
       # START Contact Us nav_panel
       bslib::nav_panel(
         "Contact Us",
-        fluidRow(
-          # use columns to create white space on sides
-          column(2),
-          column(8, includeMarkdown(app_sys("app/text/contact.md"))),
-          column(2)
+        div(
+          class = "scrollable-markdown",
+          fluidRow(
+            column(2),
+            column(8, includeMarkdown(app_sys("app/text/contact.md"))),
+            column(2)
+          )
         )
       ), # END Contact Us nav_panel
 

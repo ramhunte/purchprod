@@ -34,7 +34,8 @@ mod_overview_ui <- function(id) {
                 "Select a year and date range:",
                 bsicons::bs_icon("info-circle")
               ),
-              "By selecting a year range (e.g. 2015-2020), the values are averaged across all selected years. To select just a single year to compare, slide both ends of the range onto the same year. You can click across the year slider to change the selected year. To return back to a year range, click and drag the point right along the range.",
+              "Select a year in the first dropdown(e.g. 2023) you would like to analyze. Next, select a year range (e.g. 2015-2020) to compare to
+              a range avererage OR select just a single year to compare (slide both ends of the range onto the same year).",
               options = list(container = "body"), # optional: avoids overflow issues
               style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
             ),
@@ -68,7 +69,7 @@ mod_overview_ui <- function(id) {
 
         # Total Production Value value box
         bslib::value_box(
-          title = "Total Production Value",
+          title = "Total production value of all species",
           value = textOutput(ns("pval_text")),
           theme = bslib::value_box_theme(
             bg = pal[["value3"]],
@@ -90,7 +91,7 @@ mod_overview_ui <- function(id) {
 
         # Number of observations value box
         bslib::value_box(
-          title = "Number of observations",
+          title = "Number of processors",
           value = textOutput(ns("n_text")),
           theme = bslib::value_box_theme(
             bg = pal[["value4"]],
@@ -165,7 +166,7 @@ mod_overview_server <- function(id) {
               input$year1Input, # from first year picker
               seq(input$yearrangeInput[1], input$yearrangeInput[2]) # from second year range slider
             ),
-          .data[["statistic"]] == "Total",
+          # .data[["statistic"]] == "Total",
           .data[["metric"]] %in% c("Production value", "Production weight") # production value and weight for graphs
         ) |>
         dplyr::mutate(

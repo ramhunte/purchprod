@@ -16,6 +16,7 @@ raw_purcprod <- readRDS("data-raw/mini_purcprod.RDS")
 clean_purcprod <- raw_purcprod |>
   # making all variable names lowercase for consistency
   janitor::clean_names() |>
+  dplyr::filter(statistic == "Total") |>
   # adjusting raw values by their assigned units
   # ex: if a value is labeled "millions", then we divide it by 1,000,000 to make it abbreviated
   # do this for variance, quartiles, value, upper/lower
@@ -141,7 +142,8 @@ specsdf <- raw_purcprod |>
   janitor::clean_names() |>
   dplyr::filter(
     tab == 'Product', # production tab data
-    cs == ""
+    cs == "",
+    statistic == "Total"
   ) |>
 
   tidyr::separate(

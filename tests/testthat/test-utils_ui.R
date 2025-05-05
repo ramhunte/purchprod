@@ -90,27 +90,27 @@ test_that("metric_func2 returns selectInput with correct properties", {
 })
 
 ####################### Statistic
-test_that("stat_func returns radioButtons with correct properties", {
-  ui <- stat_func("statInput")
-
-  # Basic type check
-  expect_s3_class(ui, "shiny.tag")
-
-  # Render HTML
-  html <- as.character(ui)
-
-  # Check for correct inputId and label
-  expect_match(html, 'id="statInput"')
-  expect_match(html, '>Statistic<')
-
-  # Check that the correct choices are present
-  expect_match(html, 'Mean')
-  expect_match(html, 'Median')
-  expect_match(html, 'Total')
-
-  # Check that the default selected option is "Median"
-  expect_match(html, 'checked="checked"') # Look for the "Median" being checked
-})
+# test_that("stat_func returns radioButtons with correct properties", {
+#   ui <- stat_func("statInput")
+#
+#   # Basic type check
+#   expect_s3_class(ui, "shiny.tag")
+#
+#   # Render HTML
+#   html <- as.character(ui)
+#
+#   # Check for correct inputId and label
+#   expect_match(html, 'id="statInput"')
+#   expect_match(html, '>Statistic<')
+#
+#   # Check that the correct choices are present
+#   expect_match(html, 'Mean')
+#   expect_match(html, 'Median')
+#   expect_match(html, 'Total')
+#
+#   # Check that the default selected option is "Median"
+#   expect_match(html, 'checked="checked"') # Look for the "Median" being checked
+# })
 
 ####################### Product type
 test_that("prodtype_func returns checkboxGroupInput with correct properties", {

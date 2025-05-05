@@ -12,8 +12,8 @@
 mod_summary_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    metric_func1(inputID = ns("metricInput")),
-    stat_func(inputID = ns("statInput"))
+    metric_func1(inputID = ns("metricInput"))
+    # stat_func(inputID = ns("statInput"))
   )
 }
 
@@ -26,8 +26,8 @@ mod_summary_server <- function(id) {
 
     return(reactive({
       list(
-        metric = input$metricInput,
-        stat = input$statInput
+        metric = input$metricInput
+        # stat = input$statInput
       )
     }))
   })

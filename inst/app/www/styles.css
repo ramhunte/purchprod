@@ -74,3 +74,16 @@ table.dataTable thead th,
   overflow: visible !important;
 }
 
+
+/* scrollability for footer in info and contac page */
+    .scrollable-markdown {
+      height: calc(100vh - 120px); /* Adjust based on navbar + footer height */
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* Optional: prevent outer page scroll */
+    body {
+      overflow: hidden;
+    }
+

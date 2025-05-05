@@ -5,8 +5,19 @@
 
 This Shiny App (built in R) is a tool that was developed to assist the Economic Data Collection Program at the
 <a href="https://www.fisheries.noaa.gov/about/northwest-fisheries-science-center" target="_blank">Northwest Fisheries Science Center</a> 
-make its economic data available to the public. Data is collected annually from the West Coast Groundfish Trawl Fishery as required by
+make its economic data available to the public. 
+
+The data included in this app were obtained through the EDC program from shorebased processors that purchase bottom groundfish, midwater groundfish, 
+and Pacific hake from catcher vessels that fish in the West Coast Groundfish Trawl catch share program. All fish caught as part of the trawl catch share 
+program as well as the purchases of other fish that those facilities are reported here.
+
+Data is collected annually from the West Coast Groundfish Trawl Fishery as required by
 <a href="https://www.ecfr.gov/current/title-50/chapter-VI/part-660/subpart-D/section-660.114" target="_blank">regulation 50 CFR 660.114</a>.
+The first receiver site license (FRSL) authorizes the holder to receive, purchase, or take custody, control, or possession of an IFQ landing at a specific 
+physical site onshore directly from a vessel. Each buyer of groundfish from a vessel making an IFQ landing must have a first receiver site license for 
+each physical location where the IFQ landing is offloaded.
+
+
 This app aggregates, summarizes, and compares various facets of this data pertaining to the purchase and production of the West Coast Groundfish Trawl Catch Share Program.
 
 
