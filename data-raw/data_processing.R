@@ -8,7 +8,7 @@
 
 ########################### Reading  Raw data #################################
 
-raw_purcprod <- readRDS("data-raw/mini_purcprod.RDS")
+raw_purcprod <- readRDS("data-raw/mini_purcprod_targ.RDS")
 
 ########################### Cleaning Raw data #################################
 
@@ -84,7 +84,7 @@ sumdf_prac <- clean_purcprod |>
 sumdf_reg <- clean_purcprod |>
   dplyr::filter(
     tab == 'Summary',
-    cs != "",
+    # cs != "",
     variable %in% c("California", "Washington and Oregon")
   )
 
@@ -92,7 +92,7 @@ sumdf_reg <- clean_purcprod |>
 sumdf_size <- clean_purcprod |>
   dplyr::filter(
     tab == 'Summary',
-    cs != "",
+    # cs != "",
     variable %in% c("Small", "Medium", "Large", "Non-processor")
   )
 
@@ -106,7 +106,7 @@ proddf <- dplyr::filter(clean_purcprod, tab == 'Product') |> # production tab da
   tidyr::separate(
     metric,
     into = c("type", "metric"),
-    sep = " ",
+    sep = " (?=\\()",
     extra = "merge"
   ) |>
   dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1))
@@ -118,14 +118,14 @@ proddf_prac <- proddf |>
 # subsetting data for the "Region" bottom tab under "By Product Type"
 proddf_reg <- proddf |>
   dplyr::filter(
-    cs != "",
+    # cs != "",
     variable %in% c("California", "Washington and Oregon")
   )
 
 # subsetting data for the "Processor size/type" bottom tab under "By Product Type"
 proddf_size <- proddf |>
   dplyr::filter(
-    cs != "",
+    # cs != "",
     variable %in% c("Small", "Medium", "Large", "Non-processor")
   )
 
@@ -149,7 +149,7 @@ specsdf <- raw_purcprod |>
   tidyr::separate(
     metric,
     into = c("type", "metric"),
-    sep = " ",
+    sep = " (?=\\()",
     extra = "merge"
   ) |>
   dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1)) |>
