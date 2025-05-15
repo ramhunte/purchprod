@@ -17,43 +17,82 @@
 mod_overview_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    bslib::page_fillable(
-      bslib::layout_columns(
-        # width = 1 / 5,
-        # height = 175,
-        fill = FALSE,
-        ######################### Year Picker Card #########################
-        bslib::card(
-          class = "card-overflow-fix", # assigning a custom css class to card to allow dropdown overflow
-
+    bslib::page_sidebar(
+      sidebar = bslib::sidebar(
+        width = "19%",
+        # START  div
+        tags$div(
+          style = "margin-bottom: 20px;",
           # Select a year:
           year_func(
             inputID = ns("year1Input"),
             label = bslib::tooltip(
               span(
-                "Select a year and date range:",
+                strong(em("Select a year")),
                 bsicons::bs_icon("info-circle")
               ),
-              "Select a year in the first dropdown(e.g. 2023) you would like to analyze. Next, select a year range (e.g. 2015-2020) to compare to
-              a range avererage OR select just a single year to compare (slide both ends of the range onto the same year).",
+              "Select a year in the dropdown (e.g. 2023) you would like to analyze.",
               options = list(container = "body"), # optional: avoids overflow issues
               style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
             ),
             choices = unique(sumdf_prac$year),
             selected = "2023",
             options = list(`style` = "btn-year1")
-          ),
+          )
+        ), # END div()
 
-          # Select a date range:
+        # Select a date range:
+
+        # START  div
+        tags$div(
+          style = "margin-bottom: 20px;",
           year_range_func(
             inputID = ns("yearrangeInput"),
-            label = NULL,
+            label = bslib::tooltip(
+              span(
+                strong(em("Select a date range or year")),
+                bsicons::bs_icon("info-circle")
+              ),
+              "Select a year range (e.g. 2015-2020) to get an average total production value across years OR select a single year (slide both ends of the range onto the same year). This value is compared
+              to the previous year selected in the dropdown above.",
+              options = list(container = "body"), # optional: avoids overflow issues
+              style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
+            ),
             min = min(sumdf_prac$year),
             max = max(sumdf_prac$year),
             value = c(2015, 2020)
           )
-        ),
+        ), # END div
 
+        # Select a region or processor size
+        # START  div
+        tags$div(
+          style = "margin-bottom: 20px;",
+          radioButtons(
+            inputId = ns("regsizeInput"),
+            label = bslib::tooltip(
+              span(
+                strong(em("Select processor size or state")),
+                bsicons::bs_icon("info-circle")
+              ),
+              "Filter the data to processor size (Small/Medium or Large) or by region (California or Washington and Oregon)",
+              options = list(container = "body"), # optional: avoids overflow issues
+              style = "position: absolute; top: 10px; right: 10px; cursor: pointer;"
+            ),
+            choices = c(
+              'Small/Medium',
+              'Large',
+              'California',
+              'Washington and Oregon'
+            )
+          )
+        ) # END div()
+      ),
+
+      bslib::layout_columns(
+        # width = 1 / 5,
+        # height = 175,
+        fill = FALSE,
         ######################### Value Boxes #########################
 
         # Year value box
@@ -159,15 +198,17 @@ mod_overview_server <- function(id) {
     observe({
       req(input$year1Input, input$yearrangeInput)
 
-      filtered <- sumdf_prac |>
+      filtered <- overviewdf |>
         dplyr::filter(
+          !is.na(.data[["value"]]),
           .data[["year"]] %in% # selecting just years that user is interested in
             c(
               input$year1Input, # from first year picker
               seq(input$yearrangeInput[1], input$yearrangeInput[2]) # from second year range slider
             ),
           # .data[["statistic"]] == "Total",
-          .data[["metric"]] %in% c("Production value", "Production weight") # production value and weight for graphs
+          # .data[["metric"]] %in% c("Production value", "Production weight"), # production value and weight for graphs
+          .data[["type"]] %in% c(input$regsizeInput)
         ) |>
         dplyr::mutate(
           period = dplyr::case_when(
@@ -336,7 +377,7 @@ mod_overview_server <- function(id) {
         year1 = input$year1Input,
         range1 = input$yearrangeInput[1],
         range2 = input$yearrangeInput[2],
-        upper_lim = 780
+        upper_lim = 500
       )
     })
 
@@ -350,7 +391,7 @@ mod_overview_server <- function(id) {
         year1 = input$year1Input,
         range1 = input$yearrangeInput[1],
         range2 = input$yearrangeInput[2],
-        upper_lim = 450
+        upper_lim = 500
       )
     })
   })

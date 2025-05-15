@@ -40,7 +40,10 @@ lollipop_func <- function(data, year1, range1, range2, upper_lim) {
     data = data,
     ggplot2::aes(
       x = .data[["value"]],
-      y = forcats::fct_reorder(.data[["variable"]], .data[["value"]]),
+      y = forcats::fct_reorder(
+        .data[["variable"]],
+        .data[["value"]]
+      ),
       group = .data[["variable"]],
       color = factor(.data[["year"]])
     )

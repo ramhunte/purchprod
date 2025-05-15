@@ -109,7 +109,8 @@ proddf <- dplyr::filter(clean_purcprod, tab == 'Product') |> # production tab da
     sep = " (?=\\()",
     extra = "merge"
   ) |>
-  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1))
+  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1)) |>
+  dplyr::filter(!is.na(value))
 
 # subsetting data for the "Production Activities" bottom tab under "By Product Type"
 proddf_prac <- proddf |>
@@ -118,7 +119,7 @@ proddf_prac <- proddf |>
 # subsetting data for the "Region" bottom tab under "By Product Type"
 proddf_reg <- proddf |>
   dplyr::filter(
-    # cs != "",
+    cs != "",
     variable %in% c("California", "Washington and Oregon")
   )
 
@@ -196,6 +197,25 @@ specsdf <- raw_purcprod |>
     ),
     unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
   )
+
+####################### Cleaning "Overive" page data ###########################
+
+overviewdf <- clean_purcprod |>
+  dplyr::filter(
+    tab == "Overview"
+  ) |>
+  tidyr::separate(
+    metric,
+    into = c("type", "metric"),
+    sep = " (?=\\()",
+    extra = "merge"
+  ) |>
+  dplyr::mutate(metric = substr(metric, 2, nchar(metric) - 1)) |>
+  dplyr::select(-c(cs, upper, lower, variance, q25, q75)) |>
+  dplyr::filter(
+    metric %in% c("Production value", "Production weight")
+  )
+
 
 ########################### Plot aesthetics #################################
 
@@ -314,6 +334,9 @@ usethis::use_data(
   proddf_size,
   ###########  for "By Species" tab on the Explore the Data page
   specsdf,
+
+  ###########  for "Overview" page
+  overviewdf,
   ###########  plot aesthetics
   pal,
   line_ty,
