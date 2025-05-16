@@ -8,7 +8,11 @@
 
 ########################### Reading  Raw data #################################
 
+# purchase production data
 raw_purcprod <- readRDS("data-raw/mini_purcprod_targ.RDS")
+
+# degp deflator
+load("data-raw/gdp_defl.RData")
 
 ########################### Cleaning Raw data #################################
 
@@ -198,7 +202,7 @@ specsdf <- raw_purcprod |>
     unit_lab = paste0(variable, " (", metric, "): ", unit, " nominal $")
   )
 
-####################### Cleaning "Overive" page data ###########################
+####################### Cleaning "Overview" page data ###########################
 
 overviewdf <- clean_purcprod |>
   dplyr::filter(
@@ -214,7 +218,17 @@ overviewdf <- clean_purcprod |>
   dplyr::select(-c(cs, upper, lower, variance, q25, q75)) |>
   dplyr::filter(
     metric %in% c("Production value", "Production weight")
-  )
+  ) |>
+
+  # View data in terms of 2023 deflator value, so shoe 2023 equivalence
+  dplyr::left_join(gdp_defl, by = c("year" = "YEAR")) |>
+  dplyr::mutate(
+    value = dplyr::case_when(
+      metric == "Production value" ~ value / DEFL,
+      TRUE ~ value
+    )
+  ) |>
+  dplyr::select(-DEFL)
 
 
 ########################### Plot aesthetics #################################

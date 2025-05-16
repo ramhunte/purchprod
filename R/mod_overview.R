@@ -391,7 +391,7 @@ mod_overview_server <- function(id) {
         year1 = input$year1Input,
         range1 = input$yearrangeInput[1],
         range2 = input$yearrangeInput[2],
-        upper_lim = 500
+        upper_lim = 300
       )
     })
   })
