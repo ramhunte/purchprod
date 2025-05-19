@@ -128,7 +128,7 @@ development.
     │   ├── figures
     │   │   └── nmfs_logo.png
     │   └── run_app.Rd
-    ├── purchprod.Rproj
+    ├── purcprod.Rproj
     ├── renv # managed by {Renv} to isolate package dependencies and create reproducible environment
     │   ├── activate.R
     │   ├── settings.json
