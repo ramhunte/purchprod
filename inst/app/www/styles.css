@@ -7,6 +7,8 @@
     background-color: #0085CA !important;  /* light green */
     color: white !important;
     border: 1px solid #0085CA !important;
+
+
   }
 
 /* message for when there is no data on for the plot on "Explore the Data"" page */
@@ -23,6 +25,7 @@
   max-width: 200px;   /* Controls the max width of the button */
   width: fit-content; /* Allows the button width to adapt to its content */
 }
+
 
 /* download button */
 #downloadData {

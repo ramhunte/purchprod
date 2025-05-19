@@ -18,6 +18,7 @@ load("data-raw/gdp_defl.RData")
 
 # this df is a cleaned version of the raw data
 clean_purcprod <- raw_purcprod |>
+  dplyr::left_join(gdp_defl, by = c("Year" = "YEAR")) |>
   # making all variable names lowercase for consistency
   janitor::clean_names() |>
   dplyr::filter(statistic == "Total") |>
@@ -143,6 +144,7 @@ proddf_size <- proddf |>
 # all shown as numbers in the millions and not also thousands.
 
 specsdf <- raw_purcprod |>
+  dplyr::left_join(gdp_defl, by = c("Year" = "YEAR")) |>
   dplyr::select(-c(ylab)) |>
   janitor::clean_names() |>
   dplyr::filter(
@@ -221,14 +223,13 @@ overviewdf <- clean_purcprod |>
   ) |>
 
   # View data in terms of 2023 deflator value, so shoe 2023 equivalence
-  dplyr::left_join(gdp_defl, by = c("year" = "YEAR")) |>
   dplyr::mutate(
     value = dplyr::case_when(
-      metric == "Production value" ~ value / DEFL,
+      metric == "Production value" ~ value / defl,
       TRUE ~ value
     )
   ) |>
-  dplyr::select(-DEFL)
+  dplyr::select(-defl)
 
 
 ########################### Plot aesthetics #################################

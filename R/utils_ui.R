@@ -218,6 +218,27 @@ size_func <- function(inputID) {
   )
 }
 
+
+# Deflator picker
+defl_func <- function(
+  inputID,
+  label,
+  choices,
+  selected,
+  options = NULL,
+  width = NULL
+) {
+  shinyWidgets::pickerInput(
+    inputId = inputID,
+    label = label,
+    choices = choices,
+    selected = selected,
+    options = options,
+    width = width
+  )
+}
+
+
 # creates a download button for csv
 down_func <- function(outputID) {
   downloadButton(

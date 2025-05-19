@@ -84,7 +84,8 @@ mod_overview_ui <- function(id) {
               'Large',
               'California',
               'Washington and Oregon'
-            )
+            ),
+            selected = "Large"
           )
         ) # END div()
       ),

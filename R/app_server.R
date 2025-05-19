@@ -44,6 +44,14 @@ app_server <- function(input, output, session) {
     mod_specs_tabs_ui("specs_tabs_1")
   })
 
+  ############################# Deflator value  #################################
+
+  defl_val <- reactive({
+    gdp_defl |>
+      dplyr::filter(.data$YEAR == input$deflInput) |>
+      dplyr::pull(.data$DEFL)
+  })
+
   ############################# "Summary" tab: reactive data frame  #################################
 
   sum_plot_df <- reactive({
@@ -68,6 +76,23 @@ app_server <- function(input, output, session) {
           # "Production Activities"
           .data$variable %in%
             c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
+        ) |>
+        dplyr::mutate(
+          # adjusting price realted cols for deflation value
+          value = dplyr::case_when(
+            .data$metric %in%
+              c(
+                "Markup",
+                "Production price (per lb)",
+                "Production value",
+                "Purchase price (per lb)",
+                "Purchase value"
+              ) ~
+              .data$value * defl_val() / .data$defl,
+
+            # for metrics that dont have price involved
+            TRUE ~ .data$value
+          )
         )
     } else if (
       # "Summary" and "Region"
@@ -81,6 +106,23 @@ app_server <- function(input, output, session) {
           # "Region" tab filters
           .data$variable %in% other_tabs_inputs()$reg,
           .data$cs %in% other_tabs_inputs()$pracs1
+        ) |>
+        dplyr::mutate(
+          # adjusting price realted cols for deflation value
+          value = dplyr::case_when(
+            .data$metric %in%
+              c(
+                "Markup",
+                "Production price (per lb)",
+                "Production value",
+                "Purchase price (per lb)",
+                "Purchase value"
+              ) ~
+              .data$value * defl_val() / .data$defl,
+
+            # for metrics that dont have price involved
+            TRUE ~ .data$value
+          )
         )
     } else if (
       # "Summary" and "Processor Size/Type"
@@ -94,6 +136,23 @@ app_server <- function(input, output, session) {
           # "Processor Size/Type" tab filters
           .data$variable %in% other_tabs_inputs()$size,
           .data$cs %in% other_tabs_inputs()$pracs2
+        ) |>
+        dplyr::mutate(
+          # adjusting price realted cols for deflation value
+          value = dplyr::case_when(
+            .data$metric %in%
+              c(
+                "Markup",
+                "Production price (per lb)",
+                "Production value",
+                "Purchase price (per lb)",
+                "Purchase value"
+              ) ~
+              .data$value * defl_val() / .data$defl,
+
+            # for metrics that dont have price involved
+            TRUE ~ .data$value
+          )
         )
     }
 
@@ -116,6 +175,23 @@ app_server <- function(input, output, session) {
             # "Production Activities" tab filters
             .data$variable %in%
               c(other_tabs_inputs()$prodac, other_tabs_inputs()$osps)
+          ) |>
+          dplyr::mutate(
+            # adjusting price realted cols for deflation value
+            value = dplyr::case_when(
+              .data$metric %in%
+                c(
+                  "Markup",
+                  "Production price (per lb)",
+                  "Production value",
+                  "Purchase price (per lb)",
+                  "Purchase value"
+                ) ~
+                .data$value * defl_val() / .data$defl,
+
+              # for metrics that dont have price involved
+              TRUE ~ .data$value
+            )
           )
       } else if (
         # "By Product Type" and "Region"
@@ -130,6 +206,23 @@ app_server <- function(input, output, session) {
             # "Region" tab filters
             .data$variable %in% other_tabs_inputs()$reg,
             .data$cs %in% other_tabs_inputs()$pracs1
+          ) |>
+          dplyr::mutate(
+            # adjusting price realted cols for deflation value
+            value = dplyr::case_when(
+              .data$metric %in%
+                c(
+                  "Markup",
+                  "Production price (per lb)",
+                  "Production value",
+                  "Purchase price (per lb)",
+                  "Purchase value"
+                ) ~
+                .data$value * defl_val() / .data$defl,
+
+              # for metrics that dont have price involved
+              TRUE ~ .data$value
+            )
           )
       } else if (
         # "By Product Type" and "Processor Size/Type"
@@ -144,6 +237,23 @@ app_server <- function(input, output, session) {
             # "Processor Size/Type" tab filters
             .data$variable %in% other_tabs_inputs()$size,
             .data$cs %in% other_tabs_inputs()$pracs2
+          ) |>
+          dplyr::mutate(
+            # adjusting price realted cols for deflation value
+            value = dplyr::case_when(
+              .data$metric %in%
+                c(
+                  "Markup",
+                  "Production price (per lb)",
+                  "Production value",
+                  "Purchase price (per lb)",
+                  "Purchase value"
+                ) ~
+                .data$value * defl_val() / .data$defl,
+
+              # for metrics that dont have price involved
+              TRUE ~ .data$value
+            )
           )
       }
 
@@ -161,9 +271,25 @@ app_server <- function(input, output, session) {
           # "By Species" tab filters
           .data$metric %in% specs_inputs()$metric,
           .data$variable %in% c(specs_inputs()$specs, specs_inputs()$os),
-          # .data$statistic == specs_inputs()$stat,
           # bottom tab filters
           .data$type %in% specs_tabs_inputs()$prodtype
+        ) |>
+        dplyr::mutate(
+          # adjusting price realted cols for deflation value
+          value = dplyr::case_when(
+            .data$metric %in%
+              c(
+                "Markup",
+                "Production price (per lb)",
+                "Production value",
+                "Purchase price (per lb)",
+                "Purchase value"
+              ) ~
+              .data$value * defl_val() / .data$defl,
+
+            # for metrics that dont have price involved
+            TRUE ~ .data$value
+          )
         )
       return(df)
     }

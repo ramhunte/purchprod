@@ -94,6 +94,16 @@ app_ui <- function(request) {
               uiOutput("speciesTabs")
             ), # END lower nav_panel
 
+            # Deflator picker
+            defl_func(
+              inputID = "deflInput",
+              label = "Deflator Year",
+              choices = unique(sumdf_prac$year),
+              selected = 2023,
+              width = "130px",
+              options = list(`style` = "btn-year1")
+            ),
+
             # downloadButton
             down_func(outputID = "downloadData")
           ), # END sidebar,
