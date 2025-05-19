@@ -17,6 +17,6 @@
 # devtools::test_coverage_active_file()
 
 library(testthat)
-library(purchprod)
+library(purcprod)
 
-test_check("purchprod")
+test_check("purcprod")

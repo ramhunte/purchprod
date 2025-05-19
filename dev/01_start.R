@@ -19,7 +19,7 @@
 ## to change the name in the app_sys() function in app_config.R /!\
 ##
 golem::fill_desc(
-  pkg_name = "purchprod", # The name of the golem package containing the app (typically lowercase, no underscore or periods)
+  pkg_name = "purcprod", # The name of the golem package containing the app (typically lowercase, no underscore or periods)
   pkg_title = "Purchase Production App", # What the Package Does (One Line, Title Case, No Period)
   pkg_description = "Placeholder for package description.", # What the package does (one paragraph).
   authors = person(
