@@ -339,6 +339,8 @@ line_ty <- c(
 
 # this function writes the desired data frames that are used in the app into the 'data' folder
 usethis::use_data(
+  ########### Deflator data
+  gdp_defl,
   ########### for "Summary" tab on the Explore the Data page
   sumdf_prac,
   sumdf_reg,
